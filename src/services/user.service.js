@@ -13,6 +13,12 @@ const createUser = async (userBody) => {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
   } else if (!(await web3.utils.isAddress(userBody.address))) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'address is not valid');
+  } else if (await User.isAddressTaken(userBody.address)) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'address already taken');
+  } else if (await User.isUsernameTaken(userBody.userName)) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'userName already taken');
+  } else if (!(await web3.utils.isAddress(userBody.address))) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'address is not valid');
   }
   return User.create(userBody);
 };
@@ -47,6 +53,10 @@ const getUserById = async (id) => {
  */
 const getUserByEmail = async (email) => {
   return User.findOne({ email });
+};
+
+const getUserByAddress = async (address) => {
+  return User.findOne({ address });
 };
 
 /**
@@ -89,4 +99,5 @@ module.exports = {
   getUserByEmail,
   updateUserById,
   deleteUserById,
+  getUserByAddress,
 };
