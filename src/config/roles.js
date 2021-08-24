@@ -1,5 +1,6 @@
 const allRoles = {
   user: ['logout'],
+  artist: [],
   admin: ['getUsers', 'manageUsers'],
 };
 

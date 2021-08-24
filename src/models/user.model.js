@@ -6,15 +6,11 @@ const { roles } = require('../config/roles');
 
 const userSchema = mongoose.Schema(
   {
-    firstName: {
+    userName: {
       type: String,
       required: true,
       trim: true,
-    },
-    lastName: {
-      type: String,
-      required: true,
-      trim: true,
+      unique: true,
     },
     email: {
       type: String,
@@ -28,46 +24,34 @@ const userSchema = mongoose.Schema(
         }
       },
     },
-    country: {
+    profilePic: {
+      type: String,
+      required: false,
+      trim: true,
+    },
+    address: {
       type: String,
       required: true,
       trim: true,
+      unique: true,
     },
-    zipCode: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    city: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    password: {
-      type: String,
-      required: true,
-      trim: true,
-      minlength: 8,
-      validate(value) {
-        if (!value.match(/\d/) || !value.match(/[a-zA-Z]/)) {
-          throw new Error('Password must contain at least one letter and one number');
-        }
-      },
-      private: true, // used by the toJSON plugin
-    },
+    // password: {
+    //   type: String,
+    //   required: true,
+    //   trim: true,
+    //   minlength: 8,
+    //   validate(value) {
+    //     if (!value.match(/\d/) || !value.match(/[a-zA-Z]/)) {
+    //       throw new Error('Password must contain at least one letter and one number');
+    //     }
+    //   },
+    //   private: true, // used by the toJSON plugin
+    // },
     role: {
       type: String,
       enum: roles,
       default: 'user',
     },
-    isEmailVerified: {
-      type: Boolean,
-      default: false,
-    },
-    deviceId: {
-      type: String,
-      required: false
-    }
   },
   {
     timestamps: true,

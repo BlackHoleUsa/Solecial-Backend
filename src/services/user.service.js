@@ -1,6 +1,7 @@
 const httpStatus = require('http-status');
 const { User } = require('../models');
 const ApiError = require('../utils/ApiError');
+const web3 = require('web3');
 
 /**
  * Create a user
@@ -10,6 +11,8 @@ const ApiError = require('../utils/ApiError');
 const createUser = async (userBody) => {
   if (await User.isEmailTaken(userBody.email)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
+  } else if (!(await web3.utils.isAddress(userBody.address))) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'address is not valid');
   }
   return User.create(userBody);
 };
