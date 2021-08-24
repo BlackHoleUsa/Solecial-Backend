@@ -17,9 +17,8 @@ const createUser = async (userBody) => {
     throw new ApiError(httpStatus.BAD_REQUEST, 'address already taken');
   } else if (await User.isUsernameTaken(userBody.userName)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'userName already taken');
-  } else if (!(await web3.utils.isAddress(userBody.address))) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'address is not valid');
   }
+
   return User.create(userBody);
 };
 
