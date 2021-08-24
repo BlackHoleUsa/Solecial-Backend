@@ -5,6 +5,6 @@ const { createCollectionVS } = require('../../validations/collection.validation'
 
 const router = express.Router();
 
-router.post('/createCollection', validate(createCollectionVS), collectionController.test);
+router.post('/createCollection', validate(createCollectionVS), collectionController.createCollection);
 
 module.exports = router;

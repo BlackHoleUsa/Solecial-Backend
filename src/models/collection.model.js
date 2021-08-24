@@ -20,7 +20,6 @@ const collectionSchema = mongoose.Schema(
     description: {
       typetype: String,
       required: false,
-      trim: true,
     },
     artworks: [
       {

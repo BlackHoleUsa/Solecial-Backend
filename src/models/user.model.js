@@ -52,6 +52,12 @@ const userSchema = mongoose.Schema(
       enum: roles,
       default: 'user',
     },
+    collections: [
+      {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'Collection',
+      },
+    ],
   },
   {
     timestamps: true,
