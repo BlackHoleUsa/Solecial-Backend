@@ -1,20 +1,33 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const { authService, userService, tokenService, emailService, collectionService } = require('../services');
+const { authService, userService, tokenService, emailService, collectionService, artworkService } = require('../services');
 const { User } = require('../models');
 const EVENT = require('../triggers/custom-events').customEvent;
+const { addFilesToIPFS } = require('../utils/helpers');
 
 const saveArtwork = catchAsync(async (req, res) => {
-  // const { owner } = req.body;
-  // const col = await collectionService.saveCollection(req.body);
-  // const data = await collectionService.getCollectionsById(owner);
+  const { body } = req;
+  const files = req.files;
 
-  //   EVENT.emit('add-collection-in-user', {
-  //     collectionId: col._id,
-  //     userId: owner,
-  //   });
+  let imgData;
 
-  res.status(httpStatus.OK).send({ status: true, message: 'collection created successfully' });
+  if (files.length > 0) {
+    imgData = await addFilesToIPFS(files[0].buffer, 'image');
+    body.image = imgData;
+  }
+  body.owner = body.creater;
+  const artwork = await artworkService.saveArtwork(body);
+
+  EVENT.emit('add-artwork-in-user', {
+    artworkId: artwork._id,
+    userId: body.creater,
+  });
+  EVENT.emit('add-artwork-in-collection', {
+    artworkId: artwork._id,
+    collectionId: body.collectionId,
+  });
+
+  res.status(httpStatus.OK).send({ status: true, message: 'artwork saved successfully', artwork });
 });
 
 module.exports = {

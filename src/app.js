@@ -15,6 +15,8 @@ const { errorConverter, errorHandler } = require('./middlewares/error');
 const ApiError = require('./utils/ApiError');
 const bodyParser = require('body-parser');
 
+const { fileParser } = require('express-multipart-file-parser');
+
 require('./triggers/triggers');
 
 const app = express();
@@ -29,6 +31,19 @@ app.use(helmet());
 
 // parse json request body
 app.use(express.json());
+
+app.use(
+  fileParser({
+    rawBodyOptions: {
+      limit: '30mb', //file size limit
+    },
+    busboyOptions: {
+      limits: {
+        fields: 50, //Number text fields allowed
+      },
+    },
+  })
+);
 
 // parse urlencoded request body
 app.use(express.urlencoded({ extended: true }));

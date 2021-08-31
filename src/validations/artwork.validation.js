@@ -6,7 +6,7 @@ const createArtworkVS = {
     description: Joi.string().required(),
     creater: Joi.string().required(),
     price: Joi.string().required(),
-    image: Joi.string().required(),
+    image: Joi.string().optional(),
     collectionId: Joi.string().required(),
   }),
 };

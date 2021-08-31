@@ -58,6 +58,12 @@ const userSchema = mongoose.Schema(
         ref: 'Collection',
       },
     ],
+    artworks: [
+      {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'Artwork',
+      },
+    ],
   },
   {
     timestamps: true,
