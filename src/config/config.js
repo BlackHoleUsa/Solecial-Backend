@@ -25,6 +25,9 @@ const envVarsSchema = Joi.object()
     // SMTP_PASSWORD: Joi.string().description('password for email server'),
     SG_API_KEY: Joi.string().description('password for email server'),
     EMAIL_FROM: Joi.string().description('the from field in the emails sent by the app'),
+    PINATA_API_KEY: Joi.string().description('Pinata api key'),
+    PINATA_API_SECRET: Joi.string().description('Pinata api secret'),
+    PINATA_API_JWT: Joi.string().description('Pinata api jwt'),
   })
   .unknown();
 
@@ -64,5 +67,10 @@ module.exports = {
     // },
     from: envVars.EMAIL_FROM,
     sendGridApiKey: envVars.SG_API_KEY,
+  },
+  pinata: {
+    api_key: envVars.PINATA_API_KEY,
+    api_secret: envVars.PINATA_API_SECRET,
+    api_jwt: envVars.PINATA_API_JWT,
   },
 };
