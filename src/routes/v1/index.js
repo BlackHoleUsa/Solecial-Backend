@@ -3,6 +3,7 @@ const authRoute = require('./auth.route');
 const userRoute = require('./user.route');
 const docsRoute = require('./docs.route');
 const collectionRoute = require('./collection.route');
+const artworkRoute = require('./artwork.route');
 
 const config = require('../../config/config');
 const logger = require('../../config/logger');
@@ -21,6 +22,10 @@ const defaultRoutes = [
   {
     path: '/collection',
     route: collectionRoute,
+  },
+  {
+    path: '/artwork',
+    route: artworkRoute,
   },
 ];
 
