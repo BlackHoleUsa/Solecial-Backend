@@ -12,9 +12,23 @@ const register = catchAsync(async (req, res) => {
 const login = catchAsync(async (req, res) => {
   const { address } = req.body;
   const user = await authService.loginUserWithAddress(address);
-  await tokenService.removeToken(user);
-  const tokens = await tokenService.generateAuthTokens(user);
-  res.send({ user, tokens });
+  if (user) {
+    await tokenService.removeToken(user);
+    const tokens = await tokenService.generateAuthTokens(user);
+    res.send({
+      status: true,
+      user,
+      tokens
+    });
+  } else {
+    res.send({
+      status: false,
+      user: null,
+      tokens: null,
+      message: "No user found"
+    })
+  }
+
 });
 
 const logout = catchAsync(async (req, res) => {
