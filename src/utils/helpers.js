@@ -1,35 +1,13 @@
-const IPFS = require('ipfs');
 const pinataSDK = require('@pinata/sdk');
 const config = require('../config/config');
-const { createReadStream } = require('fs');
 const { Readable } = require('stream');
-const os = require('os');
-const path = require('path');
-const fs = require('fs');
+const AWS = require('aws-sdk');
 const pinata = pinataSDK(config.pinata.api_key, config.pinata.api_secret);
 
 const addFilesToIPFS = async (photo, type) => {
   try {
-    // const readable = new Readable();
-    // readable._read = () => {};
-    // readable.push(photo);
-
-    // const readableInstanceStream = new Readable({
-    //   read() {
-    //     this.push(photo);
-    //     this.push(null);
-    //   },
-    // });
-
     const stream = Readable.from(photo);
     stream.path = 'some_filename.png';
-    // const tmp = path.resolve(os.tmpdir(), `${new Date().getTime()}.png`);
-
-    // await fs.writeFile(tmp, photo);
-
-    // const stream = fs.createReadStream(tmp);
-
-    // const stream = Readable.from(photo);
 
     const options = {
       pinataMetadata: {
@@ -46,21 +24,31 @@ const addFilesToIPFS = async (photo, type) => {
   }
 };
 
-const loadImage = async (cid, ipfs) => {
-  let file = '';
+const uploadToAws = (photo, path) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const s3 = new AWS.S3();
 
-  ipfs.files.read(`http://ipfs.io/ipfs/` + cid, (err, files) => {
-    if (err) {
-      console.log('--error getting files---', err);
+      const params = {
+        Bucket: config.aws.bucket,
+        Key: `${path}`,
+        Body: photo,
+        ContentEncoding: 'base64',
+      };
+      s3.upload(params, (err, data) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(data);
+      });
+    } catch (error) {
+      console.log('Uploading to amazon error', error);
+      reject(err);
     }
-    pos;
-    console.log('---files----', files);
-    file = files;
   });
-
-  return file;
 };
 
 module.exports = {
   addFilesToIPFS,
+  uploadToAws,
 };

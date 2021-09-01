@@ -35,6 +35,10 @@ const artworkSchema = mongoose.Schema(
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Collection',
     },
+    views: {
+      type: Number,
+      required: false,
+    },
   },
   {
     timestamps: true,

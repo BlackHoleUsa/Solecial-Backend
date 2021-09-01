@@ -17,6 +17,11 @@ const collectionSchema = mongoose.Schema(
       required: false,
       trim: true,
     },
+    profileImage: {
+      type: String,
+      required: false,
+      trim: true,
+    },
     description: {
       typetype: String,
       required: false,
@@ -24,6 +29,7 @@ const collectionSchema = mongoose.Schema(
     artworks: [
       {
         type: mongoose.SchemaTypes.ObjectId,
+        ref: 'Artwork',
         required: false,
       },
     ],

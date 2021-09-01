@@ -28,6 +28,9 @@ const envVarsSchema = Joi.object()
     PINATA_API_KEY: Joi.string().description('Pinata api key'),
     PINATA_API_SECRET: Joi.string().description('Pinata api secret'),
     PINATA_API_JWT: Joi.string().description('Pinata api jwt'),
+    AWS_ACCESS_KEY_ID: Joi.string().description('aws access key'),
+    AWS_SECRET_ACCESS_KEY: Joi.string().description('aws secret access key'),
+    AWS_BUCKET: Joi.string().description('aws bucket'),
   })
   .unknown();
 
@@ -72,5 +75,10 @@ module.exports = {
     api_key: envVars.PINATA_API_KEY,
     api_secret: envVars.PINATA_API_SECRET,
     api_jwt: envVars.PINATA_API_JWT,
+  },
+  aws: {
+    accessKeyId: envVars.AWS_ACCESS_KEY_ID,
+    secretAccessKey: envVars.AWS_SECRET_ACCESS_KEY,
+    bucket: envVars.AWS_BUCKET,
   },
 };
