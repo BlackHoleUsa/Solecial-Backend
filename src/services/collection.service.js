@@ -12,11 +12,28 @@ const saveCollection = async (params) => {
   return await Collection.create(params);
 };
 
-const getCollectionsById = async (userId) => {
-  return await Collection.find({ owner: userId });
+const getCollectionById = async (userId) => {
+  return await Collection.findOne({ owner: userId });
+};
+
+const getPaginatedCollections = async (page, perPage, userId) => {
+  return await Collection.find({ owner: userId })
+    .limit(parseInt(perPage))
+    .skip(page * perPage)
+    .lean();
+};
+const getPopulatedCollection = async (collectionId, fieldToPopulate) => {
+  return await Collection.findOne({ _id: collectionId }).populate(fieldToPopulate).lean();
+};
+
+const updateCollectionImages = async (collectionId, profileImage, coverImage) => {
+  return await Collection.findOneAndUpdate({ _id: collectionId }, { profileImage, coverImage });
 };
 
 module.exports = {
   saveCollection,
-  getCollectionsById,
+  getCollectionById,
+  getPaginatedCollections,
+  getPopulatedCollection,
+  updateCollectionImages,
 };

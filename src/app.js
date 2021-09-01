@@ -14,9 +14,9 @@ const routes = require('./routes/v1');
 const { errorConverter, errorHandler } = require('./middlewares/error');
 const ApiError = require('./utils/ApiError');
 const bodyParser = require('body-parser');
-
 const { fileParser } = require('express-multipart-file-parser');
 
+require('./config/aws.config');
 require('./triggers/triggers');
 
 const app = express();
