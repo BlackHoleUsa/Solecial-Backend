@@ -35,6 +35,12 @@ const userSchema = mongoose.Schema(
       trim: true,
       unique: true,
     },
+    bio: {
+      type: String,
+      required: true,
+      trim: true,
+      unique: true,
+    },
     // password: {
     //   type: String,
     //   required: true,

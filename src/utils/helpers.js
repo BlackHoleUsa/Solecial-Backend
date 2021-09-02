@@ -33,6 +33,7 @@ const uploadToAws = (photo, path) => {
         Bucket: config.aws.bucket,
         Key: `${path}`,
         Body: photo,
+        ACL: "public-read",
         ContentEncoding: 'base64',
       };
       s3.upload(params, (err, data) => {
