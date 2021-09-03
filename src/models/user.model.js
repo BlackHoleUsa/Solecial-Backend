@@ -73,7 +73,7 @@ const userSchema = mongoose.Schema(
     favouriteArtworks: [
       {
         type: mongoose.SchemaTypes.ObjectId,
-        ref: 'Artwork',
+        ref: 'Artwor k',
       },
     ],
     followers: [
