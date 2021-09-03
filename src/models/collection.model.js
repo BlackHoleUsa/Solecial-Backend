@@ -17,6 +17,11 @@ const collectionSchema = mongoose.Schema(
       required: false,
       trim: true,
     },
+    collectionAddress: {
+      type: String,
+      required: false,
+      trim: true,
+    },
     profileImage: {
       type: String,
       required: false,
