@@ -12,6 +12,14 @@ const saveArtwork = async (params) => {
   return await Artwork.create(params);
 };
 
+const getUserArtworks = async (userId, page, perPage) => {
+  return await Artwork.find({ owner: userId })
+    .limit(parseInt(perPage))
+    .skip(page * perPage)
+    .lean();
+};
+
 module.exports = {
   saveArtwork,
+  getUserArtworks,
 };

@@ -27,7 +27,7 @@ const getPopulatedCollection = async (collectionId, fieldToPopulate) => {
 };
 
 const updateCollectionImages = async (collectionId, profileImage, coverImage) => {
-  return await Collection.findOneAndUpdate({ _id: collectionId }, { profileImage, coverImage });
+  return await Collection.findOneAndUpdate({ _id: collectionId }, { profileImage, coverImage }, { new: true });
 };
 
 module.exports = {

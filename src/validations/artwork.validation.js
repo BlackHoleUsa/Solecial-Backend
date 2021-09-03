@@ -11,6 +11,37 @@ const createArtworkVS = {
   }),
 };
 
+const getArtworksVS = {
+  query: Joi.object().keys({
+    page: Joi.string().required(),
+    perPage: Joi.string().required(),
+  }),
+};
+
+const addFavouriteVS = {
+  body: Joi.object().keys({
+    artworkId: Joi.string().required(),
+  }),
+};
+
+const removeFavouriteVS = {
+  body: Joi.object().keys({
+    artworkId: Joi.string().required(),
+  }),
+};
+
+const getFavouriteVS = {
+  query: Joi.object().keys({
+    userId: Joi.string().required(),
+    page: Joi.string().required(),
+    perPage: Joi.string().required(),
+  }),
+};
+
 module.exports = {
   createArtworkVS,
+  getArtworksVS,
+  addFavouriteVS,
+  removeFavouriteVS,
+  getFavouriteVS,
 };
