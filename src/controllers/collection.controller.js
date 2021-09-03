@@ -13,7 +13,8 @@ const createCollection = catchAsync(async (req, res) => {
   const { owner } = req.body;
   const files = req.files;
   let col = await collectionService.saveCollection(req.body);
-
+  // const hashUrl = await helpers.createCollectionHash(col._id);
+  // console.log(hashUrl);
   let cover, profile;
   if (files.length > 0) {
     for (let file of files) {
