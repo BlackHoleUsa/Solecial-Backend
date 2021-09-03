@@ -18,9 +18,9 @@ const createCollection = catchAsync(async (req, res) => {
   if (files.length > 0) {
     for (let file of files) {
       if (file.fieldname == 'profileImage') {
-        profile = await helpers.uploadToAws(files[0].buffer, `/collections/${col._id}/profile`);
+        profile = await helpers.uploadToAws(file.buffer, `/collections/${col._id}/profile`);
       } else if (file.fieldname == 'coverImage') {
-        cover = await helpers.uploadToAws(files[0].buffer, `/collections/${col._id}/cover`);
+        cover = await helpers.uploadToAws(file.buffer, `/collections/${col._id}/cover`);
       }
     }
 

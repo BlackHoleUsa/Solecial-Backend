@@ -70,6 +70,30 @@ const userSchema = mongoose.Schema(
         ref: 'Artwork',
       },
     ],
+    favouriteArtworks: [
+      {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'Artwork',
+      },
+    ],
+    followers: [
+      {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'User',
+      },
+    ],
+    following: [
+      {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'User',
+      },
+    ],
+    creations: [
+      {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'Artwork',
+      },
+    ],
   },
   {
     timestamps: true,

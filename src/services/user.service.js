@@ -66,7 +66,7 @@ const getUserByAddress = async (address) => {
  */
 const updateUserById = async (userId, updateBody) => {
   const user = await User.findByIdAndUpdate(userId, updateBody, {
-    new: true
+    new: true,
   });
 
   return user;
@@ -86,6 +86,43 @@ const deleteUserById = async (userId) => {
   return user;
 };
 
+/**
+ *
+ * @param {ObjectId} userId
+ * @param {ObjectId} artworkId
+ * @returns {Promise<User>}
+ */
+const addArtworkToFavourites = async (userId, artworkId) => {
+  return await User.findOneAndUpdate({ _id: userId }, { $push: { favouriteArtworks: artworkId } });
+};
+
+/**
+ *
+ * @param {ObjectId} userId
+ * @param {ObjectId} artworkId
+ * @returns {Promise<User>}
+ */
+const removeArtworkFromFavourite = async (userId, artworkId) => {
+  return await User.findOneAndUpdate({ _id: userId }, { $pull: { favouriteArtworks: artworkId } });
+};
+
+/**
+ *
+ * @param {ObjectId} userId
+ * @param {number} page
+ * @param {number} perPage
+ */
+
+const getFavouriteArtworks = async (userId, page, perPage) => {
+  const user = await User.findOne({ _id: userId })
+    .select(['favouriteArtworks'])
+    .populate('favouriteArtworks')
+    .limit(parseInt(perPage))
+    .skip(page * perPage);
+
+  return user.favouriteArtworks;
+};
+
 module.exports = {
   createUser,
   queryUsers,
@@ -94,4 +131,7 @@ module.exports = {
   updateUserById,
   deleteUserById,
   getUserByAddress,
+  addArtworkToFavourites,
+  removeArtworkFromFavourite,
+  getFavouriteArtworks,
 };
