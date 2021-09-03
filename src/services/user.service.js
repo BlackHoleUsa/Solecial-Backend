@@ -123,6 +123,42 @@ const getFavouriteArtworks = async (userId, page, perPage) => {
   return user.favouriteArtworks;
 };
 
+const followOtherUser = async (userId, otherUserId) => {
+  await User.findOneAndUpdate({ _id: otherUserId }, { $push: { followers: userId } }, { new: true });
+  return await User.findOneAndUpdate({ _id: userId }, { $push: { following: otherUserId } }, { new: true });
+};
+
+const unFollowUser = async (userId, otherUserId) => {
+  await User.findOneAndUpdate({ _id: otherUserId }, { $pull: { followers: userId } }, { new: true });
+  return await User.findOneAndUpdate({ _id: userId }, { $pull: { following: otherUserId } }, { new: true });
+};
+
+const getUserFollowers = async (userId, page, perPage) => {
+  const user = await User.findOne({ _id: userId })
+    .populate({
+      path: 'followers',
+      options: {
+        limit: parseInt(perPage),
+        skip: page * perPage,
+      },
+    })
+    .lean();
+  return user.followers;
+};
+
+const getUserFollowing = async (userId, page, perPage) => {
+  const user = await User.findOne({ _id: userId })
+    .populate({
+      path: 'following',
+      options: {
+        limit: parseInt(perPage),
+        skip: page * perPage,
+      },
+    })
+    .lean();
+  return user.following;
+};
+
 module.exports = {
   createUser,
   queryUsers,
@@ -134,4 +170,8 @@ module.exports = {
   addArtworkToFavourites,
   removeArtworkFromFavourite,
   getFavouriteArtworks,
+  followOtherUser,
+  unFollowUser,
+  getUserFollowers,
+  getUserFollowing,
 };
