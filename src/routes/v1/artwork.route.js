@@ -34,4 +34,10 @@ router.get(
   artworkController.getFavouriteArtworks
 );
 
+router.post(
+  '/increaseViewCount',
+  [auth('manageUsers'), validate(artworkValidation.increaseViewVS)],
+  artworkController.increaseArtworkViews
+);
+
 module.exports = router;

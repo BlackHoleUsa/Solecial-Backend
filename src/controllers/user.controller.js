@@ -39,10 +39,57 @@ const deleteUser = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+const followUser = catchAsync(async (req, res) => {
+  const { otherUserId } = req.body;
+  const user = req.user;
+
+  await userService.followOtherUser(user._id, otherUserId);
+  res.status(httpStatus.OK).send({
+    status: true,
+    message: 'user followed successfully',
+  });
+});
+
+const unfollowUser = catchAsync(async (req, res) => {
+  const { otherUserId } = req.body;
+  const user = req.user;
+
+  await userService.unFollowUser(user._id, otherUserId);
+  res.status(httpStatus.OK).send({
+    status: true,
+    message: 'user unfollowed successfully',
+  });
+});
+
+const getUserFollowers = catchAsync(async (req, res) => {
+  const { page, perPage, userId } = req.query;
+
+  const followers = await userService.getUserFollowers(userId, page, perPage);
+  res.status(httpStatus.OK).send({
+    status: true,
+    message: 'successfull',
+    data: followers,
+  });
+});
+
+const getUserFollowing = catchAsync(async (req, res) => {
+  const { page, perPage, userId } = req.query;
+
+  const following = await userService.getUserFollowing(userId, page, perPage);
+  res.status(httpStatus.OK).send({
+    status: true,
+    message: 'successfull',
+    data: following,
+  });
+});
 module.exports = {
   createUser,
   getUsers,
   getUser,
   updateUser,
   deleteUser,
+  followUser,
+  unfollowUser,
+  getUserFollowing,
+  getUserFollowers,
 };

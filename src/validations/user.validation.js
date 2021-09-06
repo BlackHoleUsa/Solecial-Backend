@@ -30,16 +30,43 @@ const updateUser = {
   params: Joi.object().keys({
     userId: Joi.required().custom(objectId),
   }),
-  body: Joi.object()
-    .keys({
-      bio: Joi.string().required(),
-      profilePic: Joi.string().optional()
-    })
+  body: Joi.object().keys({
+    bio: Joi.string().required(),
+    profilePic: Joi.string().optional(),
+  }),
 };
 
 const deleteUser = {
   params: Joi.object().keys({
     userId: Joi.string().custom(objectId),
+  }),
+};
+
+const getUserFollowers = {
+  query: Joi.object().keys({
+    userId: Joi.string().required(),
+    page: Joi.string().required(),
+    perPage: Joi.string().required(),
+  }),
+};
+
+const getUserFollowing = {
+  query: Joi.object().keys({
+    userId: Joi.string().required(),
+    page: Joi.string().required(),
+    perPage: Joi.string().required(),
+  }),
+};
+
+const followUser = {
+  body: Joi.object().keys({
+    otherUserId: Joi.string().required(),
+  }),
+};
+
+const unfollowUser = {
+  body: Joi.object().keys({
+    otherUserId: Joi.string().required(),
   }),
 };
 
@@ -49,4 +76,8 @@ module.exports = {
   getUser,
   updateUser,
   deleteUser,
+  unfollowUser,
+  followUser,
+  getUserFollowing,
+  getUserFollowers,
 };

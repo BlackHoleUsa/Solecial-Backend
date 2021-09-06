@@ -38,10 +38,17 @@ const getFavouriteVS = {
   }),
 };
 
+const increaseViewVS = {
+  body: Joi.object().keys({
+    artworkId: Joi.string().required(),
+  }),
+};
+
 module.exports = {
   createArtworkVS,
   getArtworksVS,
   addFavouriteVS,
   removeFavouriteVS,
   getFavouriteVS,
+  increaseViewVS,
 };
