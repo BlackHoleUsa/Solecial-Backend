@@ -59,10 +59,18 @@ const getFavouriteArtworks = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send({ status: true, message: 'successfull', data: artworks });
 });
 
+const increaseArtworkViews = catchAsync(async (req, res) => {
+  const { artworkId } = req.body;
+
+  const artwork = await artworkService.increaseArtworkViews(artworkId);
+  res.status(httpStatus.OK).send({ status: true, message: 'Artwork view increased successfully', data: artwork });
+});
+
 module.exports = {
   saveArtwork,
   getUserArtworks,
   addToFavourite,
   removeFromFavourites,
   getFavouriteArtworks,
+  increaseArtworkViews,
 };

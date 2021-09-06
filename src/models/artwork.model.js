@@ -38,6 +38,7 @@ const artworkSchema = mongoose.Schema(
     views: {
       type: Number,
       required: false,
+      default: 0,
     },
   },
   {

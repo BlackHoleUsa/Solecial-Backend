@@ -19,7 +19,12 @@ const getUserArtworks = async (userId, page, perPage) => {
     .lean();
 };
 
+const increaseArtworkViews = async (artworkId) => {
+  return await Artwork.findOneAndUpdate({ _id: artworkId }, { $inc: { views: 1 } }, { new: true });
+};
+
 module.exports = {
   saveArtwork,
   getUserArtworks,
+  increaseArtworkViews,
 };
