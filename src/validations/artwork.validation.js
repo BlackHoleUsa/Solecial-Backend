@@ -15,6 +15,7 @@ const getArtworksVS = {
   query: Joi.object().keys({
     page: Joi.string().required(),
     perPage: Joi.string().required(),
+    userId: Joi.string().required(),
   }),
 };
 

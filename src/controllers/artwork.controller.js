@@ -31,9 +31,9 @@ const saveArtwork = catchAsync(async (req, res) => {
 });
 
 const getUserArtworks = catchAsync(async (req, res) => {
-  const { page, perPage } = req.query;
-  const user = req.user;
-  const artworks = await artworkService.getUserArtworks(user._id, page, perPage);
+  const { page, perPage, userId } = req.query;
+
+  const artworks = await artworkService.getUserArtworks(userId, page, perPage);
   res.status(httpStatus.OK).send({ status: true, message: 'successfull', data: artworks });
 });
 
