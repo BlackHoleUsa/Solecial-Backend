@@ -2,6 +2,7 @@ const pinataSDK = require('@pinata/sdk');
 const config = require('../config/config');
 const { Readable } = require('stream');
 const AWS = require('aws-sdk');
+const Ipfs = require('ipfs');
 const pinata = pinataSDK(config.pinata.api_key, config.pinata.api_secret);
 
 const addFilesToIPFS = async (photo, type) => {
@@ -54,27 +55,24 @@ const createCollectionHash = async (collectionId) => {
   try {
     // const stream = Readable.from(photo);
     // stream.path = '/QmcXq6xxeU4UZv4FHRsDW9tcs5CYigDaxCb1wQZDPcjQVx/3';
-
-    const options = {
-      pinataMetadata: {
-        name: 'testImage',
-      },
-      pinataOptions: {
-        cidVersion: 0,
-      },
-    };
-
-    const colData = await pinata.pinJSONToIPFS({
-      pinataMetadata: {
-        name: 'customNameForYourJSONObject',
-        keyvalues: {
-          customKey: 'customValue',
-          customKey2: 'customValue2',
-        },
-      },
-      collectionId: collectionId.toString(),
-    });
-
+    // const options = {
+    //   pinataMetadata: {
+    //     name: 'testImage',
+    //   },
+    //   pinataOptions: {
+    //     cidVersion: 0,
+    //   },
+    // };
+    // const colData = await pinata.pinJSONToIPFS({
+    //   pinataMetadata: {
+    //     name: 'customNameForYourJSONObject',
+    //     keyvalues: {
+    //       customKey: 'customValue',
+    //       customKey2: 'customValue2',
+    //     },
+    //   },
+    //   collectionId: collectionId.toString(),
+    // });
     // const metadata = {
     //   name: 'test',
     //   keyvalues: {
@@ -85,8 +83,25 @@ const createCollectionHash = async (collectionId) => {
     // };
     // const result = await pinata.hashMetadata(colData.IpfsHash, metadata);
     // console.log(result);
+    // return `https://gateway.pinata.cloud/ipfs/${colData.IpfsHash}`.toString();
 
-    return `https://gateway.pinata.cloud/ipfs/${colData.IpfsHash}`.toString();
+    const nftMetaData = {
+      attributes: [
+        {
+          trait_type: 'Breed',
+          value: 'Maltipoo',
+        },
+        {
+          trait_type: 'Eye color',
+          value: 'Mocha',
+        },
+      ],
+      description: "The world's most adorable and sensitive pup.",
+      image: 'https://gateway.pinata.cloud/ipfs/QmWmvTJmJU3pozR9ZHFmQC2DNDwi2XJtf3QGyYiiagFSWb',
+      name: 'Ramses',
+    };
+    const result = await pinata.pinJSONToIPFS(nftMetaData, {});
+    return `https://gateway.pinata.cloud/ipfs/${result.IpfsHash}`.toString();
   } catch (err) {
     console.log('---error ipfs---', err);
   }
