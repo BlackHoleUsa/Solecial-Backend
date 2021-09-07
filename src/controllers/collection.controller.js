@@ -4,6 +4,7 @@ const { authService, userService, tokenService, emailService, collectionService 
 const { User } = require('../models');
 const helpers = require('../utils/helpers');
 const EVENT = require('../triggers/custom-events').customEvent;
+const { profile } = require('winston');
 
 const test = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send({ status: true, message: 'successfull' });
@@ -33,7 +34,7 @@ const createCollection = catchAsync(async (req, res) => {
     collectionId: col._id,
     userId: owner,
   });
-  res.status(httpStatus.OK).send({ status: true, message: 'collection created successfully', data: col });
+  res.status(httpStatus.OK).send({ status: true, message: 'collection created successfully', data: hashUrl });
 });
 
 const getUserCollections = catchAsync(async (req, res) => {
@@ -48,8 +49,33 @@ const getCollectionDetails = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send({ status: true, message: 'successfull', data });
 });
 
+const updateCollection = catchAsync(async (req, res) => {
+  const files = req.files;
+  const body = req.body;
+
+  const { collectionId } = body;
+
+  if (files.length > 0) {
+    for (let file of files) {
+      if (file.fieldname == 'profileImage') {
+        await helpers.deleteFromAWS(`/collections/${collectionId}/profile`);
+        profile = await helpers.uploadToAws(file.buffer, `/collections/${collectionId}/profile`);
+        body.profileImage = profile;
+      } else if (file.fieldname == 'coverImage') {
+        await helpers.deleteFromAWS(`/collections/${collectionId}/cover`);
+        cover = await helpers.uploadToAws(file.buffer, `/collections/${collectionId}/cover`);
+        body.coverImage = cover;
+      }
+    }
+  }
+
+  const user = await collectionService.updateCollectioById(collectionId, body);
+  res.send(user);
+});
+
 module.exports = {
   createCollection,
   getUserCollections,
   getCollectionDetails,
+  updateCollection,
 };

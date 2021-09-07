@@ -2,7 +2,9 @@ const pinataSDK = require('@pinata/sdk');
 const config = require('../config/config');
 const { Readable } = require('stream');
 const AWS = require('aws-sdk');
-const Ipfs = require('ipfs');
+const fs = require('fs');
+const IPFS = require('ipfs');
+const { CID } = require('ipfs');
 const pinata = pinataSDK(config.pinata.api_key, config.pinata.api_secret);
 
 const addFilesToIPFS = async (photo, type) => {
@@ -51,57 +53,41 @@ const uploadToAws = (photo, path) => {
   });
 };
 
+const deleteFromAWS = (key) => {
+  return new Promise((resolve, reject) => {
+    try {
+      const s3 = new AWS.S3();
+      var params = {
+        Bucket: config.aws.bucket,
+        Key: `${key}`,
+      };
+      s3.deleteObject(params, (err, data) => {
+        if (err) {
+          reject();
+        } else {
+          resolve(data);
+        }
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
 const createCollectionHash = async (collectionId) => {
   try {
-    // const stream = Readable.from(photo);
-    // stream.path = '/QmcXq6xxeU4UZv4FHRsDW9tcs5CYigDaxCb1wQZDPcjQVx/3';
-    // const options = {
-    //   pinataMetadata: {
-    //     name: 'testImage',
-    //   },
-    //   pinataOptions: {
-    //     cidVersion: 0,
-    //   },
-    // };
-    // const colData = await pinata.pinJSONToIPFS({
-    //   pinataMetadata: {
-    //     name: 'customNameForYourJSONObject',
-    //     keyvalues: {
-    //       customKey: 'customValue',
-    //       customKey2: 'customValue2',
-    //     },
-    //   },
-    //   collectionId: collectionId.toString(),
-    // });
-    // const metadata = {
-    //   name: 'test',
-    //   keyvalues: {
-    //     newKey: 'newValue',
-    //     existingKey: 'newValue',
-    //     existingKeyToRemove: null,
-    //   },
-    // };
-    // const result = await pinata.hashMetadata(colData.IpfsHash, metadata);
-    // console.log(result);
-    // return `https://gateway.pinata.cloud/ipfs/${colData.IpfsHash}`.toString();
+    const ipfs = await IPFS.create();
 
-    const nftMetaData = {
-      attributes: [
-        {
-          trait_type: 'Breed',
-          value: 'Maltipoo',
-        },
-        {
-          trait_type: 'Eye color',
-          value: 'Mocha',
-        },
-      ],
-      description: "The world's most adorable and sensitive pup.",
-      image: 'https://gateway.pinata.cloud/ipfs/QmWmvTJmJU3pozR9ZHFmQC2DNDwi2XJtf3QGyYiiagFSWb',
-      name: 'Ramses',
-    };
-    const result = await pinata.pinJSONToIPFS(nftMetaData, {});
-    return `https://gateway.pinata.cloud/ipfs/${result.IpfsHash}`.toString();
+    // fs.mkdirSync('src/utils/test.txt', { recursive: true })
+    // await fs.promises.mkdir('src/utils/test');
+    // await fs.promises.writeFile('src/utils/test.txt', 'Hello bro how are u?');
+    await ipfs.files.mkdir(`/collections`, { parents: true });
+    await ipfs.files.write(`/collections/${collectionId.toString()}`, 'src/utils/test.txt', { create: true });
+    const stats = await ipfs.files.stat(`/collections`);
+
+    // await fs.promises.unlink('src/utils/test', { recursive: true });
+
+    return stats.cid.toString();
   } catch (err) {
     console.log('---error ipfs---', err);
   }
@@ -110,4 +96,5 @@ module.exports = {
   addFilesToIPFS,
   uploadToAws,
   createCollectionHash,
+  deleteFromAWS,
 };
