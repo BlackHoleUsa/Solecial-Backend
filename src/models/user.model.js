@@ -10,12 +10,11 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      unique: true,
     },
     email: {
       type: String,
       required: true,
-      unique: true,
+
       trim: true,
       lowercase: true,
       validate(value) {
@@ -33,12 +32,10 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      unique: true,
     },
     bio: {
       type: String,
       required: false,
-      trim: true,
     },
     // password: {
     //   type: String,

@@ -15,7 +15,7 @@ const createCollection = catchAsync(async (req, res) => {
   const files = req.files;
   let col = await collectionService.saveCollection(req.body);
   const hashUrl = await helpers.createCollectionHash(col._id);
-  console.log(hashUrl);
+
   let cover, profile;
   if (files.length > 0) {
     for (let file of files) {
@@ -29,12 +29,12 @@ const createCollection = catchAsync(async (req, res) => {
     col = await collectionService.updateCollectionImages(col._id, profile.Location, cover.Location);
   }
 
-  // const data = await collectionService.getCollectionById(owner);
+  const data = await collectionService.getCollectionById(owner);
   EVENT.emit('add-collection-in-user', {
     collectionId: col._id,
     userId: owner,
   });
-  res.status(httpStatus.OK).send({ status: true, message: 'collection created successfully', data: hashUrl });
+  res.status(httpStatus.OK).send({ status: true, message: 'collection created successfully', data });
 });
 
 const getUserCollections = catchAsync(async (req, res) => {
@@ -52,7 +52,6 @@ const getCollectionDetails = catchAsync(async (req, res) => {
 const updateCollection = catchAsync(async (req, res) => {
   const files = req.files;
   let body = req.body;
-
   const { collectionId } = body;
   let profile, cover;
   if (files.length > 0) {
@@ -68,7 +67,6 @@ const updateCollection = catchAsync(async (req, res) => {
       }
     }
   }
-
   const collection = await collectionService.updateCollectioById(collectionId, body);
   res.send({ status: true, message: 'collection updated successfully', collection });
 });
