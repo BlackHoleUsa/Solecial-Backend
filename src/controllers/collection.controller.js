@@ -4,17 +4,12 @@ const { authService, userService, tokenService, emailService, collectionService 
 const { User } = require('../models');
 const helpers = require('../utils/helpers');
 const EVENT = require('../triggers/custom-events').customEvent;
-const { profile } = require('winston');
-
-const test = catchAsync(async (req, res) => {
-  res.status(httpStatus.OK).send({ status: true, message: 'successfull' });
-});
 
 const createCollection = catchAsync(async (req, res) => {
   const { owner } = req.body;
   const files = req.files;
   let col = await collectionService.saveCollection(req.body);
-  const hashUrl = await helpers.createCollectionHash(col._id);
+  // const hashUrl = await helpers.createCollectionHash(col._id);
 
   let cover, profile;
   if (files.length > 0) {

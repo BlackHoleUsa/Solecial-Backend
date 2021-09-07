@@ -27,9 +27,8 @@ const artworkSchema = mongoose.Schema(
       trim: true,
     },
     price: {
-      type: String,
+      type: Number,
       required: true,
-      trim: true,
     },
     collectionId: {
       type: mongoose.SchemaTypes.ObjectId,
