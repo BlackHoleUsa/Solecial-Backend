@@ -51,26 +51,26 @@ const getCollectionDetails = catchAsync(async (req, res) => {
 
 const updateCollection = catchAsync(async (req, res) => {
   const files = req.files;
-  const body = req.body;
+  let body = req.body;
 
   const { collectionId } = body;
-
+  let profile, cover;
   if (files.length > 0) {
     for (let file of files) {
       if (file.fieldname == 'profileImage') {
         await helpers.deleteFromAWS(`/collections/${collectionId}/profile`);
         profile = await helpers.uploadToAws(file.buffer, `/collections/${collectionId}/profile`);
-        body.profileImage = profile;
+        body.profileImage = profile.Location;
       } else if (file.fieldname == 'coverImage') {
         await helpers.deleteFromAWS(`/collections/${collectionId}/cover`);
         cover = await helpers.uploadToAws(file.buffer, `/collections/${collectionId}/cover`);
-        body.coverImage = cover;
+        body.coverImage = cover.Location;
       }
     }
   }
 
-  const user = await collectionService.updateCollectioById(collectionId, body);
-  res.send(user);
+  const collection = await collectionService.updateCollectioById(collectionId, body);
+  res.send({ status: true, message: 'collection updated successfully', collection });
 });
 
 module.exports = {

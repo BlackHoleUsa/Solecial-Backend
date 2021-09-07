@@ -11,6 +11,16 @@ const createCollectionVS = {
   }),
 };
 
+const updateCollectionVS = {
+  body: Joi.object().keys({
+    collectionId: Joi.string().required(),
+    name: Joi.string().optional(),
+    description: Joi.string().optional(),
+    coverImage: Joi.string().optional(),
+    profileImage: Joi.string().optional(),
+  }),
+};
+
 const getCollectionVS = {
   query: Joi.object().keys({
     userId: Joi.string().required(),
@@ -28,4 +38,5 @@ module.exports = {
   createCollectionVS,
   getCollectionVS,
   singleCollectionVS,
+  updateCollectionVS,
 };
