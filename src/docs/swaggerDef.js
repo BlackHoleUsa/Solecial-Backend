@@ -4,7 +4,7 @@ const config = require('../config/config');
 const swaggerDef = {
   openapi: '3.0.0',
   info: {
-    title: 'VIRGIL API documentation',
+    title: 'DIGIDRIP API documentation',
     version,
     license: {
       name: 'MIT',
@@ -16,6 +16,7 @@ const swaggerDef = {
       url: `http://localhost:${config.port}/v1`,
     },
   ],
+  security: [{ bearerAuth: [] }],
 };
 
 module.exports = swaggerDef;
