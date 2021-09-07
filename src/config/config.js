@@ -81,4 +81,7 @@ module.exports = {
     secretAccessKey: envVars.AWS_SECRET_ACCESS_KEY,
     bucket: envVars.AWS_BUCKET,
   },
+  ETH_CONTRACTS: {
+    MINT_NFT_CONTRACT_ADDRESS: '0x95C3251876cdf276efa2625AbcB4Acb0374fA839',
+  }
 };
