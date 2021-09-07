@@ -15,6 +15,7 @@ const getArtworksVS = {
   query: Joi.object().keys({
     page: Joi.string().required(),
     perPage: Joi.string().required(),
+    userId: Joi.string().required(),
   }),
 };
 
@@ -38,10 +39,17 @@ const getFavouriteVS = {
   }),
 };
 
+const increaseViewVS = {
+  body: Joi.object().keys({
+    artworkId: Joi.string().required(),
+  }),
+};
+
 module.exports = {
   createArtworkVS,
   getArtworksVS,
   addFavouriteVS,
   removeFavouriteVS,
   getFavouriteVS,
+  increaseViewVS,
 };

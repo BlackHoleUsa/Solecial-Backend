@@ -22,6 +22,7 @@ const getPaginatedCollections = async (page, perPage, userId) => {
     .skip(page * perPage)
     .lean();
 };
+
 const getPopulatedCollection = async (collectionId, fieldToPopulate) => {
   return await Collection.findOne({ _id: collectionId }).populate(fieldToPopulate).lean();
 };
@@ -30,10 +31,19 @@ const updateCollectionImages = async (collectionId, profileImage, coverImage) =>
   return await Collection.findOneAndUpdate({ _id: collectionId }, { profileImage, coverImage }, { new: true });
 };
 
+const updateCollectioById = async (collectionId, updateBody) => {
+  const user = await Collection.findByIdAndUpdate(collectionId, updateBody, {
+    new: true,
+  });
+
+  return user;
+};
+
 module.exports = {
   saveCollection,
   getCollectionById,
   getPaginatedCollections,
   getPopulatedCollection,
   updateCollectionImages,
+  updateCollectioById,
 };
