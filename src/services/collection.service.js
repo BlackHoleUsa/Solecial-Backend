@@ -12,8 +12,12 @@ const saveCollection = async (params) => {
   return await Collection.create(params);
 };
 
-const getCollectionById = async (userId) => {
-  return await Collection.findOne({ owner: userId });
+const getCollectionById = async (id) => {
+  return await Collection.findOne({ _id: id });
+};
+
+const getCollectionsByUserId = async (userId) => {
+  return await Collection.find({ owner: userId });
 };
 
 const getPaginatedCollections = async (page, perPage, userId) => {
@@ -46,4 +50,5 @@ module.exports = {
   getPopulatedCollection,
   updateCollectionImages,
   updateCollectioById,
+  getCollectionsByUserId,
 };

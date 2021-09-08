@@ -34,9 +34,16 @@ const singleCollectionVS = {
     collectionId: Joi.string().required(),
   }),
 };
+
+const getAllCollectionsVS = {
+  query: Joi.object().keys({
+    userId: Joi.string().required(),
+  }),
+};
 module.exports = {
   createCollectionVS,
   getCollectionVS,
   singleCollectionVS,
   updateCollectionVS,
+  getAllCollectionsVS,
 };

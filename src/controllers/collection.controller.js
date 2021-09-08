@@ -38,6 +38,12 @@ const getUserCollections = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send({ status: true, message: 'successfull', page, data });
 });
 
+const getAllUserCollection = catchAsync(async (req, res) => {
+  const { userId } = req.query;
+  const data = await collectionService.getCollectionsByUserId(userId);
+  res.status(httpStatus.OK).send({ status: true, message: 'successfull', data });
+});
+
 const getCollectionDetails = catchAsync(async (req, res) => {
   const { collectionId } = req.query;
   const data = await collectionService.getPopulatedCollection(collectionId, 'artworks');
@@ -71,4 +77,5 @@ module.exports = {
   getUserCollections,
   getCollectionDetails,
   updateCollection,
+  getAllUserCollection,
 };

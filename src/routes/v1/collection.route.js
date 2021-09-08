@@ -6,6 +6,7 @@ const {
   getCollectionVS,
   singleCollectionVS,
   updateCollectionVS,
+  getAllCollectionsVS,
 } = require('../../validations/collection.validation');
 const auth = require('../../middlewares/auth');
 
@@ -33,6 +34,12 @@ router.post(
   '/updateCollection',
   [auth('consumedByArtistOnly'), validate(updateCollectionVS)],
   collectionController.updateCollection
+);
+
+router.get(
+  '/getAllUserCollections',
+  [auth('consumedByArtistOnly'), validate(getAllCollectionsVS)],
+  collectionController.getAllUserCollection
 );
 
 module.exports = router;
