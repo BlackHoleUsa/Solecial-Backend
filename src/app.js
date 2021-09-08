@@ -14,9 +14,11 @@ const routes = require('./routes/v1');
 const { errorConverter, errorHandler } = require('./middlewares/error');
 const ApiError = require('./utils/ApiError');
 const { fileParser } = require('express-multipart-file-parser');
+require('./utils/contract.service');
 
 require('./config/aws.config');
 require('./triggers/triggers');
+// require('./triggers/contract.triggers');
 
 const app = express();
 

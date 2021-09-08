@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { toJSON } = require('./plugins');
+const { ARTWORK_TYPE } = require('../utils/enums');
 
 const artworkSchema = mongoose.Schema(
   {
@@ -21,15 +22,14 @@ const artworkSchema = mongoose.Schema(
       ref: 'User',
       required: false,
     },
-    image: {
+    artwork_url: {
       type: String,
       required: false,
       trim: true,
     },
     price: {
-      type: String,
+      type: Number,
       required: true,
-      trim: true,
     },
     collectionId: {
       type: mongoose.SchemaTypes.ObjectId,
@@ -39,6 +39,16 @@ const artworkSchema = mongoose.Schema(
       type: Number,
       required: false,
       default: 0,
+    },
+    artwork_type: {
+      type: String,
+      required: false,
+      default: ARTWORK_TYPE.IMAGE,
+    },
+    meta_url: {
+      type: String,
+      required: false,
+      trim: true,
     },
   },
   {
