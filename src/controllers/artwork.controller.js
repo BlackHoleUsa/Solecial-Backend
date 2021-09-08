@@ -1,7 +1,14 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const { authService, userService, tokenService, emailService, collectionService, artworkService } = require('../services');
-const { User } = require('../models');
+const {
+  authService,
+  userService,
+  tokenService,
+  emailService,
+  collectionService,
+  artworkService,
+  bidService,
+} = require('../services');
 const EVENT = require('../triggers/custom-events').customEvent;
 const { addFilesToIPFS, pinMetaDataToIPFS } = require('../utils/helpers');
 
@@ -9,9 +16,7 @@ const saveArtwork = catchAsync(async (req, res) => {
   const body = req.body;
   const files = req.files;
   const { name, description, creater, collectionId } = body;
-
   let imgData;
-
   if (files.length > 0) {
     imgData = await addFilesToIPFS(files[0].buffer, 'image');
     body.artwork_url = imgData;
@@ -19,20 +24,17 @@ const saveArtwork = catchAsync(async (req, res) => {
   body.owner = body.creater;
   const artwork = await artworkService.saveArtwork(body);
   const user = await userService.getUserById(creater);
-
   const metaUrl = await pinMetaDataToIPFS({
     name,
     description,
     creater: {
-      name: user.userName,
-      id: user._id,
+      name: user?.userName,
+      id: user?._id,
     },
     collectionId,
     artwork_url: imgData,
   });
-
   const updatedArtwork = await artworkService.updateArtworkMetaUrl(artwork._id, metaUrl);
-
   EVENT.emit('add-artwork-in-user', {
     artworkId: artwork._id,
     userId: body.creater,
@@ -41,7 +43,6 @@ const saveArtwork = catchAsync(async (req, res) => {
     artworkId: artwork._id,
     collectionId: body.collectionId,
   });
-
   res.status(httpStatus.OK).send({ status: true, message: 'artwork saved successfully', updatedArtwork });
 });
 
@@ -81,6 +82,19 @@ const increaseArtworkViews = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send({ status: true, message: 'Artwork view increased successfully', data: artwork });
 });
 
+const placeBid = catchAsync(async (req, res) => {
+  const body = req.body;
+  const { artwork } = body;
+  const bid = await bidService.saveBid(body);
+
+  EVENT.emit('save-bid-in-artwork', {
+    artworkId: artwork,
+    bidId: bid._id,
+  });
+
+  res.status(httpStatus.OK).send({ status: true, message: 'Your bid has been placed successfully', data: bid });
+});
+
 module.exports = {
   saveArtwork,
   getUserArtworks,
@@ -88,4 +102,5 @@ module.exports = {
   removeFromFavourites,
   getFavouriteArtworks,
   increaseArtworkViews,
+  placeBid,
 };

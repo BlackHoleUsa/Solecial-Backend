@@ -46,6 +46,15 @@ const increaseViewVS = {
   }),
 };
 
+const placeBidVS = {
+  body: Joi.object().keys({
+    bidder: Joi.string().required(),
+    artwork: Joi.string().required(),
+    bid_amount: Joi.number().required(),
+    owner: Joi.string().required(),
+  }),
+};
+
 module.exports = {
   createArtworkVS,
   getArtworksVS,
@@ -53,4 +62,5 @@ module.exports = {
   removeFavouriteVS,
   getFavouriteVS,
   increaseViewVS,
+  placeBidVS,
 };

@@ -40,4 +40,6 @@ router.post(
   artworkController.increaseArtworkViews
 );
 
+router.post('/placeBid', [auth('manageUsers'), validate(artworkValidation.placeBidVS)], artworkController.placeBid);
+
 module.exports = router;
