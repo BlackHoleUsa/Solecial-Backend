@@ -52,6 +52,22 @@ const placeBidVS = {
     artwork: Joi.string().required(),
     bid_amount: Joi.number().required(),
     owner: Joi.string().required(),
+    auctionId: Joi.string().required(),
+  }),
+};
+
+const openAuctionVS = {
+  body: Joi.object().keys({
+    initialPrice: Joi.number().required(),
+    artwork: Joi.string().required(),
+    owner: Joi.string().required(),
+    creater: Joi.string().required(),
+    endTime: Joi.date().required(),
+  }),
+};
+const getSingleArtVS = {
+  query: Joi.object().keys({
+    artworkId: Joi.string().required(),
   }),
 };
 
@@ -63,4 +79,6 @@ module.exports = {
   getFavouriteVS,
   increaseViewVS,
   placeBidVS,
+  openAuctionVS,
+  getSingleArtVS,
 };

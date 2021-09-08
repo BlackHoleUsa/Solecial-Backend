@@ -56,6 +56,14 @@ const artworkSchema = mongoose.Schema(
         ref: 'Bid',
       },
     ],
+    isAuctionOpen: {
+      type: Boolean,
+      default: false,
+    },
+    auction: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'Auction',
+    },
   },
   {
     timestamps: true,

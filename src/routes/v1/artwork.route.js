@@ -41,5 +41,16 @@ router.post(
 );
 
 router.post('/placeBid', [auth('manageUsers'), validate(artworkValidation.placeBidVS)], artworkController.placeBid);
+router.post(
+  '/openArtworkAuction',
+  [auth('manageUsers'), validate(artworkValidation.openAuctionVS)],
+  artworkController.createAuction
+);
+
+router.get(
+  '/getSingleArtwork',
+  [auth('manageUsers'), validate(artworkValidation.getSingleArtVS)],
+  artworkController.getSingleArtwork
+);
 
 module.exports = router;
