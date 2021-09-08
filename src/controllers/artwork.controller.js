@@ -8,6 +8,7 @@ const {
   collectionService,
   artworkService,
   bidService,
+  auctionService,
 } = require('../services');
 const EVENT = require('../triggers/custom-events').customEvent;
 const { addFilesToIPFS, pinMetaDataToIPFS } = require('../utils/helpers');
@@ -82,17 +83,37 @@ const increaseArtworkViews = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send({ status: true, message: 'Artwork view increased successfully', data: artwork });
 });
 
+const createAuction = catchAsync(async (req, res) => {
+  const { artwork } = req.body;
+  const body = req.body;
+  const auction = await auctionService.saveAuction(body);
+
+  EVENT.emit('open-artwork-auction', {
+    artworkId: artwork,
+    auction: auction._id,
+  });
+
+  res.status(httpStatus.OK).send({ status: true, message: 'Artwork placed on auction successfully', data: auction });
+});
+
 const placeBid = catchAsync(async (req, res) => {
   const body = req.body;
-  const { artwork } = body;
+  const { artwork, auctionId } = body;
   const bid = await bidService.saveBid(body);
 
   EVENT.emit('save-bid-in-artwork', {
     artworkId: artwork,
     bidId: bid._id,
+    auctionId,
   });
 
   res.status(httpStatus.OK).send({ status: true, message: 'Your bid has been placed successfully', data: bid });
+});
+const getSingleArtwork = catchAsync(async (req, res) => {
+  const { artworkId } = req.query;
+
+  const artwork = await artworkService.getPopulatedArtwork(artworkId, 'auction creater owner');
+  res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: artwork });
 });
 
 module.exports = {
@@ -103,4 +124,6 @@ module.exports = {
   getFavouriteArtworks,
   increaseArtworkViews,
   placeBid,
+  createAuction,
+  getSingleArtwork,
 };

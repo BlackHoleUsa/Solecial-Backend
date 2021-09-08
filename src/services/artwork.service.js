@@ -8,6 +8,10 @@ const { Collection, Artwork } = require('../models');
 const ApiError = require('../utils/ApiError');
 const { tokenTypes } = require('../config/tokens');
 
+const getPopulatedArtwork = async (artworkId, fieldsToPopulate) => {
+  return await Artwork.findOne({ _id: artworkId }).populate(fieldsToPopulate);
+};
+
 const saveArtwork = async (params) => {
   return await Artwork.create(params);
 };
@@ -37,4 +41,5 @@ module.exports = {
   increaseArtworkViews,
   updateArtwork,
   updateArtworkMetaUrl,
+  getPopulatedArtwork,
 };
