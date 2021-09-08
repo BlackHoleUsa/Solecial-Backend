@@ -5,12 +5,14 @@ const AWS = require('aws-sdk');
 const fs = require('fs');
 const IPFS = require('ipfs');
 const { CID } = require('ipfs');
+const ApiError = require('./ApiError');
+const httpStatus = require('http-status');
 const pinata = pinataSDK(config.pinata.api_key, config.pinata.api_secret);
 
 const addFilesToIPFS = async (photo, type) => {
   try {
     const stream = Readable.from(photo);
-    stream.path = '/QmcXq6xxeU4UZv4FHRsDW9tcs5CYigDaxCb1wQZDPcjQVx/3';
+    stream.path = 'test';
 
     const options = {
       pinataMetadata: {
@@ -25,6 +27,30 @@ const addFilesToIPFS = async (photo, type) => {
     return `https://gateway.pinata.cloud/ipfs/${imgData.IpfsHash}`.toString();
   } catch (err) {
     console.log('---error ipfs---', err);
+  }
+};
+
+const pinMetaDataToIPFS = async (metaData) => {
+  try {
+    // const body = {
+    //   message: 'Pinatas are awesome',
+    // };
+    // const options = {
+    //   pinataMetadata: {
+    //     name: MyCustomName,
+    //     keyvalues: {
+    //       customKey: 'customValue',
+    //       customKey2: 'customValue2',
+    //     },
+    //   },
+    //   pinataOptions: {
+    //     cidVersion: 0,
+    //   },
+    // };
+    const meta = await pinata.pinJSONToIPFS(metaData, {});
+    return `https://gateway.pinata.cloud/ipfs/${meta.IpfsHash}`.toString();
+  } catch (err) {
+    throw new ApiError(httpStatus[400], 'Error pinning meta data to ipfs');
   }
 };
 
@@ -92,9 +118,11 @@ const createCollectionHash = async (collectionId) => {
     console.log('---error ipfs---', err);
   }
 };
+
 module.exports = {
   addFilesToIPFS,
   uploadToAws,
   createCollectionHash,
   deleteFromAWS,
+  pinMetaDataToIPFS,
 };

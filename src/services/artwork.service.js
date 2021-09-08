@@ -23,8 +23,18 @@ const increaseArtworkViews = async (artworkId) => {
   return await Artwork.findOneAndUpdate({ _id: artworkId }, { $inc: { views: 1 } }, { new: true });
 };
 
+const updateArtwork = async (id, fieldToUpdate, value) => {
+  return await Artwork.findOneAndUpdate({ _id: id }, { fieldToUpdate: value }, { new: true });
+};
+
+const updateArtworkMetaUrl = async (id, value) => {
+  return await Artwork.findOneAndUpdate({ _id: id }, { meta_url: value }, { new: true });
+};
+
 module.exports = {
   saveArtwork,
   getUserArtworks,
   increaseArtworkViews,
+  updateArtwork,
+  updateArtworkMetaUrl,
 };

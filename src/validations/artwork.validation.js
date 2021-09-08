@@ -8,6 +8,7 @@ const createArtworkVS = {
     price: Joi.string().required(),
     image: Joi.string().optional(),
     collectionId: Joi.string().required(),
+    artwork_type: Joi.string().required(),
   }),
 };
 
