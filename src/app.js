@@ -18,7 +18,7 @@ require('./utils/contract.service');
 
 require('./config/aws.config');
 require('./triggers/triggers');
-// require('./triggers/contract.triggers');
+require('./triggers/contract.triggers');
 
 const app = express();
 
