@@ -1,5 +1,6 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
+const ApiError = require('../utils/apiError');
 const {
   authService,
   userService,
@@ -85,7 +86,14 @@ const increaseArtworkViews = catchAsync(async (req, res) => {
 
 const createAuction = catchAsync(async (req, res) => {
   const { artwork } = req.body;
+  if (await auctionService.artworkExistsInAuction(artwork)) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Artwork is already on auction');
+  }
   const body = req.body;
+  const { owner, creater } = await artworkService.getArtworkById(artwork);
+  body.owner = owner;
+  body.creater = creater;
+
   const auction = await auctionService.saveAuction(body);
 
   EVENT.emit('open-artwork-auction', {
@@ -116,6 +124,13 @@ const getSingleArtwork = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: artwork });
 });
 
+const getAuctionBids = catchAsync(async (req, res) => {
+  const { auctionId } = req.query;
+
+  const bids = await bidService.getAuctionBidsPopulated(auctionId, 'bidder owner auction');
+  res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: bids });
+});
+
 module.exports = {
   saveArtwork,
   getUserArtworks,
@@ -126,4 +141,5 @@ module.exports = {
   placeBid,
   createAuction,
   getSingleArtwork,
+  getAuctionBids,
 };
