@@ -4,9 +4,9 @@ const userRoute = require('./user.route');
 const docsRoute = require('./docs.route');
 const collectionRoute = require('./collection.route');
 const artworkRoute = require('./artwork.route');
+const auctionRoute = require('./auction.route');
 
 const config = require('../../config/config');
-const logger = require('../../config/logger');
 
 const router = express.Router();
 
@@ -26,6 +26,10 @@ const defaultRoutes = [
   {
     path: '/artwork',
     route: artworkRoute,
+  },
+  {
+    path: '/auction',
+    route: auctionRoute,
   },
 ];
 
