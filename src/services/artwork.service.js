@@ -39,6 +39,10 @@ const getArtworkById = async (id) => {
   return await Artwork.findOne({ _id: id });
 };
 
+const closeArtworkAuction = async (artworkId) => {
+  return await Artwork.findOneAndUpdate({ _id: artworkId }, { isAuctionOpen: false, auction: null, bids: [] });
+};
+
 module.exports = {
   saveArtwork,
   getUserArtworks,
@@ -47,4 +51,5 @@ module.exports = {
   updateArtworkMetaUrl,
   getPopulatedArtwork,
   getArtworkById,
+  closeArtworkAuction,
 };
