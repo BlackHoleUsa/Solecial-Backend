@@ -1,4 +1,6 @@
 const { MINT_CONTRACT_INSTANCE } = require('../config/contract.config');
+const { contractController } = require('../controllers');
+const { MINT_CONTRACT_EVENTS } = require('../utils/enums');
 // var contractInfo = require('./contractInfo');
 // const Web3 = require('web3')
 
@@ -7,14 +9,21 @@ const { MINT_CONTRACT_INSTANCE } = require('../config/contract.config');
 
 // const contract = new web3.eth.Contract(contractInfo.marketMinterabi, contractInfo.marketMinterAddress);
 
-MINT_CONTRACT_INSTANCE.events.allEvents(function (err, event) {
+MINT_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
   if (err) {
-    console.error('Error', err)
-    process.exit(1)
+    console.error('Error', err);
+    process.exit(1);
   }
 
-  console.log('Event', event)
-})
+  console.log('Event', ev);
+  // console.log('--collection address--', ev.returnValues.CollectionAddress);
+
+  switch (ev.event) {
+    case MINT_CONTRACT_EVENTS.NEW_COLLECTION:
+      // contractController.updateCollectionAddress();
+      break;
+  }
+});
 
 // const transferEvent = async () => {
 

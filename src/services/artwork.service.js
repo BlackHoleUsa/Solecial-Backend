@@ -35,6 +35,10 @@ const updateArtworkMetaUrl = async (id, value) => {
   return await Artwork.findOneAndUpdate({ _id: id }, { meta_url: value }, { new: true });
 };
 
+const getArtworkById = async (id) => {
+  return await Artwork.findOne({ _id: id });
+};
+
 module.exports = {
   saveArtwork,
   getUserArtworks,
@@ -42,4 +46,5 @@ module.exports = {
   updateArtwork,
   updateArtworkMetaUrl,
   getPopulatedArtwork,
+  getArtworkById,
 };

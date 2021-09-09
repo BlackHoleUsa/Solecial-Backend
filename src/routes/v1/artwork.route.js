@@ -299,4 +299,10 @@ router.get(
   artworkController.getSingleArtwork
 );
 
+router.get(
+  '/getAuctionBids',
+  [auth('manageUsers'), validate(artworkValidation.getAuctionBidsVS)],
+  artworkController.getAuctionBids
+);
+
 module.exports = router;
