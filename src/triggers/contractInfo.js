@@ -119,7 +119,7 @@ var ABI = [
 	}
 ]
 
-var contractAddress= "0x346768d39028ac6D6cBCf0Aa4832c2dD89bC07F0";
+var contractAddress = "0x95C3251876cdf276efa2625AbcB4Acb0374fA839";
 
 exports.marketMinterabi = ABI;
-exports.marketMinterAddress= contractAddress;
+exports.marketMinterAddress = contractAddress;
