@@ -1,4 +1,4 @@
-const { User, Collection } = require('../models');
+const { User, Collection, Artwork, Auction } = require('../models');
 
 const addCollectionInUser = async (params) => {
   const { collectionId, userId } = params;
@@ -18,14 +18,50 @@ const addArtworkInUser = async (params) => {
 
 const addArtworkInCollection = async (params) => {
   const { artworkId, collectionId } = params;
-  await Collection.findOneAndUpdate(collectionId, {
-    $push: { artworks: artworkId },
-  });
+  await Collection.findOneAndUpdate(
+    { _id: collectionId },
+    {
+      $push: { artworks: artworkId },
+    }
+  );
   console.log('artwork added in collection successfully');
+};
+
+const saveBidInArtwork = async (params) => {
+  const { artworkId, bidId, auctionId } = params;
+  await Artwork.findOneAndUpdate(
+    { _id: artworkId },
+    {
+      $push: { bids: bidId },
+    }
+  );
+
+  await Auction.findOneAndUpdate(
+    { _id: auctionId },
+    {
+      $push: { bids: bidId },
+    }
+  );
+
+  console.log('bid saved in artwork successfully');
+};
+
+const openArtworkAuction = async (params) => {
+  const { artworkId, auction } = params;
+  await Artwork.findOneAndUpdate(
+    { _id: artworkId },
+    {
+      auction: auction,
+      isAuctionOpen: true,
+    }
+  );
+  console.log('auction opened for artwork successfully');
 };
 
 module.exports = {
   addCollectionInUser,
   addArtworkInUser,
   addArtworkInCollection,
+  saveBidInArtwork,
+  openArtworkAuction,
 };

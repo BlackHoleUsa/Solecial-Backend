@@ -22,6 +22,11 @@ const collectionSchema = mongoose.Schema(
       required: false,
       trim: true,
     },
+    symbol: {
+      type: String,
+      required: false,
+      trim: true,
+    },
     profileImage: {
       type: String,
       required: false,

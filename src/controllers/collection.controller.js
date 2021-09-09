@@ -4,17 +4,16 @@ const { authService, userService, tokenService, emailService, collectionService 
 const { User } = require('../models');
 const helpers = require('../utils/helpers');
 const EVENT = require('../triggers/custom-events').customEvent;
-
-const test = catchAsync(async (req, res) => {
-  res.status(httpStatus.OK).send({ status: true, message: 'successfull' });
-});
+const ApiError = require('../utils/apiError');
 
 const createCollection = catchAsync(async (req, res) => {
-  const { owner } = req.body;
+  const { owner, name } = req.body;
   const files = req.files;
+  if (await collectionService.collectionExists(owner, name)) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Collection with name already exists');
+  }
+
   let col = await collectionService.saveCollection(req.body);
-  const hashUrl = await helpers.createCollectionHash(col._id);
-  console.log(hashUrl);
   let cover, profile;
   if (files.length > 0) {
     for (let file of files) {
@@ -28,18 +27,25 @@ const createCollection = catchAsync(async (req, res) => {
     col = await collectionService.updateCollectionImages(col._id, profile.Location, cover.Location);
   }
 
-  // const data = await collectionService.getCollectionById(owner);
+  const data = await collectionService.getCollectionById(owner);
   EVENT.emit('add-collection-in-user', {
     collectionId: col._id,
     userId: owner,
   });
-  res.status(httpStatus.OK).send({ status: true, message: 'collection created successfully', data: col });
+  res.status(httpStatus.OK).send({ status: true, message: 'collection created successfully', data });
 });
 
 const getUserCollections = catchAsync(async (req, res) => {
   const { userId, page, perPage } = req.query;
+
   const data = await collectionService.getPaginatedCollections(page, perPage, userId);
   res.status(httpStatus.OK).send({ status: true, message: 'successfull', page, data });
+});
+
+const getAllUserCollection = catchAsync(async (req, res) => {
+  const { userId } = req.query;
+  const data = await collectionService.getCollectionsByUserId(userId);
+  res.status(httpStatus.OK).send({ status: true, message: 'successfull', data });
 });
 
 const getCollectionDetails = catchAsync(async (req, res) => {
@@ -48,8 +54,32 @@ const getCollectionDetails = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send({ status: true, message: 'successfull', data });
 });
 
+const updateCollection = catchAsync(async (req, res) => {
+  const files = req.files;
+  let body = req.body;
+  const { collectionId } = body;
+  let profile, cover;
+  if (files.length > 0) {
+    for (let file of files) {
+      if (file.fieldname == 'profileImage') {
+        await helpers.deleteFromAWS(`/collections/${collectionId}/profile`);
+        profile = await helpers.uploadToAws(file.buffer, `/collections/${collectionId}/profile`);
+        body.profileImage = profile.Location;
+      } else if (file.fieldname == 'coverImage') {
+        await helpers.deleteFromAWS(`/collections/${collectionId}/cover`);
+        cover = await helpers.uploadToAws(file.buffer, `/collections/${collectionId}/cover`);
+        body.coverImage = cover.Location;
+      }
+    }
+  }
+  const collection = await collectionService.updateCollectioById(collectionId, body);
+  res.send({ status: true, message: 'collection updated successfully', collection });
+});
+
 module.exports = {
   createCollection,
   getUserCollections,
   getCollectionDetails,
+  updateCollection,
+  getAllUserCollection,
 };

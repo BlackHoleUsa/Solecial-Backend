@@ -8,6 +8,17 @@ const createCollectionVS = {
     owner: Joi.string().required(),
     coverImage: Joi.string().optional(),
     profileImage: Joi.string().optional(),
+    symbol: Joi.string().optional(),
+  }),
+};
+
+const updateCollectionVS = {
+  body: Joi.object().keys({
+    collectionId: Joi.string().required(),
+    name: Joi.string().optional(),
+    description: Joi.string().optional(),
+    coverImage: Joi.string().optional(),
+    profileImage: Joi.string().optional(),
   }),
 };
 
@@ -24,8 +35,16 @@ const singleCollectionVS = {
     collectionId: Joi.string().required(),
   }),
 };
+
+const getAllCollectionsVS = {
+  query: Joi.object().keys({
+    userId: Joi.string().required(),
+  }),
+};
 module.exports = {
   createCollectionVS,
   getCollectionVS,
   singleCollectionVS,
+  updateCollectionVS,
+  getAllCollectionsVS,
 };
