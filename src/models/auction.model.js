@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { toJSON } = require('./plugins');
+const { AUCTION_STATUS } = require('../utils/enums');
 
 const auctionSchema = mongoose.Schema(
   {
@@ -32,6 +33,10 @@ const auctionSchema = mongoose.Schema(
         ref: 'Bid',
       },
     ],
+    status: {
+      type: String,
+      default: AUCTION_STATUS.OPEN,
+    },
   },
   {
     timestamps: true,

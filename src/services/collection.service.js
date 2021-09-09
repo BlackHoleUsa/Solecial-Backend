@@ -36,11 +36,15 @@ const updateCollectionImages = async (collectionId, profileImage, coverImage) =>
 };
 
 const updateCollectioById = async (collectionId, updateBody) => {
-  const user = await Collection.findByIdAndUpdate(collectionId, updateBody, {
+  const collection = await Collection.findByIdAndUpdate(collectionId, updateBody, {
     new: true,
   });
+  return collection;
+};
 
-  return user;
+const collectionExists = async (userId, colName) => {
+  const collection = await Collection.find({ owner: userId, name: colName });
+  return collection.length > 0;
 };
 
 module.exports = {
@@ -51,4 +55,5 @@ module.exports = {
   updateCollectionImages,
   updateCollectioById,
   getCollectionsByUserId,
+  collectionExists,
 };

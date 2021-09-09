@@ -4,13 +4,16 @@ const { authService, userService, tokenService, emailService, collectionService 
 const { User } = require('../models');
 const helpers = require('../utils/helpers');
 const EVENT = require('../triggers/custom-events').customEvent;
+const ApiError = require('../utils/apiError');
 
 const createCollection = catchAsync(async (req, res) => {
-  const { owner } = req.body;
+  const { owner, name } = req.body;
   const files = req.files;
-  let col = await collectionService.saveCollection(req.body);
-  // const hashUrl = await helpers.createCollectionHash(col._id);
+  if (await collectionService.collectionExists(owner, name)) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Collection with name already exists');
+  }
 
+  let col = await collectionService.saveCollection(req.body);
   let cover, profile;
   if (files.length > 0) {
     for (let file of files) {
@@ -34,6 +37,7 @@ const createCollection = catchAsync(async (req, res) => {
 
 const getUserCollections = catchAsync(async (req, res) => {
   const { userId, page, perPage } = req.query;
+
   const data = await collectionService.getPaginatedCollections(page, perPage, userId);
   res.status(httpStatus.OK).send({ status: true, message: 'successfull', page, data });
 });
