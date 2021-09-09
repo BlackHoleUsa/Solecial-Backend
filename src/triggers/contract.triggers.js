@@ -12,15 +12,16 @@ const { MINT_CONTRACT_EVENTS } = require('../utils/enums');
 MINT_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
   if (err) {
     console.error('Error', err);
-    process.exit(1);
+    return;
   }
 
   console.log('Event', ev);
-  // console.log('--collection address--', ev.returnValues.CollectionAddress);
+  console.log('--collection address--', ev.returnValues.CollectionAddress);
 
   switch (ev.event) {
     case MINT_CONTRACT_EVENTS.NEW_COLLECTION:
-      // contractController.updateCollectionAddress();
+      const { CollectionAddress, owner, colName } = ev.returnValues;
+      contractController.updateCollectionAddress(CollectionAddress, owner, colName);
       break;
   }
 });

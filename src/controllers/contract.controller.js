@@ -1,11 +1,13 @@
 const { User, Collection, Artwork, Auction } = require('../models');
 const { getUserByAddress } = require('../services/user.service');
 
-const updateCollectionAddress = async (collectionId, address) => {
+const updateCollectionAddress = async (CollectionAddress, owner, colName) => {
+  const user = await User.findOne({ address: owner });
+
   await Collection.findOneAndUpdate(
-    { _id: collectionId },
+    { owner: user._id, name: colName },
     {
-      collectionAddress: address,
+      collectionAddress: CollectionAddress,
     }
   );
   console.log('collection address updated successfully');

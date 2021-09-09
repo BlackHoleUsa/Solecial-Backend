@@ -117,6 +117,7 @@ const placeBid = catchAsync(async (req, res) => {
 
   res.status(httpStatus.OK).send({ status: true, message: 'Your bid has been placed successfully', data: bid });
 });
+
 const getSingleArtwork = catchAsync(async (req, res) => {
   const { artworkId } = req.query;
 
