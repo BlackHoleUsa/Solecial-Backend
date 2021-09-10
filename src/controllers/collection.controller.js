@@ -4,7 +4,7 @@ const { authService, userService, tokenService, emailService, collectionService 
 const { User } = require('../models');
 const helpers = require('../utils/helpers');
 const EVENT = require('../triggers/custom-events').customEvent;
-const ApiError = require('../utils/apiError');
+const ApiError = require('../utils/ApiError');
 
 const createCollection = catchAsync(async (req, res) => {
   const { owner, name } = req.body;
