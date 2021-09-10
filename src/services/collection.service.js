@@ -39,6 +39,10 @@ const collectionExists = async (userId, colName) => {
   return collection.length > 0;
 };
 
+const deleteCollectionById = async (collectionId) => {
+  return await Collection.findOneAndDelete({ _id: collectionId });
+};
+
 module.exports = {
   saveCollection,
   getCollectionById,
@@ -48,4 +52,5 @@ module.exports = {
   updateCollectioById,
   getCollectionsByUserId,
   collectionExists,
+  deleteCollectionById,
 };
