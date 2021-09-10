@@ -8,16 +8,14 @@ const updateCollectionAddress = async (CollectionAddress, owner, colName) => {
     { owner: user._id, name: colName },
     {
       collectionAddress: CollectionAddress,
-    },
-    { new: true }
+    }
   );
 
   await Artwork.findOneAndUpdate(
     { collectionId: collection._id },
     {
       tokenId: 1,
-    },
-    { new: true }
+    }
   );
   console.log('collection address and artwork token id updated successfully');
 };
