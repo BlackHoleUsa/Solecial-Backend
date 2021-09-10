@@ -41,10 +41,18 @@ const getAllCollectionsVS = {
     userId: Joi.string().required(),
   }),
 };
+
+const deleteCollectionsVS = {
+  body: Joi.object().keys({
+    collectionId: Joi.string().required(),
+  }),
+};
+
 module.exports = {
   createCollectionVS,
   getCollectionVS,
   singleCollectionVS,
   updateCollectionVS,
   getAllCollectionsVS,
+  deleteCollectionsVS,
 };

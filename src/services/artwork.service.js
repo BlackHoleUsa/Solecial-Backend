@@ -43,6 +43,10 @@ const closeArtworkAuction = async (artworkId) => {
   return await Artwork.findOneAndUpdate({ _id: artworkId }, { isAuctionOpen: false, auction: null, bids: [] });
 };
 
+const deleteArtworksByCollection = async (collectionId) => {
+  return await Artwork.deleteMany({ collectionId: collectionId });
+};
+
 module.exports = {
   saveArtwork,
   getUserArtworks,
@@ -52,4 +56,5 @@ module.exports = {
   getPopulatedArtwork,
   getArtworkById,
   closeArtworkAuction,
+  deleteArtworksByCollection,
 };
