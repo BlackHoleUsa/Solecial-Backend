@@ -9,7 +9,7 @@ const artworkSchema = mongoose.Schema(
       required: true,
     },
     description: {
-      typetype: String,
+      type: String,
       required: false,
     },
     creater: {
