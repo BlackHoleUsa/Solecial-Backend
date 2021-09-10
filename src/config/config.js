@@ -42,7 +42,7 @@ if (error) {
 
 module.exports = {
   env: envVars.NODE_ENV,
-  port: envVars.PORT,
+  port: process.env.PORT || envVars.PORT,
   mongoose: {
     url: envVars.MONGODB_URL,
     options: {
@@ -83,7 +83,8 @@ module.exports = {
   },
   ETH_CONTRACTS: {
     // MINT_NFT_CONTRACT_ADDRESS: '0x95C3251876cdf276efa2625AbcB4Acb0374fA839',
-    MINT_NFT_CONTRACT_ADDRESS: '0x0296D857eA22Ac65b1d0AE63d8c6A951E4027B49',
+    // MINT_NFT_CONTRACT_ADDRESS: '0x0296D857eA22Ac65b1d0AE63d8c6A951E4027B49',
+    MINT_NFT_CONTRACT_ADDRESS: '0xB60DC87BB4908bB42b5Ed9766FCb5618ea617C77',
     MINT_NFT_ABI: [
       {
         inputs: [
