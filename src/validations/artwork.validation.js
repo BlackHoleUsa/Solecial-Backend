@@ -9,6 +9,7 @@ const createArtworkVS = {
     image: Joi.string().optional(),
     collectionId: Joi.string().required(),
     artwork_type: Joi.string().required(),
+    tokenId: Joi.string().optional(),
   }),
 };
 

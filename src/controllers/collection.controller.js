@@ -1,6 +1,6 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const { authService, userService, tokenService, emailService, collectionService } = require('../services');
+const { authService, userService, tokenService, emailService, collectionService, artworkService } = require('../services');
 const { User } = require('../models');
 const helpers = require('../utils/helpers');
 const EVENT = require('../triggers/custom-events').customEvent;
@@ -76,10 +76,19 @@ const updateCollection = catchAsync(async (req, res) => {
   res.send({ status: true, message: 'collection updated successfully', collection });
 });
 
+const deleteCollection = catchAsync(async (req, res) => {
+  const { collectionId } = req.body;
+
+  await collectionService.deleteCollectionById(collectionId);
+  await artworkService.deleteArtworksByCollection(collectionId);
+  res.send({ status: true, message: 'collection deleted successfully' });
+});
+
 module.exports = {
   createCollection,
   getUserCollections,
   getCollectionDetails,
   updateCollection,
   getAllUserCollection,
+  deleteCollection,
 };
