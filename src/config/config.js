@@ -7,7 +7,7 @@ dotenv.config({ path: path.join(__dirname, '../../.env') });
 const envVarsSchema = Joi.object()
   .keys({
     NODE_ENV: Joi.string().valid('production', 'development', 'test').required(),
-    PORT: Joi.number().default(3000),
+    // PORT: Joi.number().default(3000),
     MONGODB_URL: Joi.string().required().description('Mongo DB url'),
     DB_NAME: Joi.string().required().description('DB Name'),
     JWT_SECRET: Joi.string().required().description('JWT secret key'),
@@ -42,7 +42,7 @@ if (error) {
 
 module.exports = {
   env: envVars.NODE_ENV,
-  port: process.env.PORT || envVars.PORT,
+  port: envVars.PORT,
   mongoose: {
     url: envVars.MONGODB_URL,
     options: {
