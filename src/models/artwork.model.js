@@ -31,6 +31,10 @@ const artworkSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
+    tokenId: {
+      type: Number,
+      required: true,
+    },
     collectionId: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Collection',
