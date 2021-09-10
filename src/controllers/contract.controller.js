@@ -4,13 +4,22 @@ const { getUserByAddress } = require('../services/user.service');
 const updateCollectionAddress = async (CollectionAddress, owner, colName) => {
   const user = await User.findOne({ address: owner });
 
-  await Collection.findOneAndUpdate(
+  const collection = await Collection.findOneAndUpdate(
     { owner: user._id, name: colName },
     {
       collectionAddress: CollectionAddress,
-    }
+    },
+    { new: true }
   );
-  console.log('collection address updated successfully');
+
+  await Artwork.findOneAndUpdate(
+    { collectionId: collection._id },
+    {
+      tokenId: 1,
+    },
+    { new: true }
+  );
+  console.log('collection address and artwork token id updated successfully');
 };
 
 module.exports = {
