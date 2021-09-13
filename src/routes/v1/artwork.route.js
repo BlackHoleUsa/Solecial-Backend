@@ -311,4 +311,10 @@ router.get(
   artworkController.getAuctionBids
 );
 
+router.get(
+  '/getCollectionArtworks',
+  [auth('manageUsers'), validate(artworkValidation.getCollectionArtworksVS)],
+  artworkController.getArtworksByCollection
+);
+
 module.exports = router;
