@@ -87,7 +87,7 @@ const deleteCollection = catchAsync(async (req, res) => {
 const getAllCollections = catchAsync(async (req, res) => {
   const collections = await collectionService.getAllCollections();
 
-  res.send({ status: true, message: 'collection deleted successfully', data: collections });
+  res.send({ status: true, message: 'successfull', data: collections });
 });
 
 module.exports = {
