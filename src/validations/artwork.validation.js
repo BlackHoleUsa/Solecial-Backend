@@ -79,7 +79,7 @@ const getAuctionBidsVS = {
 const updateTokenVS = {
   body: Joi.object().keys({
     artworkId: Joi.string().required(),
-    tokenId: Joi.number().required(),
+    tokenId: Joi.string().required(),
   }),
 };
 
