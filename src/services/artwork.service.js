@@ -9,7 +9,7 @@ const ApiError = require('../utils/ApiError');
 const { tokenTypes } = require('../config/tokens');
 
 const getPopulatedArtwork = async (artworkId, fieldsToPopulate) => {
-  return await Artwork.findOne({ _id: artworkId }).populate(fieldsToPopulate);
+  return await Artwork.findOne({ _id: artworkId }).populate(fieldsToPopulate).lean();
 };
 
 const saveArtwork = async (params) => {
