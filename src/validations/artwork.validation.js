@@ -83,6 +83,11 @@ const updateTokenVS = {
   }),
 };
 
+const getCollectionArtworksVS = {
+  query: Joi.object().keys({
+    collectionId: Joi.string().required(),
+  }),
+};
 module.exports = {
   createArtworkVS,
   getArtworksVS,
@@ -95,4 +100,5 @@ module.exports = {
   getSingleArtVS,
   getAuctionBidsVS,
   updateTokenVS,
+  getCollectionArtworksVS,
 };
