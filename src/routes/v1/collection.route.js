@@ -173,4 +173,6 @@ router.post(
   collectionController.deleteCollection
 );
 
+router.get('/getAllCollections', collectionController.getAllCollections);
+
 module.exports = router;

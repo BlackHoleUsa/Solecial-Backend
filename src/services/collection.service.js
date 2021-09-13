@@ -43,6 +43,10 @@ const deleteCollectionById = async (collectionId) => {
   return await Collection.findOneAndDelete({ _id: collectionId });
 };
 
+const getAllCollections = async () => {
+  return await Collection.find({});
+};
+
 module.exports = {
   saveCollection,
   getCollectionById,
@@ -53,4 +57,5 @@ module.exports = {
   getCollectionsByUserId,
   collectionExists,
   deleteCollectionById,
+  getAllCollections,
 };
