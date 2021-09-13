@@ -143,7 +143,7 @@ const getArtworksByCollection = catchAsync(async (req, res) => {
   const { collectionId } = req.query;
   const artworks = await artworkService.getArtworksByCollection(collectionId);
 
-  res.status(httpStatus.OK).send({ status: true, message: 'token id updated successfully', data: artworks });
+  res.status(httpStatus.OK).send({ status: true, message: 'successfull', data: artworks });
 });
 
 module.exports = {
@@ -158,5 +158,5 @@ module.exports = {
   getSingleArtwork,
   getAuctionBids,
   updateTokenId,
-  getArtworksByCollection
+  getArtworksByCollection,
 };
