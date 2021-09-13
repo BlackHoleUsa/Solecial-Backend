@@ -76,6 +76,13 @@ const getAuctionBidsVS = {
   }),
 };
 
+const updateTokenVS = {
+  body: Joi.object().keys({
+    artworkId: Joi.string().required(),
+    tokenId: Joi.string().required(),
+  }),
+};
+
 module.exports = {
   createArtworkVS,
   getArtworksVS,
@@ -87,4 +94,5 @@ module.exports = {
   openAuctionVS,
   getSingleArtVS,
   getAuctionBidsVS,
+  updateTokenVS,
 };

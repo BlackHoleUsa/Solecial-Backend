@@ -84,151 +84,152 @@ module.exports = {
   ETH_CONTRACTS: {
     // MINT_NFT_CONTRACT_ADDRESS: '0x95C3251876cdf276efa2625AbcB4Acb0374fA839',
     // MINT_NFT_CONTRACT_ADDRESS: '0x0296D857eA22Ac65b1d0AE63d8c6A951E4027B49',
-    MINT_NFT_CONTRACT_ADDRESS: '0xB60DC87BB4908bB42b5Ed9766FCb5618ea617C77',
+    // MINT_NFT_CONTRACT_ADDRESS: '0xB60DC87BB4908bB42b5Ed9766FCb5618ea617C77',
+    MINT_NFT_CONTRACT_ADDRESS: '0x2eC4B65875A83Ad7f5528c3077b601a306c2D2D7',
     MINT_NFT_ABI: [
       {
-        inputs: [
+        "inputs": [
           {
-            internalType: 'address',
-            name: 'auctionContract',
-            type: 'address',
-          },
+            "internalType": "address",
+            "name": "auctionContract",
+            "type": "address"
+          }
         ],
-        stateMutability: 'nonpayable',
-        type: 'constructor',
+        "stateMutability": "nonpayable",
+        "type": "constructor"
       },
       {
-        anonymous: false,
-        inputs: [
+        "anonymous": false,
+        "inputs": [
           {
-            indexed: true,
-            internalType: 'address',
-            name: 'previousOwner',
-            type: 'address',
+            "indexed": true,
+            "internalType": "address",
+            "name": "previousOwner",
+            "type": "address"
           },
           {
-            indexed: true,
-            internalType: 'address',
-            name: 'newOwner',
-            type: 'address',
-          },
+            "indexed": true,
+            "internalType": "address",
+            "name": "newOwner",
+            "type": "address"
+          }
         ],
-        name: 'OwnershipTransferred',
-        type: 'event',
+        "name": "OwnershipTransferred",
+        "type": "event"
       },
       {
-        anonymous: false,
-        inputs: [
+        "anonymous": false,
+        "inputs": [
           {
-            indexed: false,
-            internalType: 'address',
-            name: 'CollectionAddress',
-            type: 'address',
+            "indexed": false,
+            "internalType": "address",
+            "name": "CollectionAddress",
+            "type": "address"
           },
           {
-            indexed: false,
-            internalType: 'address',
-            name: 'owner',
-            type: 'address',
+            "indexed": false,
+            "internalType": "address",
+            "name": "owner",
+            "type": "address"
           },
           {
-            indexed: false,
-            internalType: 'string',
-            name: 'colName',
-            type: 'string',
-          },
+            "indexed": false,
+            "internalType": "string",
+            "name": "colName",
+            "type": "string"
+          }
         ],
-        name: 'newCollection',
-        type: 'event',
+        "name": "newCollection",
+        "type": "event"
       },
       {
-        inputs: [
+        "inputs": [
           {
-            internalType: 'address',
-            name: '',
-            type: 'address',
-          },
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
         ],
-        name: 'contractAddresses',
-        outputs: [
+        "name": "contractAddresses",
+        "outputs": [
           {
-            internalType: 'address',
-            name: '',
-            type: 'address',
-          },
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
         ],
-        stateMutability: 'view',
-        type: 'function',
+        "stateMutability": "view",
+        "type": "function"
       },
       {
-        inputs: [
+        "inputs": [
           {
-            internalType: 'string',
-            name: 'collectionName',
-            type: 'string',
+            "internalType": "string",
+            "name": "collectionName",
+            "type": "string"
           },
           {
-            internalType: 'string',
-            name: 'collectionSymbol',
-            type: 'string',
+            "internalType": "string",
+            "name": "collectionSymbol",
+            "type": "string"
           },
           {
-            internalType: 'string',
-            name: '_baseuri',
-            type: 'string',
-          },
+            "internalType": "string",
+            "name": "_baseuri",
+            "type": "string"
+          }
         ],
-        name: 'newCollectionMint',
-        outputs: [],
-        stateMutability: 'nonpayable',
-        type: 'function',
+        "name": "newCollectionMint",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
       },
       {
-        inputs: [],
-        name: 'owner',
-        outputs: [
+        "inputs": [],
+        "name": "owner",
+        "outputs": [
           {
-            internalType: 'address',
-            name: '',
-            type: 'address',
-          },
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
         ],
-        stateMutability: 'view',
-        type: 'function',
+        "stateMutability": "view",
+        "type": "function"
       },
       {
-        inputs: [],
-        name: 'proxyAuction',
-        outputs: [
+        "inputs": [],
+        "name": "proxyAuction",
+        "outputs": [
           {
-            internalType: 'address',
-            name: '',
-            type: 'address',
-          },
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
         ],
-        stateMutability: 'view',
-        type: 'function',
+        "stateMutability": "view",
+        "type": "function"
       },
       {
-        inputs: [],
-        name: 'renounceOwnership',
-        outputs: [],
-        stateMutability: 'nonpayable',
-        type: 'function',
+        "inputs": [],
+        "name": "renounceOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
       },
       {
-        inputs: [
+        "inputs": [
           {
-            internalType: 'address',
-            name: 'newOwner',
-            type: 'address',
-          },
+            "internalType": "address",
+            "name": "newOwner",
+            "type": "address"
+          }
         ],
-        name: 'transferOwnership',
-        outputs: [],
-        stateMutability: 'nonpayable',
-        type: 'function',
-      },
+        "name": "transferOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }
     ],
     WEB_SOCKET_INFURA_URL: 'wss://rinkeby.infura.io/ws/v3/c944b72ce9b74c77aac906c6a59f4e99',
   },

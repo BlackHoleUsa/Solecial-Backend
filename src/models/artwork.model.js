@@ -32,7 +32,7 @@ const artworkSchema = mongoose.Schema(
       required: true,
     },
     tokenId: {
-      type: Number,
+      type: String,
       required: false,
     },
     collectionId: {
