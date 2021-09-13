@@ -1,12 +1,4 @@
-const jwt = require('jsonwebtoken');
-const moment = require('moment');
-const httpStatus = require('http-status');
-const config = require('../config/config');
-const userService = require('./user.service');
-const { Token } = require('../models');
-const { Collection, Artwork } = require('../models');
-const ApiError = require('../utils/ApiError');
-const { tokenTypes } = require('../config/tokens');
+const { Artwork } = require('../models');
 
 const getPopulatedArtwork = async (artworkId, fieldsToPopulate) => {
   return await Artwork.findOne({ _id: artworkId }).populate(fieldsToPopulate).lean();
@@ -47,6 +39,10 @@ const deleteArtworksByCollection = async (collectionId) => {
   return await Artwork.deleteMany({ collectionId: collectionId });
 };
 
+const updateArtworkTokenId = async (artworkId, tokenId) => {
+  return await Artwork.findOneAndUpdate({ _id: artworkId }, { tokenId: tokenId }, { new: true });
+};
+
 module.exports = {
   saveArtwork,
   getUserArtworks,
@@ -57,4 +53,5 @@ module.exports = {
   getArtworkById,
   closeArtworkAuction,
   deleteArtworksByCollection,
+  updateArtworkTokenId,
 };

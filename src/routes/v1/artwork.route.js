@@ -286,6 +286,12 @@ router.post(
   artworkController.increaseArtworkViews
 );
 
+router.post(
+  '/updateTokenId',
+  [auth('manageUsers'), validate(artworkValidation.updateTokenVS)],
+  artworkController.updateTokenId
+);
+
 router.post('/placeBid', [auth('manageUsers'), validate(artworkValidation.placeBidVS)], artworkController.placeBid);
 router.post(
   '/openArtworkAuction',
