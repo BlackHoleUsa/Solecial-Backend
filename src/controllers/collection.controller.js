@@ -27,7 +27,7 @@ const createCollection = catchAsync(async (req, res) => {
     col = await collectionService.updateCollectionImages(col._id, profile.Location, cover.Location);
   }
 
-  const data = await collectionService.getCollectionById(owner);
+  const data = await collectionService.getCollectionById(col._id);
   EVENT.emit('add-collection-in-user', {
     collectionId: col._id,
     userId: owner,
