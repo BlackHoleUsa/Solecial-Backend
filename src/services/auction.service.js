@@ -3,11 +3,13 @@ const { AUCTION_STATUS } = require('../utils/enums');
 const artworkService = require('./artwork.service');
 
 const saveAuction = async (params) => {
-  return await Auction.create(params);
+  let res = await Auction.create(params);
+  return res.toObject();
 };
 
 const artworkExistsInAuction = async (artworkId) => {
-  const auction = await Auction.find({ artwork: artworkId });
+  let auction = await Auction.find({ artwork: artworkId });
+
   return auction.length > 0;
 };
 
