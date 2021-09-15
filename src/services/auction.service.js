@@ -15,7 +15,8 @@ const getOpenAuctions = async (page, perPage) => {
   const auctions = await Auction.find({ status: 'open' })
     .populate('artwork owner creater bids')
     .limit(parseInt(perPage))
-    .skip(page * perPage);
+    .skip(page * perPage)
+    .lean();
 
   return auctions;
 };
