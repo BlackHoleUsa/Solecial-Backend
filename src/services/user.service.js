@@ -42,7 +42,7 @@ const queryUsers = async (filter, options) => {
  * @returns {Promise<User>}
  */
 const getUserById = async (id) => {
-  return User.findById(id);
+  return User.findById(id).lean();
 };
 
 /**
@@ -51,11 +51,11 @@ const getUserById = async (id) => {
  * @returns {Promise<User>}
  */
 const getUserByEmail = async (email) => {
-  return User.findOne({ email });
+  return User.findOne({ email }).lean();
 };
 
 const getUserByAddress = async (address) => {
-  return User.findOne({ address });
+  return User.findOne({ address }).lean();
 };
 
 /**
@@ -67,7 +67,7 @@ const getUserByAddress = async (address) => {
 const updateUserById = async (userId, updateBody) => {
   const user = await User.findByIdAndUpdate(userId, updateBody, {
     new: true,
-  });
+  }).lean();
 
   return user;
 };
@@ -93,7 +93,7 @@ const deleteUserById = async (userId) => {
  * @returns {Promise<User>}
  */
 const addArtworkToFavourites = async (userId, artworkId) => {
-  return await User.findOneAndUpdate({ _id: userId }, { $push: { favouriteArtworks: artworkId } });
+  return await User.findOneAndUpdate({ _id: userId }, { $push: { favouriteArtworks: artworkId } }).lean();
 };
 
 /**
@@ -103,7 +103,7 @@ const addArtworkToFavourites = async (userId, artworkId) => {
  * @returns {Promise<User>}
  */
 const removeArtworkFromFavourite = async (userId, artworkId) => {
-  return await User.findOneAndUpdate({ _id: userId }, { $pull: { favouriteArtworks: artworkId } });
+  return await User.findOneAndUpdate({ _id: userId }, { $pull: { favouriteArtworks: artworkId } }).lean();
 };
 
 /**
@@ -118,19 +118,20 @@ const getFavouriteArtworks = async (userId, page, perPage) => {
     .select(['favouriteArtworks'])
     .populate('favouriteArtworks')
     .limit(parseInt(perPage))
-    .skip(page * perPage);
+    .skip(page * perPage)
+    .lean();
 
   return user.favouriteArtworks;
 };
 
 const followOtherUser = async (userId, otherUserId) => {
   await User.findOneAndUpdate({ _id: otherUserId }, { $push: { followers: userId } }, { new: true });
-  return await User.findOneAndUpdate({ _id: userId }, { $push: { following: otherUserId } }, { new: true });
+  return await User.findOneAndUpdate({ _id: userId }, { $push: { following: otherUserId } }, { new: true }).lean();
 };
 
 const unFollowUser = async (userId, otherUserId) => {
   await User.findOneAndUpdate({ _id: otherUserId }, { $pull: { followers: userId } }, { new: true });
-  return await User.findOneAndUpdate({ _id: userId }, { $pull: { following: otherUserId } }, { new: true });
+  return await User.findOneAndUpdate({ _id: userId }, { $pull: { following: otherUserId } }, { new: true }).lean();
 };
 
 const getUserFollowers = async (userId, page, perPage) => {

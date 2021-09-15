@@ -5,11 +5,11 @@ const saveCollection = async (params) => {
 };
 
 const getCollectionById = async (id) => {
-  return await Collection.findOne({ _id: id });
+  return await Collection.findOne({ _id: id }).lean();
 };
 
 const getCollectionsByUserId = async (userId) => {
-  return await Collection.find({ owner: userId });
+  return await Collection.find({ owner: userId }).lean();
 };
 
 const getPaginatedCollections = async (page, perPage, userId) => {
@@ -24,13 +24,13 @@ const getPopulatedCollection = async (collectionId, fieldToPopulate) => {
 };
 
 const updateCollectionImages = async (collectionId, profileImage, coverImage) => {
-  return await Collection.findOneAndUpdate({ _id: collectionId }, { profileImage, coverImage }, { new: true });
+  return await Collection.findOneAndUpdate({ _id: collectionId }, { profileImage, coverImage }, { new: true }).lean();
 };
 
 const updateCollectioById = async (collectionId, updateBody) => {
   const collection = await Collection.findByIdAndUpdate(collectionId, updateBody, {
     new: true,
-  });
+  }).lean();
   return collection;
 };
 
@@ -44,7 +44,7 @@ const deleteCollectionById = async (collectionId) => {
 };
 
 const getAllCollections = async () => {
-  return await Collection.find({});
+  return await Collection.find({}).lean();
 };
 
 module.exports = {
