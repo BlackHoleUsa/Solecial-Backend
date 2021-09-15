@@ -64,8 +64,8 @@ const verifyToken = async (token, type) => {
  * @returns {Promise<Object>}
  */
 const generateAuthTokens = async (user) => {
-  const accessToken = generateToken(user.id, tokenTypes.ACCESS);
-  await saveToken(accessToken, user.id, tokenTypes.ACCESS);
+  const accessToken = generateToken(user._id, tokenTypes.ACCESS);
+  await saveToken(accessToken, user._id, tokenTypes.ACCESS);
   return accessToken;
 };
 

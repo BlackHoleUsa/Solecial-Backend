@@ -1,7 +1,8 @@
 const { Collection } = require('../models');
 
 const saveCollection = async (params) => {
-  return await Collection.create(params);
+  const col = await Collection.create(params);
+  return col.toObject();
 };
 
 const getCollectionById = async (id) => {

@@ -18,8 +18,8 @@ const createUser = async (userBody) => {
   } else if (await User.isUsernameTaken(userBody.userName)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'userName already taken');
   }
-
-  return User.create(userBody);
+  const usr = await User.create(userBody);
+  return usr.toObject();
 };
 
 /**

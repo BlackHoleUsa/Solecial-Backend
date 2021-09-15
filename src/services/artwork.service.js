@@ -5,7 +5,8 @@ const getPopulatedArtwork = async (artworkId, fieldsToPopulate) => {
 };
 
 const saveArtwork = async (params) => {
-  return await Artwork.create(params);
+  const art = await Artwork.create(params);
+  return art.toObject();
 };
 
 const getUserArtworks = async (userId, page, perPage) => {
