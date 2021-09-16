@@ -1,4 +1,5 @@
 const { User, Collection, Artwork, Auction } = require('../models');
+const { MINT_STATUS } = require('../utils/enums');
 
 const addCollectionInUser = async (params) => {
   const { collectionId, userId } = params;
@@ -53,6 +54,7 @@ const openArtworkAuction = async (params) => {
     {
       auction: auction,
       isAuctionOpen: true,
+      auctionMintStatus: MINT_STATUS.COMPLETE,
     }
   );
   console.log('auction opened for artwork successfully');
