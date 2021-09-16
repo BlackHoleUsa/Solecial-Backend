@@ -35,6 +35,7 @@ AUCTION_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
   switch (ev.event) {
     case AUC_CONTRACT_EVENTS.NEW_AUCTION:
       console.log('Event', ev);
+      const { colAddress, tokenId, aucId } = ev.returnValues;
       break;
   }
 });
