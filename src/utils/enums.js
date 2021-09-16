@@ -19,7 +19,7 @@ const AUCTION_STATUS = {
 
 const MINT_STATUS = {
   PENDING: 'pending',
-  CLOSED: 'closed',
+  COMPLETE: 'complete',
 };
 
 module.exports = {
