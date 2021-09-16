@@ -1,6 +1,6 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const ApiError = require('../utils/apiError');
+const ApiError = require('../utils/ApiError');
 const {
   authService,
   userService,
@@ -121,7 +121,7 @@ const placeBid = catchAsync(async (req, res) => {
 const getSingleArtwork = catchAsync(async (req, res) => {
   const { artworkId } = req.query;
 
-  const artwork = await artworkService.getPopulatedArtwork(artworkId, 'auction creater owner');
+  const artwork = await artworkService.getPopulatedArtwork(artworkId, 'auction creater owner collectionId');
   res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: artwork });
 });
 
@@ -130,6 +130,26 @@ const getAuctionBids = catchAsync(async (req, res) => {
 
   const bids = await bidService.getAuctionBidsPopulated(auctionId, 'bidder owner auction');
   res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: bids });
+});
+
+const updateTokenId = catchAsync(async (req, res) => {
+  const { artworkId, tokenId } = req.body;
+  const artwork = await artworkService.updateArtworkTokenId(artworkId, tokenId);
+
+  res.status(httpStatus.OK).send({ status: true, message: 'token id updated successfully', data: artwork });
+});
+
+const getArtworksByCollection = catchAsync(async (req, res) => {
+  const { collectionId } = req.query;
+  const artworks = await artworkService.getArtworksByCollection(collectionId);
+
+  res.status(httpStatus.OK).send({ status: true, message: 'successfull', data: artworks });
+});
+
+const changeAuctionStatus = catchAsync(async (req, res) => {
+  const { artworkId, status } = req.body;
+  const artwork = await artworkService.changeArtworkAuctionStatus(artworkId, status);
+  res.status(httpStatus.OK).send({ status: true, message: 'successfull', data: artwork });
 });
 
 module.exports = {
@@ -143,4 +163,7 @@ module.exports = {
   createAuction,
   getSingleArtwork,
   getAuctionBids,
+  updateTokenId,
+  getArtworksByCollection,
+  changeAuctionStatus,
 };

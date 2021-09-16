@@ -18,17 +18,16 @@ const login = catchAsync(async (req, res) => {
     res.send({
       status: true,
       user,
-      tokens
+      tokens,
     });
   } else {
     res.send({
       status: false,
       user: null,
       tokens: null,
-      message: "No user found"
-    })
+      message: 'No user found',
+    });
   }
-
 });
 
 const logout = catchAsync(async (req, res) => {

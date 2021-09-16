@@ -31,6 +31,10 @@ const artworkSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
+    tokenId: {
+      type: String,
+      required: false,
+    },
     collectionId: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Collection',
@@ -63,6 +67,10 @@ const artworkSchema = mongoose.Schema(
     auction: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Auction',
+    },
+    auctionMintStatus: {
+      type: String,
+      default: 'closed',
     },
   },
   {

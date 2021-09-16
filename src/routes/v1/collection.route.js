@@ -7,6 +7,7 @@ const {
   singleCollectionVS,
   updateCollectionVS,
   getAllCollectionsVS,
+  deleteCollectionsVS,
 } = require('../../validations/collection.validation');
 const auth = require('../../middlewares/auth');
 
@@ -165,5 +166,13 @@ router.get(
   [auth('consumedByArtistOnly'), validate(getAllCollectionsVS)],
   collectionController.getAllUserCollection
 );
+
+router.post(
+  '/deleteCollection',
+  [auth('consumedByArtistOnly'), validate(deleteCollectionsVS)],
+  collectionController.deleteCollection
+);
+
+router.get('/getAllCollections', collectionController.getAllCollections);
 
 module.exports = router;

@@ -1,10 +1,10 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const { authService, userService, tokenService, emailService, collectionService } = require('../services');
+const { authService, userService, tokenService, emailService, collectionService, artworkService } = require('../services');
 const { User } = require('../models');
 const helpers = require('../utils/helpers');
 const EVENT = require('../triggers/custom-events').customEvent;
-const ApiError = require('../utils/apiError');
+const ApiError = require('../utils/ApiError');
 
 const createCollection = catchAsync(async (req, res) => {
   const { owner, name } = req.body;
@@ -27,7 +27,7 @@ const createCollection = catchAsync(async (req, res) => {
     col = await collectionService.updateCollectionImages(col._id, profile.Location, cover.Location);
   }
 
-  const data = await collectionService.getCollectionById(owner);
+  const data = await collectionService.getCollectionById(col._id);
   EVENT.emit('add-collection-in-user', {
     collectionId: col._id,
     userId: owner,
@@ -76,10 +76,26 @@ const updateCollection = catchAsync(async (req, res) => {
   res.send({ status: true, message: 'collection updated successfully', collection });
 });
 
+const deleteCollection = catchAsync(async (req, res) => {
+  const { collectionId } = req.body;
+
+  await collectionService.deleteCollectionById(collectionId);
+  await artworkService.deleteArtworksByCollection(collectionId);
+  res.send({ status: true, message: 'collection deleted successfully' });
+});
+
+const getAllCollections = catchAsync(async (req, res) => {
+  const collections = await collectionService.getAllCollections();
+
+  res.send({ status: true, message: 'successfull', data: collections });
+});
+
 module.exports = {
   createCollection,
   getUserCollections,
   getCollectionDetails,
   updateCollection,
   getAllUserCollection,
+  deleteCollection,
+  getAllCollections,
 };

@@ -7,7 +7,7 @@ dotenv.config({ path: path.join(__dirname, '../../.env') });
 const envVarsSchema = Joi.object()
   .keys({
     NODE_ENV: Joi.string().valid('production', 'development', 'test').required(),
-    PORT: Joi.number().default(3000),
+    // PORT: Joi.number().default(3000),
     MONGODB_URL: Joi.string().required().description('Mongo DB url'),
     DB_NAME: Joi.string().required().description('DB Name'),
     JWT_SECRET: Joi.string().required().description('JWT secret key'),
@@ -83,151 +83,661 @@ module.exports = {
   },
   ETH_CONTRACTS: {
     // MINT_NFT_CONTRACT_ADDRESS: '0x95C3251876cdf276efa2625AbcB4Acb0374fA839',
-    MINT_NFT_CONTRACT_ADDRESS: '0x0296D857eA22Ac65b1d0AE63d8c6A951E4027B49',
+    // MINT_NFT_CONTRACT_ADDRESS: '0x0296D857eA22Ac65b1d0AE63d8c6A951E4027B49',
+    // MINT_NFT_CONTRACT_ADDRESS: '0xB60DC87BB4908bB42b5Ed9766FCb5618ea617C77',
+    MINT_NFT_CONTRACT_ADDRESS: '0xfE5915fb228f632A468cE83f6f8b6bB061d99aAE',
+    AUCTION_CONTRACT_ADDRESS: '0xf07404bBc59b9449b14a4fB36c9d675d78e4f905',
     MINT_NFT_ABI: [
       {
-        inputs: [
+        "inputs": [
           {
-            internalType: 'address',
-            name: 'auctionContract',
-            type: 'address',
-          },
+            "internalType": "address",
+            "name": "auctionContract",
+            "type": "address"
+          }
         ],
-        stateMutability: 'nonpayable',
-        type: 'constructor',
+        "stateMutability": "nonpayable",
+        "type": "constructor"
       },
       {
-        anonymous: false,
-        inputs: [
+        "anonymous": false,
+        "inputs": [
           {
-            indexed: true,
-            internalType: 'address',
-            name: 'previousOwner',
-            type: 'address',
+            "indexed": true,
+            "internalType": "address",
+            "name": "previousOwner",
+            "type": "address"
           },
           {
-            indexed: true,
-            internalType: 'address',
-            name: 'newOwner',
-            type: 'address',
-          },
+            "indexed": true,
+            "internalType": "address",
+            "name": "newOwner",
+            "type": "address"
+          }
         ],
-        name: 'OwnershipTransferred',
-        type: 'event',
+        "name": "OwnershipTransferred",
+        "type": "event"
       },
       {
-        anonymous: false,
-        inputs: [
+        "anonymous": false,
+        "inputs": [
           {
-            indexed: false,
-            internalType: 'address',
-            name: 'CollectionAddress',
-            type: 'address',
+            "indexed": false,
+            "internalType": "address",
+            "name": "CollectionAddress",
+            "type": "address"
           },
           {
-            indexed: false,
-            internalType: 'address',
-            name: 'owner',
-            type: 'address',
+            "indexed": false,
+            "internalType": "address",
+            "name": "owner",
+            "type": "address"
           },
           {
-            indexed: false,
-            internalType: 'string',
-            name: 'colName',
-            type: 'string',
-          },
+            "indexed": false,
+            "internalType": "string",
+            "name": "colName",
+            "type": "string"
+          }
         ],
-        name: 'newCollection',
-        type: 'event',
+        "name": "newCollection",
+        "type": "event"
       },
       {
-        inputs: [
+        "inputs": [
           {
-            internalType: 'address',
-            name: '',
-            type: 'address',
-          },
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
         ],
-        name: 'contractAddresses',
-        outputs: [
+        "name": "contractAddresses",
+        "outputs": [
           {
-            internalType: 'address',
-            name: '',
-            type: 'address',
-          },
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
         ],
-        stateMutability: 'view',
-        type: 'function',
+        "stateMutability": "view",
+        "type": "function"
       },
       {
-        inputs: [
+        "inputs": [
           {
-            internalType: 'string',
-            name: 'collectionName',
-            type: 'string',
+            "internalType": "string",
+            "name": "collectionName",
+            "type": "string"
           },
           {
-            internalType: 'string',
-            name: 'collectionSymbol',
-            type: 'string',
+            "internalType": "string",
+            "name": "collectionSymbol",
+            "type": "string"
           },
           {
-            internalType: 'string',
-            name: '_baseuri',
-            type: 'string',
-          },
+            "internalType": "string",
+            "name": "_baseuri",
+            "type": "string"
+          }
         ],
-        name: 'newCollectionMint',
-        outputs: [],
-        stateMutability: 'nonpayable',
-        type: 'function',
+        "name": "newCollectionMint",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
       },
       {
-        inputs: [],
-        name: 'owner',
-        outputs: [
+        "inputs": [],
+        "name": "owner",
+        "outputs": [
           {
-            internalType: 'address',
-            name: '',
-            type: 'address',
-          },
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
         ],
-        stateMutability: 'view',
-        type: 'function',
+        "stateMutability": "view",
+        "type": "function"
       },
       {
-        inputs: [],
-        name: 'proxyAuction',
-        outputs: [
+        "inputs": [],
+        "name": "proxyAuction",
+        "outputs": [
           {
-            internalType: 'address',
-            name: '',
-            type: 'address',
-          },
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
         ],
-        stateMutability: 'view',
-        type: 'function',
+        "stateMutability": "view",
+        "type": "function"
       },
       {
-        inputs: [],
-        name: 'renounceOwnership',
-        outputs: [],
-        stateMutability: 'nonpayable',
-        type: 'function',
+        "inputs": [],
+        "name": "renounceOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
       },
       {
-        inputs: [
+        "inputs": [
           {
-            internalType: 'address',
-            name: 'newOwner',
-            type: 'address',
-          },
+            "internalType": "address",
+            "name": "newOwner",
+            "type": "address"
+          }
         ],
-        name: 'transferOwnership',
-        outputs: [],
-        stateMutability: 'nonpayable',
-        type: 'function',
+        "name": "transferOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }
+    ],
+    AUC_ABI: [
+      {
+        "inputs": [],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
       },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "aucId",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "newOwner",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "collection",
+            "type": "address"
+          }
+        ],
+        "name": "NFTclaim",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "previousOwner",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "newOwner",
+            "type": "address"
+          }
+        ],
+        "name": "OwnershipTransferred",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "aucId",
+            "type": "uint256"
+          }
+        ],
+        "name": "auctionCancelled",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "aucId",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          }
+        ],
+        "name": "collectAuctionAmount",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "colAddress",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "aucId",
+            "type": "uint256"
+          }
+        ],
+        "name": "newAuction",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "aucId",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "bidder",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "bid",
+            "type": "uint256"
+          }
+        ],
+        "name": "newBid",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "colAddress",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "saleId",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "price",
+            "type": "uint256"
+          }
+        ],
+        "name": "newSale",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "saleId",
+            "type": "uint256"
+          }
+        ],
+        "name": "saleCancelled",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "saleId",
+            "type": "uint256"
+          }
+        ],
+        "name": "saleCompleted",
+        "type": "event"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "name": "AuctionList",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "auctionid",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "startTime",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "endTime",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "colAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "startPrice",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "latestBid",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "bidderAdd",
+            "type": "address"
+          },
+          {
+            "internalType": "bool",
+            "name": "nftClaim",
+            "type": "bool"
+          },
+          {
+            "internalType": "bool",
+            "name": "cancelled",
+            "type": "bool"
+          },
+          {
+            "internalType": "bool",
+            "name": "ownerclaim",
+            "type": "bool"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "aucId",
+            "type": "uint256"
+          }
+        ],
+        "name": "Bid",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "collectionAddress_",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "tokenId_",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "startTime",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "endTime",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "startPrice",
+            "type": "uint256"
+          }
+        ],
+        "name": "NewAuction",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "name": "SaleList",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "saleId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address",
+            "name": "colAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "price",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "ended",
+            "type": "bool"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "collectionAddress_",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "tokenId_",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "price_",
+            "type": "uint256"
+          }
+        ],
+        "name": "SaleNFT",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "saleId",
+            "type": "uint256"
+          }
+        ],
+        "name": "buyNFTsale",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "aucId",
+            "type": "uint256"
+          }
+        ],
+        "name": "cancelAuction",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "saleId",
+            "type": "uint256"
+          }
+        ],
+        "name": "canelSale",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "aucId",
+            "type": "uint256"
+          }
+        ],
+        "name": "claimNFT",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "aucId",
+            "type": "uint256"
+          }
+        ],
+        "name": "collectETH",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "latestAucId",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "latestSaleId",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "owner",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "renounceOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "newOwner",
+            "type": "address"
+          }
+        ],
+        "name": "transferOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }
     ],
     WEB_SOCKET_INFURA_URL: 'wss://rinkeby.infura.io/ws/v3/c944b72ce9b74c77aac906c6a59f4e99',
   },

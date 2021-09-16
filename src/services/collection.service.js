@@ -1,15 +1,16 @@
 const { Collection } = require('../models');
 
 const saveCollection = async (params) => {
-  return await Collection.create(params);
+  const col = await Collection.create(params);
+  return col.toObject();
 };
 
 const getCollectionById = async (id) => {
-  return await Collection.findOne({ _id: id });
+  return await Collection.findOne({ _id: id }).lean();
 };
 
 const getCollectionsByUserId = async (userId) => {
-  return await Collection.find({ owner: userId });
+  return await Collection.find({ owner: userId }).lean();
 };
 
 const getPaginatedCollections = async (page, perPage, userId) => {
@@ -24,19 +25,27 @@ const getPopulatedCollection = async (collectionId, fieldToPopulate) => {
 };
 
 const updateCollectionImages = async (collectionId, profileImage, coverImage) => {
-  return await Collection.findOneAndUpdate({ _id: collectionId }, { profileImage, coverImage }, { new: true });
+  return await Collection.findOneAndUpdate({ _id: collectionId }, { profileImage, coverImage }, { new: true }).lean();
 };
 
 const updateCollectioById = async (collectionId, updateBody) => {
   const collection = await Collection.findByIdAndUpdate(collectionId, updateBody, {
     new: true,
-  });
+  }).lean();
   return collection;
 };
 
 const collectionExists = async (userId, colName) => {
   const collection = await Collection.find({ owner: userId, name: colName });
   return collection.length > 0;
+};
+
+const deleteCollectionById = async (collectionId) => {
+  return await Collection.findOneAndDelete({ _id: collectionId });
+};
+
+const getAllCollections = async () => {
+  return await Collection.find({}).lean();
 };
 
 module.exports = {
@@ -48,4 +57,6 @@ module.exports = {
   updateCollectioById,
   getCollectionsByUserId,
   collectionExists,
+  deleteCollectionById,
+  getAllCollections,
 };

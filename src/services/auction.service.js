@@ -3,11 +3,12 @@ const { AUCTION_STATUS } = require('../utils/enums');
 const artworkService = require('./artwork.service');
 
 const saveAuction = async (params) => {
-  return await Auction.create(params);
+  let res = await Auction.create(params);
+  return res.toObject();
 };
 
 const artworkExistsInAuction = async (artworkId) => {
-  const auction = await Auction.find({ artwork: artworkId });
+  let auction = await Auction.find({ artwork: artworkId, status: AUCTION_STATUS.OPEN });
   return auction.length > 0;
 };
 
@@ -15,7 +16,8 @@ const getOpenAuctions = async (page, perPage) => {
   const auctions = await Auction.find({ status: 'open' })
     .populate('artwork owner creater bids')
     .limit(parseInt(perPage))
-    .skip(page * perPage);
+    .skip(page * perPage)
+    .lean();
 
   return auctions;
 };

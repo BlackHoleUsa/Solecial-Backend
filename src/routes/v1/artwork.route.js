@@ -286,6 +286,12 @@ router.post(
   artworkController.increaseArtworkViews
 );
 
+router.post(
+  '/updateTokenId',
+  [auth('manageUsers'), validate(artworkValidation.updateTokenVS)],
+  artworkController.updateTokenId
+);
+
 router.post('/placeBid', [auth('manageUsers'), validate(artworkValidation.placeBidVS)], artworkController.placeBid);
 router.post(
   '/openArtworkAuction',
@@ -303,6 +309,18 @@ router.get(
   '/getAuctionBids',
   [auth('manageUsers'), validate(artworkValidation.getAuctionBidsVS)],
   artworkController.getAuctionBids
+);
+
+router.get(
+  '/getCollectionArtworks',
+  [auth('manageUsers'), validate(artworkValidation.getCollectionArtworksVS)],
+  artworkController.getArtworksByCollection
+);
+
+router.post(
+  '/changeAuctionStatus',
+  [auth('manageUsers'), validate(artworkValidation.changeAuctionStatusVS)],
+  artworkController.changeAuctionStatus
 );
 
 module.exports = router;

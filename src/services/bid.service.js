@@ -1,7 +1,8 @@
 const { Bid } = require('../models');
 
 const saveBid = async (params) => {
-  return await Bid.create(params);
+  const bid = await Bid.create(params);
+  return bid.toObject();
 };
 
 const getAuctionBidsPopulated = async (auctionId, fieldsToPopulate) => {

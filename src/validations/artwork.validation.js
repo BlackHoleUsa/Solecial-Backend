@@ -9,6 +9,7 @@ const createArtworkVS = {
     image: Joi.string().optional(),
     collectionId: Joi.string().required(),
     artwork_type: Joi.string().required(),
+    tokenId: Joi.string().optional(),
   }),
 };
 
@@ -75,6 +76,26 @@ const getAuctionBidsVS = {
   }),
 };
 
+const updateTokenVS = {
+  body: Joi.object().keys({
+    artworkId: Joi.string().required(),
+    tokenId: Joi.string().required(),
+  }),
+};
+
+const getCollectionArtworksVS = {
+  query: Joi.object().keys({
+    collectionId: Joi.string().required(),
+  }),
+};
+
+const changeAuctionStatusVS = {
+  body: Joi.object().keys({
+    artworkId: Joi.string().required(),
+    status: Joi.string().required(),
+  }),
+};
+
 module.exports = {
   createArtworkVS,
   getArtworksVS,
@@ -86,4 +107,7 @@ module.exports = {
   openAuctionVS,
   getSingleArtVS,
   getAuctionBidsVS,
+  updateTokenVS,
+  getCollectionArtworksVS,
+  changeAuctionStatusVS,
 };
