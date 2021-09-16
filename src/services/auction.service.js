@@ -8,8 +8,7 @@ const saveAuction = async (params) => {
 };
 
 const artworkExistsInAuction = async (artworkId) => {
-  let auction = await Auction.find({ artwork: artworkId });
-
+  let auction = await Auction.find({ artwork: artworkId, status: AUCTION_STATUS.OPEN });
   return auction.length > 0;
 };
 
