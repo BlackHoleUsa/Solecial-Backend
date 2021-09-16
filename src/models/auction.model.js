@@ -27,6 +27,10 @@ const auctionSchema = mongoose.Schema(
       type: Date,
       required: false,
     },
+    contractAucId: {
+      type: String,
+      required: false,
+    },
     bids: [
       {
         type: mongoose.SchemaTypes.ObjectId,

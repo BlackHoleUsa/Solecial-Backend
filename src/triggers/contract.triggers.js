@@ -1,6 +1,6 @@
-const { MINT_CONTRACT_INSTANCE } = require('../config/contract.config');
+const { MINT_CONTRACT_INSTANCE, AUCTION_CONTRACT_INSTANCE } = require('../config/contract.config');
 const { contractController } = require('../controllers');
-const { MINT_CONTRACT_EVENTS } = require('../utils/enums');
+const { MINT_CONTRACT_EVENTS, AUC_CONTRACT_EVENTS } = require('../utils/enums');
 // var contractInfo = require('./contractInfo');
 // const Web3 = require('web3')
 
@@ -22,6 +22,20 @@ MINT_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
     case MINT_CONTRACT_EVENTS.NEW_COLLECTION:
       const { CollectionAddress, owner, colName } = ev.returnValues;
       contractController.updateCollectionAddress(CollectionAddress, owner, colName);
+      break;
+  }
+});
+
+AUCTION_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
+  if (err) {
+    console.error('Error', err);
+    return;
+  }
+
+  switch (ev.event) {
+    case AUC_CONTRACT_EVENTS.NEW_AUCTION:
+      console.log('Event', ev);
+      const { colAddress, tokenId, aucId } = ev.returnValues;
       break;
   }
 });

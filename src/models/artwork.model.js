@@ -68,6 +68,10 @@ const artworkSchema = mongoose.Schema(
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Auction',
     },
+    auctionMintStatus: {
+      type: String,
+      default: 'closed',
+    },
   },
   {
     timestamps: true,

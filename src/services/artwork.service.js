@@ -1,4 +1,5 @@
 const { Artwork } = require('../models');
+const { MINT_STATUS } = require('../utils/enums');
 
 const getPopulatedArtwork = async (artworkId, fieldsToPopulate) => {
   return await Artwork.findOne({ _id: artworkId }).populate(fieldsToPopulate).lean();
@@ -48,6 +49,17 @@ const getArtworksByCollection = async (collectionId) => {
   return await Artwork.find({ collectionId: collectionId }).lean();
 };
 
+const changeArtworkAuctionStatus = async (artworkId, status) => {
+  return await Artwork.findOneAndUpdate(
+    { _id: artworkId },
+    {
+      auctionMintStatus: status,
+      isAuctionOpen: status == MINT_STATUS.PENDING && true,
+    },
+    { new: true }
+  ).lean();
+};
+
 module.exports = {
   saveArtwork,
   getUserArtworks,
@@ -60,4 +72,5 @@ module.exports = {
   deleteArtworksByCollection,
   updateArtworkTokenId,
   getArtworksByCollection,
+  changeArtworkAuctionStatus,
 };
