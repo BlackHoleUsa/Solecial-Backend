@@ -1,4 +1,5 @@
 const { Artwork } = require('../models');
+const { MINT_STATUS } = require('../utils/enums');
 
 const getPopulatedArtwork = async (artworkId, fieldsToPopulate) => {
   return await Artwork.findOne({ _id: artworkId }).populate(fieldsToPopulate).lean();
@@ -53,6 +54,7 @@ const changeArtworkAuctionStatus = async (artworkId, status) => {
     { _id: artworkId },
     {
       auctionMintStatus: status,
+      isAuctionOpen: status == MINT_STATUS.PENDING && true,
     },
     { new: true }
   ).lean();

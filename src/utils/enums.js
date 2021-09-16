@@ -17,9 +17,15 @@ const AUCTION_STATUS = {
   CLOSED: 'closed',
 };
 
+const MINT_STATUS = {
+  PENDING: 'pending',
+  CLOSED: 'closed',
+};
+
 module.exports = {
   ARTWORK_TYPE,
   MINT_CONTRACT_EVENTS,
   AUCTION_STATUS,
-  AUC_CONTRACT_EVENTS
+  AUC_CONTRACT_EVENTS,
+  MINT_STATUS,
 };
