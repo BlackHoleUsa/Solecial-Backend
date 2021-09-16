@@ -48,6 +48,16 @@ const getArtworksByCollection = async (collectionId) => {
   return await Artwork.find({ collectionId: collectionId }).lean();
 };
 
+const changeArtworkAuctionStatus = async (artworkId, status) => {
+  return await Artwork.findOneAndUpdate(
+    { _id: artworkId },
+    {
+      auctionMintStatus: status,
+    },
+    { new: true }
+  ).lean();
+};
+
 module.exports = {
   saveArtwork,
   getUserArtworks,
@@ -60,4 +70,5 @@ module.exports = {
   deleteArtworksByCollection,
   updateArtworkTokenId,
   getArtworksByCollection,
+  changeArtworkAuctionStatus,
 };

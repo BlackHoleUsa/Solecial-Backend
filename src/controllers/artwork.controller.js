@@ -146,6 +146,12 @@ const getArtworksByCollection = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send({ status: true, message: 'successfull', data: artworks });
 });
 
+const changeAuctionStatus = catchAsync(async (req, res) => {
+  const { artworkId, status } = req.body;
+  const artwork = await artworkService.changeArtworkAuctionStatus(artworkId, status);
+  res.status(httpStatus.OK).send({ status: true, message: 'successfull', data: artwork });
+});
+
 module.exports = {
   saveArtwork,
   getUserArtworks,
@@ -159,4 +165,5 @@ module.exports = {
   getAuctionBids,
   updateTokenId,
   getArtworksByCollection,
+  changeAuctionStatus,
 };

@@ -88,6 +88,14 @@ const getCollectionArtworksVS = {
     collectionId: Joi.string().required(),
   }),
 };
+
+const changeAuctionStatusVS = {
+  body: Joi.object().keys({
+    artworkId: Joi.string().required(),
+    status: Joi.string().required(),
+  }),
+};
+
 module.exports = {
   createArtworkVS,
   getArtworksVS,
@@ -101,4 +109,5 @@ module.exports = {
   getAuctionBidsVS,
   updateTokenVS,
   getCollectionArtworksVS,
+  changeAuctionStatusVS,
 };

@@ -317,4 +317,10 @@ router.get(
   artworkController.getArtworksByCollection
 );
 
+router.post(
+  '/changeAuctionStatus',
+  [auth('manageUsers'), validate(artworkValidation.changeAuctionStatusVS)],
+  artworkController.changeAuctionStatus
+);
+
 module.exports = router;
