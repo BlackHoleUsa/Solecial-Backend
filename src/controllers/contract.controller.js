@@ -20,6 +20,17 @@ const updateCollectionAddress = async (CollectionAddress, owner, colName) => {
   console.log('collection address and artwork token id updated successfully');
 };
 
+const handleNewAuction = async (colAddress, tokenId, aucId) => {
+  const collection = await Collection.findOne({ collectionAddress: colAddress });
+  const artwork = await Artwork.findOne({ collectionId: collection._id, tokenId: tokenId });
+
+  if (await auctionService.artworkExistsInAuction(artwork._id)) {
+    console.log('Artwork is already on auction');
+    return;
+  }
+};
+
 module.exports = {
   updateCollectionAddress,
+  handleNewAuction,
 };
