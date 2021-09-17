@@ -323,4 +323,10 @@ router.post(
   artworkController.changeAuctionStatus
 );
 
+router.post(
+  '/deleteArtwork',
+  [auth('manageUsers'), validate(artworkValidation.deleteArtworkVS)],
+  artworkController.deleteArtwork
+);
+
 module.exports = router;

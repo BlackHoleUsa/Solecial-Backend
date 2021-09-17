@@ -154,8 +154,14 @@ const changeAuctionStatus = catchAsync(async (req, res) => {
 
 const deleteArtwork = catchAsync(async (req, res) => {
   const { artworkId } = req.body;
+  const artwork = await artworkService.getArtworkById(artworkId)
+  if (!artwork) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Artwork does not exist');
+  }
+  await collectionService.removeArtwork(artworkId, artwork.collectionId)
+  await userService.removeArtwork(artwork.creater, artworkId)
   await artworkService.deleteArtworkById(artworkId);
-  res.status(httpStatus.OK).send({ status: true, message: 'successfull', data: artwork });
+  res.status(httpStatus.OK).send({ status: true, message: 'artwork deleted successfully', data: artworkId });
 });
 
 module.exports = {
