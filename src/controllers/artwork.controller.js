@@ -45,6 +45,14 @@ const saveArtwork = catchAsync(async (req, res) => {
     artworkId: artwork._id,
     collectionId: body.collectionId,
   });
+
+  EVENT.emit('update-artwork-history', {
+    artwork: artwork._id,
+    collection: body.collectionId,
+    owner: body.creater,
+    message: `${user.userName} created the artwork`,
+  });
+
   res.status(httpStatus.OK).send({ status: true, message: 'artwork saved successfully', updatedArtwork });
 });
 
@@ -100,6 +108,11 @@ const createAuction = catchAsync(async (req, res) => {
     artworkId: artwork,
     auction: auction._id,
   });
+  EVENT.emit('update-artwork-history', {
+    artwork: artwork._id,
+    message: `artwork placed on auction`,
+    auction: auction._id,
+  });
 
   res.status(httpStatus.OK).send({ status: true, message: 'Artwork placed on auction successfully', data: auction });
 });
@@ -121,7 +134,7 @@ const placeBid = catchAsync(async (req, res) => {
 const getSingleArtwork = catchAsync(async (req, res) => {
   const { artworkId } = req.query;
 
-  const artwork = await artworkService.getPopulatedArtwork(artworkId, 'auction creater owner collectionId');
+  const artwork = await artworkService.getPopulatedArtwork(artworkId, 'auction creater owner collectionId bids');
   res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: artwork });
 });
 
@@ -154,8 +167,14 @@ const changeAuctionStatus = catchAsync(async (req, res) => {
 
 const deleteArtwork = catchAsync(async (req, res) => {
   const { artworkId } = req.body;
+  const artwork = await artworkService.getArtworkById(artworkId);
+  if (!artwork) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Artwork does not exist');
+  }
+  await collectionService.removeArtwork(artworkId, artwork.collectionId);
+  await userService.removeArtwork(artwork.creater, artworkId);
   await artworkService.deleteArtworkById(artworkId);
-  res.status(httpStatus.OK).send({ status: true, message: 'successfull', data: artwork });
+  res.status(httpStatus.OK).send({ status: true, message: 'artwork deleted successfully', data: artworkId });
 });
 
 module.exports = {
@@ -172,5 +191,5 @@ module.exports = {
   updateTokenId,
   getArtworksByCollection,
   changeAuctionStatus,
-  deleteArtwork
+  deleteArtwork,
 };

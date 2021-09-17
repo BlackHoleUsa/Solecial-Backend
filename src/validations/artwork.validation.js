@@ -95,6 +95,12 @@ const changeAuctionStatusVS = {
     status: Joi.string().required(),
   }),
 };
+const deleteArtworkVS = {
+  body: Joi.object().keys({
+    artworkId: Joi.string().required(),
+
+  }),
+};
 
 module.exports = {
   createArtworkVS,
@@ -110,4 +116,5 @@ module.exports = {
   updateTokenVS,
   getCollectionArtworksVS,
   changeAuctionStatusVS,
+  deleteArtworkVS
 };

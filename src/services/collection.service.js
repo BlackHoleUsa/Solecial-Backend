@@ -48,8 +48,12 @@ const getAllCollections = async () => {
   return await Collection.find({}).lean();
 };
 
-const removeArtwork = async (artworkId) => {
-  // return await 
+const removeArtwork = async (artworkId, collectionId) => {
+  return await Collection.findOneAndUpdate({
+    _id: collectionId
+  }, {
+    $pull: { artworks: artworkId }
+  }).lean()
 
 }
 

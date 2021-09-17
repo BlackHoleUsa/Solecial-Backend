@@ -1,4 +1,4 @@
-const { User, Collection, Artwork, Auction } = require('../models');
+const { User, Collection, Artwork, Auction, History } = require('../models');
 const { MINT_STATUS } = require('../utils/enums');
 
 const addCollectionInUser = async (params) => {
@@ -60,10 +60,15 @@ const openArtworkAuction = async (params) => {
   console.log('auction opened for artwork successfully');
 };
 
+const updateArtworkHistory = async (params) => {
+  await History.create(params);
+};
+
 module.exports = {
   addCollectionInUser,
   addArtworkInUser,
   addArtworkInCollection,
   saveBidInArtwork,
   openArtworkAuction,
+  updateArtworkHistory,
 };
