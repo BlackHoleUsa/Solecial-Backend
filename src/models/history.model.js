@@ -15,9 +15,9 @@ const historySchema = mongoose.Schema(
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Auction',
     },
-    collection: {
+    bid: {
       type: mongoose.SchemaTypes.ObjectId,
-      ref: 'Collection',
+      ref: 'Bid',
     },
     message: {
       type: String,

@@ -48,7 +48,6 @@ const saveArtwork = catchAsync(async (req, res) => {
 
   EVENT.emit('update-artwork-history', {
     artwork: artwork._id,
-    collection: body.collectionId,
     owner: body.creater,
     message: `${user.userName} created the artwork`,
   });
@@ -128,6 +127,13 @@ const placeBid = catchAsync(async (req, res) => {
     auctionId,
   });
 
+  EVENT.emit('update-artwork-history', {
+    artwork: artwork,
+    message: `Bid placed on artwork`,
+    auction: auctionId,
+    bid: bid._id,
+  });
+
   res.status(httpStatus.OK).send({ status: true, message: 'Your bid has been placed successfully', data: bid });
 });
 
@@ -174,6 +180,11 @@ const deleteArtwork = catchAsync(async (req, res) => {
   await collectionService.removeArtwork(artworkId, artwork.collectionId);
   await userService.removeArtwork(artwork.creater, artworkId);
   await artworkService.deleteArtworkById(artworkId);
+
+  EVENT.emit('update-artwork-history', {
+    artwork: artworkId,
+    message: `Artwork deleted`,
+  });
   res.status(httpStatus.OK).send({ status: true, message: 'artwork deleted successfully', data: artworkId });
 });
 
