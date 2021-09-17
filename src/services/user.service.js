@@ -160,6 +160,11 @@ const getUserFollowing = async (userId, page, perPage) => {
   return user.following;
 };
 
+const removeArtwork = async (userId, artworkId) => {
+  await User.findOneAndUpdate({ _id: userId }, { $pull: { artworks: artworkId } })
+}
+
+
 module.exports = {
   createUser,
   queryUsers,
@@ -175,4 +180,5 @@ module.exports = {
   unFollowUser,
   getUserFollowers,
   getUserFollowing,
+  removeArtwork
 };
