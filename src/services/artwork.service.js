@@ -60,6 +60,10 @@ const changeArtworkAuctionStatus = async (artworkId, status) => {
   ).lean();
 };
 
+const deleteArtworkById = async (artworkId) => {
+  await Artwork.findOneAndDelete({ _id: artworkId })
+}
+
 module.exports = {
   saveArtwork,
   getUserArtworks,
@@ -73,4 +77,5 @@ module.exports = {
   updateArtworkTokenId,
   getArtworksByCollection,
   changeArtworkAuctionStatus,
+  deleteArtworkById
 };

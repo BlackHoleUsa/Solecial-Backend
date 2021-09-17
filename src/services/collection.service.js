@@ -1,4 +1,4 @@
-const { Collection } = require('../models');
+const { Collection, Artwork } = require('../models');
 
 const saveCollection = async (params) => {
   const col = await Collection.create(params);
@@ -48,6 +48,11 @@ const getAllCollections = async () => {
   return await Collection.find({}).lean();
 };
 
+const removeArtwork = async (artworkId) => {
+  // return await 
+
+}
+
 module.exports = {
   saveCollection,
   getCollectionById,
@@ -59,4 +64,5 @@ module.exports = {
   collectionExists,
   deleteCollectionById,
   getAllCollections,
+  removeArtwork
 };
