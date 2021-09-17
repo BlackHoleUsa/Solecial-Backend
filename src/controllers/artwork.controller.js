@@ -152,6 +152,12 @@ const changeAuctionStatus = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send({ status: true, message: 'successfull', data: artwork });
 });
 
+const deleteArtwork = catchAsync(async (req, res) => {
+  const { artworkId } = req.body;
+  await artworkService.deleteArtworkById(artworkId);
+  res.status(httpStatus.OK).send({ status: true, message: 'successfull', data: artwork });
+});
+
 module.exports = {
   saveArtwork,
   getUserArtworks,
@@ -166,4 +172,5 @@ module.exports = {
   updateTokenId,
   getArtworksByCollection,
   changeAuctionStatus,
+  deleteArtwork
 };

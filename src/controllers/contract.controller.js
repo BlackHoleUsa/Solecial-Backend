@@ -38,7 +38,7 @@ const handleNewAuction = async (colAddress, tokenId, aucId) => {
     const params = {
       initialPrice: startPrice,
       artwork: artwork._id,
-      endTime,
+      endTime: new Date(endTime * 1000),
       owner,
       creater,
       contractAucId: aucId,
