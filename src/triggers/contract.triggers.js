@@ -38,6 +38,11 @@ AUCTION_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
       const { colAddress, tokenId, aucId } = ev.returnValues;
       contractController.handleNewAuction(colAddress, tokenId, aucId);
       break;
+    case AUC_CONTRACT_EVENTS.NEW_BID:
+      console.log('Event', ev);
+      const { bid, bidder, aucId } = ev.returnValues;
+      contractController.handleNewBid(bid, bidder, aucId);
+      break;
   }
 });
 
