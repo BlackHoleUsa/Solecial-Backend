@@ -10,6 +10,7 @@ const MINT_CONTRACT_EVENTS = {
 
 const AUC_CONTRACT_EVENTS = {
   NEW_AUCTION: 'newAuction',
+  NEW_BID: 'newBid',
 };
 
 const AUCTION_STATUS = {

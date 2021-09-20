@@ -2,7 +2,8 @@ const { User, Collection, Artwork, Auction } = require('../models');
 const { getUserByAddress } = require('../services/user.service');
 const { AUCTION_CONTRACT_INSTANCE } = require('../config/contract.config');
 const LISTENERS = require('../controllers/listeners.controller');
-const { auctionService } = require('../services');
+const { auctionService, bidService } = require('../services');
+const EVENT = require('../triggers/custom-events').customEvent;
 
 const updateCollectionAddress = async (CollectionAddress, owner, colName) => {
   const user = await User.findOne({ address: owner });
@@ -51,7 +52,41 @@ const handleNewAuction = async (colAddress, tokenId, aucId) => {
   }
 };
 
+const handleNewBid = async (bid, bidder, aucId) => {
+  let auctionData = await AUCTION_CONTRACT_INSTANCE.methods.AuctionList(aucId).call();
+  const { colAddress, owner, tokenId } = auctionData;
+  const dbBidder = await User.findOne({ address: bidder });
+  const dbOwner = await User.findOne({ address: owner });
+  const collection = await Collection.findOne({ collectionAddress: colAddress });
+  const artwork = await Artwork.findOne({ collectionId: collection._id, tokenId: tokenId });
+  const auction = await Auction.findOne({ artwork: artwork._id, contractAucId: aucId });
+
+  const params = {
+    bidder: dbBidder._id,
+    artwork: artwork._id,
+    bid_amount: bid,
+    owner: dbOwner._id,
+    auction: auction._id,
+  };
+
+  const bid = await bidService.saveBid(params);
+
+  EVENT.emit('save-bid-in-artwork', {
+    artworkId: artwork._id,
+    bidId: bid._id,
+    auctionId: auction._id,
+  });
+
+  EVENT.emit('update-artwork-history', {
+    artwork: artwork._id,
+    message: `Bid placed on artwork`,
+    auction: auction._id,
+    bid: bid._id,
+  });
+};
+
 module.exports = {
   updateCollectionAddress,
   handleNewAuction,
+  handleNewBid,
 };
