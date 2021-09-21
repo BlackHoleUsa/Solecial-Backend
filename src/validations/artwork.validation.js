@@ -98,7 +98,14 @@ const changeAuctionStatusVS = {
 const deleteArtworkVS = {
   body: Joi.object().keys({
     artworkId: Joi.string().required(),
+  }),
+};
 
+const getHistoryVS = {
+  query: Joi.object().keys({
+    artworkId: Joi.string().required(),
+    page: Joi.string().required(),
+    perPage: Joi.string().required(),
   }),
 };
 
@@ -116,5 +123,6 @@ module.exports = {
   updateTokenVS,
   getCollectionArtworksVS,
   changeAuctionStatusVS,
-  deleteArtworkVS
+  deleteArtworkVS,
+  getHistoryVS,
 };

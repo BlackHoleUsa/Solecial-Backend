@@ -10,6 +10,7 @@ const {
   artworkService,
   bidService,
   auctionService,
+  historyService,
 } = require('../services');
 const EVENT = require('../triggers/custom-events').customEvent;
 const { addFilesToIPFS, pinMetaDataToIPFS } = require('../utils/helpers');
@@ -188,6 +189,12 @@ const deleteArtwork = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send({ status: true, message: 'artwork deleted successfully', data: artworkId });
 });
 
+const getArtworkHistory = catchAsync(async (req, res) => {
+  const { artworkId, page, perPage } = req.query;
+  const history = await historyService.getArtworkHistory(artworkId, page, perPage, 'artwork owner');
+  res.status(httpStatus.OK).send({ status: true, message: 'artwork deleted successfully', data: history });
+});
+
 module.exports = {
   saveArtwork,
   getUserArtworks,
@@ -203,4 +210,5 @@ module.exports = {
   getArtworksByCollection,
   changeAuctionStatus,
   deleteArtwork,
+  getArtworkHistory,
 };
