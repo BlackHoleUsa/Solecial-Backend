@@ -30,8 +30,8 @@ const saveArtwork = catchAsync(async (req, res) => {
     name,
     description,
     creater: {
-      name: user?.userName,
-      id: user?._id,
+      name: user.userName,
+      id: user._id,
     },
     collectionId,
     artwork_url: imgData,
