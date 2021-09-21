@@ -329,4 +329,6 @@ router.post(
   artworkController.deleteArtwork
 );
 
+router.get('/getArtworkHistory', [validate(artworkValidation.getHistoryVS)], artworkController.getArtworkHistory);
+
 module.exports = router;

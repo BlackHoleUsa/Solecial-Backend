@@ -6,3 +6,4 @@ module.exports.collectionService = require('./collection.service');
 module.exports.artworkService = require('./artwork.service');
 module.exports.bidService = require('./bid.service');
 module.exports.auctionService = require('./auction.service');
+module.exports.historyService = require('./history.service');

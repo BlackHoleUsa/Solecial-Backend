@@ -7,10 +7,6 @@ const { auctionValidation } = require('../../validations');
 
 const router = express.Router();
 
-router.get(
-  '/getAuctionListing',
-  [auth('manageUsers'), validate(auctionValidation.getOpenAuctionVS)],
-  auctionController.getAuctionListing
-);
+router.get('/getAuctionListing', [validate(auctionValidation.getOpenAuctionVS)], auctionController.getAuctionListing);
 
 module.exports = router;
