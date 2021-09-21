@@ -52,7 +52,9 @@ const handleNewAuction = async (colAddress, tokenId, aucId) => {
   }
 };
 
-const handleNewBid = async (bid, bidder, aucId) => {
+const handleNewBid = async (par) => {
+  let { bid, bidder, aucId } = par;
+
   let auctionData = await AUCTION_CONTRACT_INSTANCE.methods.AuctionList(aucId).call();
   const { colAddress, owner, tokenId } = auctionData;
   const dbBidder = await User.findOne({ address: bidder });
@@ -69,11 +71,11 @@ const handleNewBid = async (bid, bidder, aucId) => {
     auction: auction._id,
   };
 
-  const bid = await bidService.saveBid(params);
+  const dbBid = await bidService.saveBid(params);
 
   EVENT.emit('save-bid-in-artwork', {
     artworkId: artwork._id,
-    bidId: bid._id,
+    bidId: dbBid._id,
     auctionId: auction._id,
   });
 
@@ -81,7 +83,7 @@ const handleNewBid = async (bid, bidder, aucId) => {
     artwork: artwork._id,
     message: `Bid placed on artwork`,
     auction: auction._id,
-    bid: bid._id,
+    bid: dbBid._id,
   });
 };
 
