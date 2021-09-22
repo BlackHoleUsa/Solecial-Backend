@@ -61,8 +61,14 @@ const changeArtworkAuctionStatus = async (artworkId, status) => {
 };
 
 const deleteArtworkById = async (artworkId) => {
-  await Artwork.findOneAndDelete({ _id: artworkId })
-}
+  await Artwork.findOneAndDelete({ _id: artworkId });
+};
+
+const searchArtworkByName = async (keyword, page, perPage) => {
+  return await Artwork.find({ name: { $regex: keyword, $options: 'i' } })
+    .limit(parseInt(perPage))
+    .skip(page * perPage);
+};
 
 module.exports = {
   saveArtwork,
@@ -77,5 +83,6 @@ module.exports = {
   updateArtworkTokenId,
   getArtworksByCollection,
   changeArtworkAuctionStatus,
-  deleteArtworkById
+  deleteArtworkById,
+  searchArtworkByName,
 };

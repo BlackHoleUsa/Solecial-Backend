@@ -12,8 +12,9 @@ const artworkExistsInAuction = async (artworkId) => {
   return auction.length > 0;
 };
 
-const getOpenAuctions = async (page, perPage) => {
-  const auctions = await Auction.find({ status: 'open' })
+const getOpenAuctions = async (page, perPage, sort) => {
+  const auctions = await Auction.find({})
+    .sort(sort)
     .populate('artwork owner creater bids')
     .limit(parseInt(perPage))
     .skip(page * perPage)
@@ -35,9 +36,14 @@ const checkAndCompleteAuctionStatus = async () => {
   }
 };
 
+const getAuctionsWithBids = async (page, perPage) => {
+  return await Auction.find({}).order('-bids.length').asList();
+};
+
 module.exports = {
   saveAuction,
   artworkExistsInAuction,
   getOpenAuctions,
   checkAndCompleteAuctionStatus,
+  getAuctionsWithBids,
 };

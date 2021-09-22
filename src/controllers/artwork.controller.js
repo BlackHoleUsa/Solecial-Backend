@@ -178,14 +178,16 @@ const deleteArtwork = catchAsync(async (req, res) => {
   if (!artwork) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Artwork does not exist');
   }
-  await collectionService.removeArtwork(artworkId, artwork.collectionId);
-  await userService.removeArtwork(artwork.creater, artworkId);
-  await artworkService.deleteArtworkById(artworkId);
 
   EVENT.emit('update-artwork-history', {
     artwork: artworkId,
     message: `Artwork deleted`,
   });
+
+  await collectionService.removeArtwork(artworkId, artwork.collectionId);
+  await userService.removeArtwork(artwork.creater, artworkId);
+  await artworkService.deleteArtworkById(artworkId);
+
   res.status(httpStatus.OK).send({ status: true, message: 'artwork deleted successfully', data: artworkId });
 });
 
