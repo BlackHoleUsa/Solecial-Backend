@@ -329,6 +329,18 @@ router.post(
   artworkController.deleteArtwork
 );
 
+router.get(
+  '/getClosedAuctions',
+  [auth('manageUsers'), validate(artworkValidation.nftClaimListVS)],
+  artworkController.getWinnedAuctions
+);
+
+router.get(
+  '/getSoldAuctions',
+  [auth('manageUsers'), validate(artworkValidation.nftClaimListVS)],
+  artworkController.getSoldItems
+);
+
 router.get('/getArtworkHistory', [validate(artworkValidation.getHistoryVS)], artworkController.getArtworkHistory);
 
 module.exports = router;

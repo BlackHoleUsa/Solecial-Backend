@@ -195,6 +195,20 @@ const getArtworkHistory = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: history });
 });
 
+const getWinnedAuctions = catchAsync(async (req, res) => {
+  const { page, perPage } = req.query;
+
+  let winnedAuctions = await auctionService.getClosedAuctions(req.user._id, page, perPage);
+  res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: winnedAuctions });
+});
+
+const getSoldItems = catchAsync(async (req, res) => {
+  const { page, perPage } = req.query;
+
+  let winnedAuctions = await auctionService.getSoldAuctions(req.user._id, page, perPage);
+  res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: winnedAuctions });
+});
+
 module.exports = {
   saveArtwork,
   getUserArtworks,
@@ -210,5 +224,7 @@ module.exports = {
   getArtworksByCollection,
   changeAuctionStatus,
   deleteArtwork,
+  getWinnedAuctions,
+  getSoldItems,
   getArtworkHistory,
 };
