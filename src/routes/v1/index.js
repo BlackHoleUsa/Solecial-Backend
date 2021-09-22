@@ -5,6 +5,7 @@ const docsRoute = require('./docs.route');
 const collectionRoute = require('./collection.route');
 const artworkRoute = require('./artwork.route');
 const auctionRoute = require('./auction.route');
+const generalRoute = require('./general.route');
 
 const config = require('../../config/config');
 
@@ -30,6 +31,10 @@ const defaultRoutes = [
   {
     path: '/auction',
     route: auctionRoute,
+  },
+  {
+    path: '/general',
+    route: generalRoute,
   },
 ];
 

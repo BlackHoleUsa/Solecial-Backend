@@ -23,10 +23,24 @@ const MINT_STATUS = {
   COMPLETE: 'complete',
 };
 
+const SEARCH_FILTERS = {
+  USERS: 'users',
+  ARTWORKS: 'artworks',
+  COLLECTIONS: 'collections',
+};
+
+const AUCTION_FILTERS = {
+  NEW: 'new',
+  HAS_OFFER: 'hasOffer',
+  ON_AUCTION: 'onAuction',
+};
+
 module.exports = {
   ARTWORK_TYPE,
   MINT_CONTRACT_EVENTS,
   AUCTION_STATUS,
   AUC_CONTRACT_EVENTS,
   MINT_STATUS,
+  SEARCH_FILTERS,
+  AUCTION_FILTERS,
 };

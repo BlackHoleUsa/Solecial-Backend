@@ -164,6 +164,12 @@ const removeArtwork = async (userId, artworkId) => {
   await User.findOneAndUpdate({ _id: userId }, { $pull: { artworks: artworkId } });
 };
 
+const searchUsersByName = async (keyword, page, perPage) => {
+  return await User.find({ userName: { $regex: keyword, $options: 'i' } })
+    .limit(parseInt(perPage))
+    .skip(page * perPage);
+};
+
 module.exports = {
   createUser,
   queryUsers,
@@ -180,4 +186,5 @@ module.exports = {
   getUserFollowers,
   getUserFollowing,
   removeArtwork,
+  searchUsersByName,
 };

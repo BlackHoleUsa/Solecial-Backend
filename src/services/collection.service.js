@@ -49,13 +49,21 @@ const getAllCollections = async () => {
 };
 
 const removeArtwork = async (artworkId, collectionId) => {
-  return await Collection.findOneAndUpdate({
-    _id: collectionId
-  }, {
-    $pull: { artworks: artworkId }
-  }).lean()
+  return await Collection.findOneAndUpdate(
+    {
+      _id: collectionId,
+    },
+    {
+      $pull: { artworks: artworkId },
+    }
+  ).lean();
+};
 
-}
+const searchCollectionByName = async (keyword, page, perPage) => {
+  return await Collection.find({ Collection: { $regex: keyword, $options: 'i' } })
+    .limit(parseInt(perPage))
+    .skip(page * perPage);
+};
 
 module.exports = {
   saveCollection,
@@ -68,5 +76,6 @@ module.exports = {
   collectionExists,
   deleteCollectionById,
   getAllCollections,
-  removeArtwork
+  removeArtwork,
+  searchCollectionByName,
 };
