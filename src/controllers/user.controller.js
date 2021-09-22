@@ -42,7 +42,6 @@ const deleteUser = catchAsync(async (req, res) => {
 const followUser = catchAsync(async (req, res) => {
   const { otherUserId } = req.body;
   const user = req.user;
-
   await userService.followOtherUser(user._id, otherUserId);
   res.status(httpStatus.OK).send({
     status: true,
