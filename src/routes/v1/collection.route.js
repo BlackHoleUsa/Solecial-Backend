@@ -114,11 +114,7 @@ router.post(
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  */
-router.get(
-  '/getUserCollections',
-  [auth('consumedByArtistOnly'), validate(getCollectionVS)],
-  collectionController.getUserCollections
-);
+router.get('/getUserCollections', [auth('manageUsers'), validate(getCollectionVS)], collectionController.getUserCollections);
 /**
  * @swagger
  * /collection/getCollectionDetails?collectionId={collectionId}&:
@@ -151,7 +147,7 @@ router.get(
  */
 router.get(
   '/getCollectionDetails',
-  [auth('consumedByArtistOnly'), validate(singleCollectionVS)],
+  [auth('manageUsers'), validate(singleCollectionVS)],
   collectionController.getCollectionDetails
 );
 
@@ -163,7 +159,7 @@ router.post(
 
 router.get(
   '/getAllUserCollections',
-  [auth('consumedByArtistOnly'), validate(getAllCollectionsVS)],
+  [auth('manageUsers'), validate(getAllCollectionsVS)],
   collectionController.getAllUserCollection
 );
 
