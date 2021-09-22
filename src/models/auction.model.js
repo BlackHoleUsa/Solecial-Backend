@@ -31,6 +31,27 @@ const auctionSchema = mongoose.Schema(
       type: String,
       required: false,
     },
+    auctionWinner: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'User',
+      required: false,
+    },
+    bidAmount: {
+      type: String,
+      required: false
+    },
+    nftClaim: {
+      type: Boolean,
+      required: false
+    },
+    cancelled: {
+      type: Boolean,
+      required: false
+    },
+    ownerclaim: {
+      type: Boolean,
+      required: false
+    },
     bids: [
       {
         type: mongoose.SchemaTypes.ObjectId,
