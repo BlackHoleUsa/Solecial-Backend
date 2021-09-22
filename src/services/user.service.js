@@ -121,7 +121,7 @@ const getFavouriteArtworks = async (userId, page, perPage) => {
     .skip(page * perPage)
     .lean();
 
-  return user.favouriteArtworks;
+  return user ? user.favouriteArtworks : [];
 };
 
 const followOtherUser = async (userId, otherUserId) => {
@@ -161,9 +161,8 @@ const getUserFollowing = async (userId, page, perPage) => {
 };
 
 const removeArtwork = async (userId, artworkId) => {
-  await User.findOneAndUpdate({ _id: userId }, { $pull: { artworks: artworkId } })
-}
-
+  await User.findOneAndUpdate({ _id: userId }, { $pull: { artworks: artworkId } });
+};
 
 module.exports = {
   createUser,
@@ -180,5 +179,5 @@ module.exports = {
   unFollowUser,
   getUserFollowers,
   getUserFollowing,
-  removeArtwork
+  removeArtwork,
 };
