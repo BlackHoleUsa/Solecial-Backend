@@ -5,6 +5,8 @@ const getOpenAuctionVS = {
     page: Joi.string().required(),
     perPage: Joi.string().required(),
     filter: Joi.string().optional(),
+    min: Joi.string().optional(),
+    max: Joi.string().optional(),
   }),
 };
 

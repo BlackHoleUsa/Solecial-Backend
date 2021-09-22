@@ -8,22 +8,28 @@ const ApiError = require('../utils/ApiError');
 const { AUCTION_FILTERS } = require('../utils/enums');
 
 const getAuctionListing = catchAsync(async (req, res) => {
-  const { page, perPage, filter } = req.query;
+  const { page, perPage, filter, min, max } = req.query;
 
   let sort = { createdAt: -1 };
+  let whereQuery = {};
 
   switch (filter) {
     case AUCTION_FILTERS.NEW:
-      const data = await auctionService.getOpenAuctions(page, perPage, { createdAt: -1 });
-      return res.status(httpStatus.OK).send({ status: true, message: 'successfull', page, data });
+      sort = { createdAt: -1 };
       break;
+
     case AUCTION_FILTERS.HAS_OFFER:
-      const bidAuctions = await auctionService.getAuctionsWithBids(page, perPage);
-      return res.status(httpStatus.OK).send({ status: true, message: 'successfull', page, data: bidAuctions });
-      break;
+      whereQuery = { 'bids.0': { $exists: true } };
   }
 
-  const data = await auctionService.getOpenAuctions(page, perPage, sort);
+  if (min) {
+    whereQuery = { initialPrice: { $gt: parseInt(min) } };
+  }
+  if (max) {
+    whereQuery = { initialPrice: { $lt: parseInt(max) } };
+  }
+
+  const data = await auctionService.getOpenAuctions(page, perPage, sort, whereQuery);
   res.status(httpStatus.OK).send({ status: true, message: 'successfull', page, data });
 });
 

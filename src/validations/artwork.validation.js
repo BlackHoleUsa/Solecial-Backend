@@ -109,6 +109,13 @@ const getHistoryVS = {
   }),
 };
 
+const nftClaimListVS = {
+  query: Joi.object().keys({
+    page: Joi.string().required(),
+    perPage: Joi.string().required(),
+  }),
+};
+
 module.exports = {
   createArtworkVS,
   getArtworksVS,
@@ -125,4 +132,5 @@ module.exports = {
   changeAuctionStatusVS,
   deleteArtworkVS,
   getHistoryVS,
+  nftClaimListVS
 };
