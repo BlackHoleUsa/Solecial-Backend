@@ -34,6 +34,13 @@ const getAuctionListing = catchAsync(async (req, res) => {
   if (min && max && filter == AUCTION_FILTERS.HAS_OFFER) {
     whereQuery = { initialPrice: { $lt: parseInt(max), $gt: parseInt(min) }, 'bids.0': { $exists: true } };
   }
+  if (min && filter == AUCTION_FILTERS.HAS_OFFER) {
+    whereQuery = { initialPrice: { $gt: parseInt(min) }, 'bids.0': { $exists: true } };
+  }
+
+  if (max && filter == AUCTION_FILTERS.HAS_OFFER) {
+    whereQuery = { initialPrice: { $lt: parseInt(min) }, 'bids.0': { $exists: true } };
+  }
 
   const data = await auctionService.getOpenAuctions(page, perPage, sort, whereQuery);
   res.status(httpStatus.OK).send({ status: true, message: 'successfull', page, data });
