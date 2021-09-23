@@ -110,11 +110,7 @@ router.post('/saveArtwork', validate(artworkValidation.createArtworkVS), artwork
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  */
-router.get(
-  '/getUserArtworks',
-  [auth('manageUsers'), validate(artworkValidation.getArtworksVS)],
-  artworkController.getUserArtworks
-);
+router.get('/getUserArtworks', [validate(artworkValidation.getArtworksVS)], artworkController.getUserArtworks);
 /**
  * @swagger
  * /artwork/addToFavourite:
