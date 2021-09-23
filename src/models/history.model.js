@@ -22,6 +22,9 @@ const historySchema = mongoose.Schema(
     message: {
       type: String,
     },
+    type: {
+      type: String,
+    },
   },
   {
     timestamps: true,

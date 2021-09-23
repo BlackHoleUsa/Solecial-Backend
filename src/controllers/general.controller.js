@@ -1,4 +1,4 @@
-const { userService, artworkService, collectionService } = require('../services');
+const { userService, artworkService, collectionService, historyService } = require('../services');
 
 const catchAsync = require('../utils/catchAsync');
 const httpStatus = require('http-status');
@@ -47,6 +47,19 @@ const handleSearch = catchAsync(async (req, res) => {
   }
 });
 
+const getAppActivity = catchAsync(async (req, res) => {
+  const { page, perPage } = req.query;
+
+  const histories = await historyService.getAllHistoriesPaginated(page, perPage);
+
+  res.status(httpStatus.OK).send({
+    status: true,
+    message: 'Successfull',
+    data: histories,
+  });
+});
+
 module.exports = {
   handleSearch,
+  getAppActivity,
 };
