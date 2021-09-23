@@ -280,11 +280,7 @@ router.get(
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  */
-router.post(
-  '/increaseViewCount',
-  [auth('manageUsers'), validate(artworkValidation.increaseViewVS)],
-  artworkController.increaseArtworkViews
-);
+router.post('/increaseViewCount', [validate(artworkValidation.increaseViewVS)], artworkController.increaseArtworkViews);
 
 router.post(
   '/updateTokenId',
@@ -299,21 +295,13 @@ router.post(
   artworkController.createAuction
 );
 
-router.get(
-  '/getSingleArtwork',
-  [auth('manageUsers'), validate(artworkValidation.getSingleArtVS)],
-  artworkController.getSingleArtwork
-);
+router.get('/getSingleArtwork', [validate(artworkValidation.getSingleArtVS)], artworkController.getSingleArtwork);
 
-router.get(
-  '/getAuctionBids',
-  [auth('manageUsers'), validate(artworkValidation.getAuctionBidsVS)],
-  artworkController.getAuctionBids
-);
+router.get('/getAuctionBids', [validate(artworkValidation.getAuctionBidsVS)], artworkController.getAuctionBids);
 
 router.get(
   '/getCollectionArtworks',
-  [auth('manageUsers'), validate(artworkValidation.getCollectionArtworksVS)],
+  [validate(artworkValidation.getCollectionArtworksVS)],
   artworkController.getArtworksByCollection
 );
 
