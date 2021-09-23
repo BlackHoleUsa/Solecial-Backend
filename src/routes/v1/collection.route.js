@@ -114,7 +114,7 @@ router.post(
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  */
-router.get('/getUserCollections', [auth('manageUsers'), validate(getCollectionVS)], collectionController.getUserCollections);
+router.get('/getUserCollections', [validate(getCollectionVS)], collectionController.getUserCollections);
 /**
  * @swagger
  * /collection/getCollectionDetails?collectionId={collectionId}&:
@@ -145,11 +145,7 @@ router.get('/getUserCollections', [auth('manageUsers'), validate(getCollectionVS
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  */
-router.get(
-  '/getCollectionDetails',
-  [auth('manageUsers'), validate(singleCollectionVS)],
-  collectionController.getCollectionDetails
-);
+router.get('/getCollectionDetails', [validate(singleCollectionVS)], collectionController.getCollectionDetails);
 
 router.post(
   '/updateCollection',
@@ -157,11 +153,7 @@ router.post(
   collectionController.updateCollection
 );
 
-router.get(
-  '/getAllUserCollections',
-  [auth('manageUsers'), validate(getAllCollectionsVS)],
-  collectionController.getAllUserCollection
-);
+router.get('/getAllUserCollections', [validate(getAllCollectionsVS)], collectionController.getAllUserCollection);
 
 router.post(
   '/deleteCollection',
