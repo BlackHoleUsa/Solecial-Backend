@@ -8,6 +8,14 @@ const getArtworkHistory = async (artworkId, page, perPage, fieldsToPopulate) => 
     .skip(page * perPage);
 };
 
+const getAllHistoriesPaginated = async (page, perPage) => {
+  return await History.find({})
+    .populate('artwork owner auction bid')
+    .limit(parseInt(perPage))
+    .skip(page * perPage);
+};
+
 module.exports = {
   getArtworkHistory,
+  getAllHistoriesPaginated,
 };

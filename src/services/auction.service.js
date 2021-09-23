@@ -1,5 +1,5 @@
 const { Bid, Auction, User } = require('../models');
-const { AUCTION_STATUS } = require('../utils/enums');
+const { AUCTION_STATUS, HISTORY_TYPE } = require('../utils/enums');
 const artworkService = require('./artwork.service');
 const { AUCTION_CONTRACT_INSTANCE } = require('../config/contract.config');
 const EVENT = require('../triggers/custom-events').customEvent;
@@ -55,6 +55,7 @@ const checkAndCompleteAuctionStatus = async () => {
         artwork: auction.artwork,
         message: `auction closed`,
         auction: auction._id,
+        type: HISTORY_TYPE.AUCTION_END,
       });
     }
   }

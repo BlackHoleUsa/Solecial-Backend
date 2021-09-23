@@ -14,6 +14,7 @@ const {
 } = require('../services');
 const EVENT = require('../triggers/custom-events').customEvent;
 const { addFilesToIPFS, pinMetaDataToIPFS } = require('../utils/helpers');
+const { HISTORY_TYPE } = require('../utils/enums');
 
 const saveArtwork = catchAsync(async (req, res) => {
   const body = req.body;
@@ -51,6 +52,7 @@ const saveArtwork = catchAsync(async (req, res) => {
     artwork: artwork._id,
     owner: body.creater,
     message: `${user.userName} created the artwork`,
+    type: HISTORY_TYPE.ARTWORK_CREATED,
   });
 
   res.status(httpStatus.OK).send({ status: true, message: 'artwork saved successfully', updatedArtwork });
@@ -112,6 +114,7 @@ const createAuction = catchAsync(async (req, res) => {
     artwork: artwork._id,
     message: `artwork placed on auction`,
     auction: auction._id,
+    type: HISTORY_TYPE.AUCTION_STARTED,
   });
 
   res.status(httpStatus.OK).send({ status: true, message: 'Artwork placed on auction successfully', data: auction });
@@ -133,6 +136,7 @@ const placeBid = catchAsync(async (req, res) => {
     message: `Bid placed on artwork`,
     auction: auctionId,
     bid: bid._id,
+    type: HISTORY_TYPE.BID_PLACED,
   });
 
   res.status(httpStatus.OK).send({ status: true, message: 'Your bid has been placed successfully', data: bid });
@@ -182,6 +186,7 @@ const deleteArtwork = catchAsync(async (req, res) => {
   EVENT.emit('update-artwork-history', {
     artwork: artworkId,
     message: `Artwork deleted`,
+    type: HISTORY_TYPE.ARTWORK_DELETED,
   });
 
   await collectionService.removeArtwork(artworkId, artwork.collectionId);

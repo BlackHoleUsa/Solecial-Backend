@@ -4,6 +4,7 @@ const { AUCTION_CONTRACT_INSTANCE } = require('../config/contract.config');
 const LISTENERS = require('../controllers/listeners.controller');
 const { auctionService, bidService } = require('../services');
 const EVENT = require('../triggers/custom-events').customEvent;
+const { HISTORY_TYPE } = require('../utils/enums');
 
 const updateCollectionAddress = async (CollectionAddress, owner, colName) => {
   const user = await User.findOne({ address: owner });
@@ -84,6 +85,7 @@ const handleNewBid = async (par) => {
     message: `Bid placed on artwork`,
     auction: auction._id,
     bid: dbBid._id,
+    type: HISTORY_TYPE.BID_PLACED,
   });
 };
 

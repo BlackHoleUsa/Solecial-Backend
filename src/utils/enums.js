@@ -35,6 +35,14 @@ const AUCTION_FILTERS = {
   ON_AUCTION: 'onAuction',
 };
 
+const HISTORY_TYPE = {
+  ARTWORK_CREATED: 'artworkCreated',
+  ARTWORK_DELETED: 'artworkDeleted',
+  AUCTION_STARTED: 'auctionStarted',
+  AUCTION_END: 'auctionEnd',
+  BID_PLACED: 'bidPlaced',
+};
+
 module.exports = {
   ARTWORK_TYPE,
   MINT_CONTRACT_EVENTS,
@@ -43,4 +51,5 @@ module.exports = {
   MINT_STATUS,
   SEARCH_FILTERS,
   AUCTION_FILTERS,
+  HISTORY_TYPE,
 };

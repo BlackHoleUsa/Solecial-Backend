@@ -1,10 +1,7 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const { authService, userService, tokenService, emailService, collectionService, auctionService } = require('../services');
-const { User } = require('../models');
-const helpers = require('../utils/helpers');
-const EVENT = require('../triggers/custom-events').customEvent;
-const ApiError = require('../utils/ApiError');
+const { auctionService } = require('../services');
+
 const { AUCTION_FILTERS } = require('../utils/enums');
 
 const getAuctionListing = catchAsync(async (req, res) => {
@@ -37,7 +34,6 @@ const getAuctionListing = catchAsync(async (req, res) => {
   if (min && filter == AUCTION_FILTERS.HAS_OFFER) {
     whereQuery = { initialPrice: { $gt: parseInt(min) }, 'bids.0': { $exists: true } };
   }
-
   if (max && filter == AUCTION_FILTERS.HAS_OFFER) {
     whereQuery = { initialPrice: { $lt: parseInt(min) }, 'bids.0': { $exists: true } };
   }
