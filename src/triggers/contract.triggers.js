@@ -32,6 +32,9 @@ AUCTION_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
     return;
   }
 
+  console.log('Event', ev);
+  console.log('--collection address--', ev.returnValues.CollectionAddress);
+
   switch (ev.event) {
     case AUC_CONTRACT_EVENTS.NEW_AUCTION:
       console.log('Event', ev);
