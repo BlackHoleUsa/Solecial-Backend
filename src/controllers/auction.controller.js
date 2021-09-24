@@ -2,7 +2,7 @@ const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
 const { auctionService } = require('../services');
 
-const { AUCTION_FILTERS } = require('../utils/enums');
+const { AUCTION_FILTERS, AUCTION_STATUS } = require('../utils/enums');
 
 const getAuctionListing = catchAsync(async (req, res) => {
   const { page, perPage, filter, min, max } = req.query;
@@ -38,6 +38,7 @@ const getAuctionListing = catchAsync(async (req, res) => {
     whereQuery = { initialPrice: { $lt: parseInt(min) }, 'bids.0': { $exists: true } };
   }
 
+  whereQuery.status = AUCTION_STATUS.OPEN;
   const data = await auctionService.getOpenAuctions(page, perPage, sort, whereQuery);
   res.status(httpStatus.OK).send({ status: true, message: 'successfull', page, data });
 });
