@@ -325,6 +325,12 @@ router.get(
   artworkController.getSoldItems
 );
 
+router.get(
+  '/getTimeoutAuctions',
+  [auth('manageUsers'), validate(artworkValidation.nftClaimListVS)],
+  artworkController.getTimeoutItems
+);
+
 router.get('/getArtworkHistory', [validate(artworkValidation.getHistoryVS)], artworkController.getArtworkHistory);
 
 module.exports = router;

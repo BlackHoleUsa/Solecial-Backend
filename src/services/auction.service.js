@@ -49,6 +49,10 @@ const checkAndCompleteAuctionStatus = async () => {
           }
         );
         console.log('DONE', res);
+      } else {
+        // let aucData = await AUCTION_CONTRACT_INSTANCE.methods.cancelAuction(auction.contractAucId).call();
+        await Auction.findOneAndUpdate({ _id: auction._id }, { status: AUCTION_STATUS.TIMEOUT, nftClaim: false });
+        console.log(`${auction.contractAucId} auction is cancelled`);
       }
 
       EVENT.emit('update-artwork-history', {
@@ -60,6 +64,18 @@ const checkAndCompleteAuctionStatus = async () => {
     }
   }
 };
+
+const getTimeoutAuctions = async (userId, page, perPage) => {
+  const auctions = await Auction.find({ auctionWinner: userId, status: AUCTION_STATUS.TIMEOUT, nftClaim: false })
+    .populate('owner creater bids artwork')
+    .limit(parseInt(perPage))
+    .skip(page * perPage)
+    .lean();
+
+  return auctions;
+}
+
+
 
 const getClosedAuctions = async (userId, page, perPage) => {
   const auctions = await Auction.find({ auctionWinner: userId, status: AUCTION_STATUS.CLOSED, nftClaim: false })
@@ -96,4 +112,5 @@ module.exports = {
   getAuctionsWithBids,
   getClosedAuctions,
   getSoldAuctions,
+  getTimeoutAuctions
 };

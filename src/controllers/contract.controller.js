@@ -47,6 +47,7 @@ const handleNewAuction = async (colAddress, tokenId, aucId) => {
     };
 
     const auction = await Auction.create(params);
+    await Artwork.findOneAndUpdate({ _id: artwork._id }, { owner: aucId }); // Giving ownership of token to auction contract
     LISTENERS.openArtworkAuction({ artworkId: artwork._id, auction: auction._id });
   } catch (err) {
     console.log(err);
@@ -89,8 +90,32 @@ const handleNewBid = async (par) => {
   });
 };
 
+const handleNFTClaim = async (values) => {
+  const { aucId, newOwner, collection } = values;
+  // await AUCTION_CONTRACT_INSTANCE.methods.AuctionList(aucId).call();
+  const auction = await Auction.findOneAndUpdate({ contractAucId: aucId }, { nftClaim: true }).populate('artwork');
+  const { artwork } = auction;
+  await User.findOneAndUpdate({ _id: artwork.owner }, { $pull: artwork._id });
+  const newArtworkOwner = await User.findOneAndUpdate({ address: newOwner }, { $push: artwork._id });
+  await Artwork.findOneAndUpdate({ _id: artwork._id }, { owner: newArtworkOwner._id });
+  console.log('nft claimed successfully');
+};
+const handleNFTSale = async (values) => {
+  const { aucId, newOwner, collection } = values;
+
+  // await AUCTION_CONTRACT_INSTANCE.methods.AuctionList(aucId).call();
+  // const auction = await Auction.findOneAndUpdate({ contractAucId: aucId }, { nftClaim: true }).populate('artwork');
+  // const { artwork } = auction;
+  // await User.findOneAndUpdate({ _id: artwork.owner }, { $pull: artwork._id });
+  // const newArtworkOwner = await User.findOneAndUpdate({ address: newOwner }, { $push: artwork._id });
+  // await Artwork.findOneAndUpdate({ _id: artwork._id }, { owner: newArtworkOwner._id });
+  console.log('nft claimed successfully');
+};
+
 module.exports = {
   updateCollectionAddress,
   handleNewAuction,
   handleNewBid,
+  handleNFTClaim,
+  handleNFTSale,
 };

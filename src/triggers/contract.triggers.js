@@ -40,8 +40,14 @@ AUCTION_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
       contractController.handleNewAuction(colAddress, tokenId, aucId);
       break;
     case AUC_CONTRACT_EVENTS.NEW_BID:
-      console.log('Event', ev);
       contractController.handleNewBid(ev.returnValues);
+      break;
+    case AUC_CONTRACT_EVENTS.CLAIM_SALE:
+      console.log('Event', ev);
+      contractController.handleNFTSale(ev.returnValues);
+      break;
+    case AUC_CONTRACT_EVENTS.NFT_CLAIM:
+      contractController.handleNFTClaim(ev.returnValues);
       break;
   }
 });
