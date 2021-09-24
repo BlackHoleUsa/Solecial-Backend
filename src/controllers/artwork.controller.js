@@ -216,6 +216,13 @@ const getSoldItems = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: winnedAuctions });
 });
 
+const getTimeoutItems = catchAsync(async (req, res) => {
+  const { page, perPage } = req.query;
+  let winnedAuctions = await auctionService.getTimeoutAuctions(req.user._id, page, perPage);
+  res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: winnedAuctions });
+});
+
+
 module.exports = {
   saveArtwork,
   getUserArtworks,
@@ -234,4 +241,5 @@ module.exports = {
   getWinnedAuctions,
   getSoldItems,
   getArtworkHistory,
+  getTimeoutItems
 };
