@@ -11,6 +11,8 @@ const MINT_CONTRACT_EVENTS = {
 const AUC_CONTRACT_EVENTS = {
   NEW_AUCTION: 'newAuction',
   NEW_BID: 'newBid',
+  CLAIM_SALE: 'collectAuctionAmount',
+  NFT_CLAIM: 'NFTclaim'
 };
 
 const AUCTION_STATUS = {

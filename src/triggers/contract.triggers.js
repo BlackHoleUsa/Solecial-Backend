@@ -31,7 +31,7 @@ AUCTION_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
     console.error('Error', err);
     return;
   }
-
+  console.log('Event', ev);
   switch (ev.event) {
     case AUC_CONTRACT_EVENTS.NEW_AUCTION:
       console.log('Event', ev);
@@ -41,6 +41,14 @@ AUCTION_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
     case AUC_CONTRACT_EVENTS.NEW_BID:
       console.log('Event', ev);
       contractController.handleNewBid(ev.returnValues);
+      break;
+    case AUC_CONTRACT_EVENTS.CLAIM_SALE:
+      console.log('Event', ev);
+      // contractController.handleNewBid(ev.returnValues);
+      break;
+    case AUC_CONTRACT_EVENTS.NFT_CLAIM:
+      console.log('Event', ev);
+      // contractController.handleNewBid(ev.returnValues);
       break;
   }
 });

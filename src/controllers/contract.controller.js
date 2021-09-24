@@ -47,6 +47,7 @@ const handleNewAuction = async (colAddress, tokenId, aucId) => {
     };
 
     const auction = await Auction.create(params);
+    await Artwork.findOneAndUpdate({ _id: artwork._id }, { owner: aucId }); // Giving ownership of token to auction contract
     LISTENERS.openArtworkAuction({ artworkId: artwork._id, auction: auction._id });
   } catch (err) {
     console.log(err);
