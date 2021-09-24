@@ -16,6 +16,7 @@ const AUC_CONTRACT_EVENTS = {
 const AUCTION_STATUS = {
   OPEN: 'open',
   CLOSED: 'closed',
+  TIMEOUT: 'timeout'
 };
 
 const MINT_STATUS = {
