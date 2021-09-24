@@ -16,7 +16,6 @@ MINT_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
   }
 
   console.log('Event', ev);
-  console.log('--collection address--', ev.returnValues.CollectionAddress);
 
   switch (ev.event) {
     case MINT_CONTRACT_EVENTS.NEW_COLLECTION:
@@ -32,6 +31,8 @@ AUCTION_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
     return;
   }
 
+  console.log('Event', ev);
+
   switch (ev.event) {
     case AUC_CONTRACT_EVENTS.NEW_AUCTION:
       console.log('Event', ev);
@@ -39,8 +40,14 @@ AUCTION_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
       contractController.handleNewAuction(colAddress, tokenId, aucId);
       break;
     case AUC_CONTRACT_EVENTS.NEW_BID:
-      console.log('Event', ev);
       contractController.handleNewBid(ev.returnValues);
+      break;
+    case AUC_CONTRACT_EVENTS.CLAIM_SALE:
+      console.log('Event', ev);
+      contractController.handleNFTSale(ev.returnValues);
+      break;
+    case AUC_CONTRACT_EVENTS.NFT_CLAIM:
+      contractController.handleNFTClaim(ev.returnValues);
       break;
   }
 });

@@ -11,12 +11,14 @@ const MINT_CONTRACT_EVENTS = {
 const AUC_CONTRACT_EVENTS = {
   NEW_AUCTION: 'newAuction',
   NEW_BID: 'newBid',
+  CLAIM_SALE: 'collectAuctionAmount',
+  NFT_CLAIM: 'NFTclaim',
 };
 
 const AUCTION_STATUS = {
   OPEN: 'open',
   CLOSED: 'closed',
-  TIMEOUT: 'timeout'
+  TIMEOUT: 'timeout',
 };
 
 const MINT_STATUS = {
@@ -44,6 +46,24 @@ const HISTORY_TYPE = {
   BID_PLACED: 'bidPlaced',
 };
 
+const TRANSACTION_TYPE = {
+  DEBIT: 'debit',
+  CREDIT: 'credit',
+};
+
+const NOTIFICATION_TYPE = {
+  NEW_FOLLOWER: 'newFollower',
+  NEW_BID: 'newBid',
+  AUCTION_TIMEOUT: 'auctionTimeout',
+  AUCTION_END: 'auctionEnd',
+  AUCTION_WIN: 'auctionWin',
+};
+
+TRANSACTION_ACTIVITY_TYPE = {
+  NFT_CLAIM: 'nftClaim',
+  NFT_SALE: 'nftSale',
+};
+
 module.exports = {
   ARTWORK_TYPE,
   MINT_CONTRACT_EVENTS,
@@ -53,4 +73,7 @@ module.exports = {
   SEARCH_FILTERS,
   AUCTION_FILTERS,
   HISTORY_TYPE,
+  TRANSACTION_TYPE,
+  NOTIFICATION_TYPE,
+  TRANSACTION_ACTIVITY_TYPE,
 };

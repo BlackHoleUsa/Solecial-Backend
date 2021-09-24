@@ -4,6 +4,8 @@ const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
 const { userService } = require('../services');
 const { uploadToAws } = require('../utils/helpers');
+const EVENT = require('../triggers/custom-events').customEvent;
+const { NOTIFICATION_TYPE } = require('../utils/enums');
 
 const createUser = catchAsync(async (req, res) => {
   const user = await userService.createUser(req.body);
@@ -43,6 +45,15 @@ const followUser = catchAsync(async (req, res) => {
   const { otherUserId } = req.body;
   const user = req.user;
   await userService.followOtherUser(user._id, otherUserId);
+
+  EVENT.emit('send-and-save-notification', {
+    receiver: user._id,
+    type: NOTIFICATION_TYPE.NEW_FOLLOWER,
+    extraData: {
+      follower: otherUserId,
+    },
+  });
+
   res.status(httpStatus.OK).send({
     status: true,
     message: 'user followed successfully',

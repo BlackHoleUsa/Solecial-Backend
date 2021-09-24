@@ -14,7 +14,7 @@ const {
 } = require('../services');
 const EVENT = require('../triggers/custom-events').customEvent;
 const { addFilesToIPFS, pinMetaDataToIPFS } = require('../utils/helpers');
-const { HISTORY_TYPE } = require('../utils/enums');
+const { HISTORY_TYPE, NOTIFICATION_TYPE } = require('../utils/enums');
 
 const saveArtwork = catchAsync(async (req, res) => {
   const body = req.body;
@@ -122,6 +122,8 @@ const createAuction = catchAsync(async (req, res) => {
 
 const placeBid = catchAsync(async (req, res) => {
   const body = req.body;
+  const user = req.user;
+
   const { artwork, auctionId } = body;
   const bid = await bidService.saveBid(body);
 
@@ -137,6 +139,14 @@ const placeBid = catchAsync(async (req, res) => {
     auction: auctionId,
     bid: bid._id,
     type: HISTORY_TYPE.BID_PLACED,
+  });
+
+  EVENT.emit('send-and-save-notification', {
+    receiver: user._id,
+    type: NOTIFICATION_TYPE.NEW_BID,
+    extraData: {
+      bid: bid._id,
+    },
   });
 
   res.status(httpStatus.OK).send({ status: true, message: 'Your bid has been placed successfully', data: bid });
@@ -222,7 +232,6 @@ const getTimeoutItems = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: winnedAuctions });
 });
 
-
 module.exports = {
   saveArtwork,
   getUserArtworks,
@@ -241,5 +250,5 @@ module.exports = {
   getWinnedAuctions,
   getSoldItems,
   getArtworkHistory,
-  getTimeoutItems
+  getTimeoutItems,
 };

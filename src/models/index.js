@@ -5,3 +5,5 @@ module.exports.Artwork = require('./artwork.model');
 module.exports.Bid = require('./bid.model');
 module.exports.Auction = require('./auction.model');
 module.exports.History = require('./history.model');
+module.exports.Notification = require('./notification.model');
+module.exports.Transaction = require('./transaction.model');
