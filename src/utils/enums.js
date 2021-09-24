@@ -47,8 +47,8 @@ const HISTORY_TYPE = {
 };
 
 const TRANSACTION_TYPE = {
-  SALE: 'sale',
-  PURCHASE: 'purchase',
+  DEBIT: 'debit',
+  CREDIT: 'credit',
 };
 
 const NOTIFICATION_TYPE = {
