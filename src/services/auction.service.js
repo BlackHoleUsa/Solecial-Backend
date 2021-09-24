@@ -1,5 +1,5 @@
 const { Bid, Auction, User } = require('../models');
-const { AUCTION_STATUS, HISTORY_TYPE } = require('../utils/enums');
+const { AUCTION_STATUS, HISTORY_TYPE, NOTIFICATION_TYPE } = require('../utils/enums');
 const artworkService = require('./artwork.service');
 const { AUCTION_CONTRACT_INSTANCE } = require('../config/contract.config');
 const EVENT = require('../triggers/custom-events').customEvent;
@@ -34,11 +34,12 @@ const checkAndCompleteAuctionStatus = async () => {
     if (currentDate > closingDate) {
       await Auction.findOneAndUpdate({ _id: auction._id }, { status: AUCTION_STATUS.CLOSED });
       await artworkService.closeArtworkAuction(auction.artwork);
+      let aucData = await AUCTION_CONTRACT_INSTANCE.methods.AuctionList(auction.contractAucId).call();
+      const { bidderAdd, latestBid, nftClaim, cancelled, ownerclaim } = aucData;
+      let user = await User.findOne({ address: bidderAdd });
+
       if (auction.bids.length > 0) {
-        let aucData = await AUCTION_CONTRACT_INSTANCE.methods.AuctionList(auction.contractAucId).call();
-        const { bidderAdd, latestBid, nftClaim, cancelled, ownerclaim } = aucData;
-        let user = await User.findOne({ address: bidderAdd });
-        let res = await Auction.findOneAndUpdate(
+        await Auction.findOneAndUpdate(
           { _id: auction._id },
           {
             auctionWinner: user._id,
@@ -48,10 +49,33 @@ const checkAndCompleteAuctionStatus = async () => {
             ownerclaim,
           }
         );
-        console.log('DONE', res);
+
+        EVENT.emit('send-and-save-notification', {
+          receiver: user._id,
+          type: NOTIFICATION_TYPE.AUCTION_WIN,
+          extraData: {
+            auction: auction._id,
+          },
+        });
+
+        EVENT.emit('send-and-save-notification', {
+          receiver: auction.owner,
+          type: NOTIFICATION_TYPE.AUCTION_END,
+          extraData: {
+            auction: auction._id,
+          },
+        });
       } else {
-        // let aucData = await AUCTION_CONTRACT_INSTANCE.methods.cancelAuction(auction.contractAucId).call();
         await Auction.findOneAndUpdate({ _id: auction._id }, { status: AUCTION_STATUS.TIMEOUT, nftClaim: false });
+
+        EVENT.emit('send-and-save-notification', {
+          receiver: auction.owner,
+          type: NOTIFICATION_TYPE.AUCTION_TIMEOUT,
+          extraData: {
+            auction: auction._id,
+          },
+        });
+
         console.log(`${auction.contractAucId} auction is cancelled`);
       }
 
@@ -73,9 +97,7 @@ const getTimeoutAuctions = async (userId, page, perPage) => {
     .lean();
 
   return auctions;
-}
-
-
+};
 
 const getClosedAuctions = async (userId, page, perPage) => {
   const auctions = await Auction.find({ auctionWinner: userId, status: AUCTION_STATUS.CLOSED, nftClaim: false })
@@ -112,5 +134,5 @@ module.exports = {
   getAuctionsWithBids,
   getClosedAuctions,
   getSoldAuctions,
-  getTimeoutAuctions
+  getTimeoutAuctions,
 };

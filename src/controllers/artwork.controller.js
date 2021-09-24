@@ -122,6 +122,8 @@ const createAuction = catchAsync(async (req, res) => {
 
 const placeBid = catchAsync(async (req, res) => {
   const body = req.body;
+  const user = req.user;
+
   const { artwork, auctionId } = body;
   const bid = await bidService.saveBid(body);
 
@@ -139,13 +141,13 @@ const placeBid = catchAsync(async (req, res) => {
     type: HISTORY_TYPE.BID_PLACED,
   });
 
-  // EVENT.emit('send-and-save-notification', {
-  //   receiver: user._id,
-  //   type: NOTIFICATION_TYPE.NEW_FOLLOWER,
-  //   extraData: {
-  //     follower: otherUserId,
-  //   },
-  // });
+  EVENT.emit('send-and-save-notification', {
+    receiver: user._id,
+    type: NOTIFICATION_TYPE.NEW_BID,
+    extraData: {
+      bid: bid._id,
+    },
+  });
 
   res.status(httpStatus.OK).send({ status: true, message: 'Your bid has been placed successfully', data: bid });
 });
@@ -230,7 +232,6 @@ const getTimeoutItems = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: winnedAuctions });
 });
 
-
 module.exports = {
   saveArtwork,
   getUserArtworks,
@@ -249,5 +250,5 @@ module.exports = {
   getWinnedAuctions,
   getSoldItems,
   getArtworkHistory,
-  getTimeoutItems
+  getTimeoutItems,
 };

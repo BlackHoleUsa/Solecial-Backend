@@ -56,6 +56,12 @@ const NOTIFICATION_TYPE = {
   NEW_BID: 'newBid',
   AUCTION_TIMEOUT: 'auctionTimeout',
   AUCTION_END: 'auctionEnd',
+  AUCTION_WIN: 'auctionWin',
+};
+
+TRANSACTION_ACTIVITY_TYPE = {
+  NFT_CLAIM: 'nftClaim',
+  NFT_SALE: 'nftSale',
 };
 
 module.exports = {
@@ -69,4 +75,5 @@ module.exports = {
   HISTORY_TYPE,
   TRANSACTION_TYPE,
   NOTIFICATION_TYPE,
+  TRANSACTION_ACTIVITY_TYPE,
 };
