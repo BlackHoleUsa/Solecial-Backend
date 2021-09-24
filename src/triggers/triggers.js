@@ -8,3 +8,4 @@ EVENT.addListener('add-artwork-in-collection', LISTENERS.addArtworkInCollection)
 EVENT.addListener('save-bid-in-artwork', LISTENERS.saveBidInArtwork);
 EVENT.addListener('open-artwork-auction', LISTENERS.openArtworkAuction);
 EVENT.addListener('update-artwork-history', LISTENERS.updateArtworkHistory);
+EVENT.addListener('send-and-save-notification', LISTENERS.createNotification);

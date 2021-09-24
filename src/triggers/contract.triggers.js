@@ -16,7 +16,6 @@ MINT_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
   }
 
   console.log('Event', ev);
-  console.log('--collection address--', ev.returnValues.CollectionAddress);
 
   switch (ev.event) {
     case MINT_CONTRACT_EVENTS.NEW_COLLECTION:
@@ -33,7 +32,6 @@ AUCTION_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
   }
 
   console.log('Event', ev);
-  console.log('--collection address--', ev.returnValues.CollectionAddress);
 
   switch (ev.event) {
     case AUC_CONTRACT_EVENTS.NEW_AUCTION:

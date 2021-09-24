@@ -43,6 +43,18 @@ const HISTORY_TYPE = {
   BID_PLACED: 'bidPlaced',
 };
 
+const TRANSACTION_TYPE = {
+  SALE: 'sale',
+  PURCHASE: 'purchase',
+};
+
+const NOTIFICATION_TYPE = {
+  NEW_FOLLOWER: 'newFollower',
+  NEW_BID: 'newBid',
+  AUCTION_TIMEOUT: 'auctionTimeout',
+  AUCTION_END: 'auctionEnd',
+};
+
 module.exports = {
   ARTWORK_TYPE,
   MINT_CONTRACT_EVENTS,
@@ -52,4 +64,6 @@ module.exports = {
   SEARCH_FILTERS,
   AUCTION_FILTERS,
   HISTORY_TYPE,
+  TRANSACTION_TYPE,
+  NOTIFICATION_TYPE,
 };
