@@ -1,4 +1,4 @@
-const { userService, artworkService, collectionService, historyService } = require('../services');
+const { userService, artworkService, collectionService, historyService, notificationService } = require('../services');
 
 const catchAsync = require('../utils/catchAsync');
 const httpStatus = require('http-status');
@@ -18,12 +18,15 @@ const handleSearch = catchAsync(async (req, res) => {
       case SEARCH_FILTERS.USERS:
         data.users = users;
         break;
+
       case SEARCH_FILTERS.ARTWORKS:
         data.artworks = artworks;
         break;
+
       case SEARCH_FILTERS.COLLECTIONS:
         data.collections = collections;
         break;
+
       default:
         data = {
           users,
@@ -59,7 +62,21 @@ const getAppActivity = catchAsync(async (req, res) => {
   });
 });
 
+const getNotifications = catchAsync(async (req, res) => {
+  const user = req.user;
+  const { page, perPage } = req.query;
+
+  const notifications = await notificationService.getUserNotifications(user._id, page, perPage);
+  res.status(httpStatus.OK).send({
+    status: true,
+    message: 'Successfull',
+    page,
+    data: notifications,
+  });
+});
+
 module.exports = {
   handleSearch,
   getAppActivity,
+  getNotifications,
 };
