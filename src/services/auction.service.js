@@ -26,7 +26,7 @@ const getOpenAuctions = async (page, perPage, sort, whereQuery) => {
 };
 
 const checkAndCompleteAuctionStatus = async () => {
-  const auctions = await Auction.find();
+  const auctions = await Auction.find({ status: AUCTION_STATUS.CLOSED });
 
   for (auction of auctions) {
     const currentDate = new Date();
