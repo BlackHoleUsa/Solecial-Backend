@@ -43,6 +43,14 @@ const getAuctionListing = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send({ status: true, message: 'successfull', page, data });
 });
 
+const checkIt = catchAsync(async (req, res) => {
+  const { page, perPage } = req.query;
+
+  let response = await auctionService.artworkExistsInAuction('6152be3c3030060da7a85236');
+  res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: response });
+});
+
 module.exports = {
   getAuctionListing,
+  checkIt,
 };
