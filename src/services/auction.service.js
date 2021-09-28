@@ -90,7 +90,7 @@ const checkAndCompleteAuctionStatus = async () => {
 };
 
 const getTimeoutAuctions = async (userId, page, perPage) => {
-  const auctions = await Auction.find({ auctionWinner: userId, status: AUCTION_STATUS.TIMEOUT, nftClaim: false })
+  const auctions = await Auction.find({ status: AUCTION_STATUS.TIMEOUT })
     .populate('owner creater bids artwork')
     .limit(parseInt(perPage))
     .skip(page * perPage)
