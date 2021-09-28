@@ -20,13 +20,13 @@ const getAuctionListing = catchAsync(async (req, res) => {
   }
 
   if (min) {
-    whereQuery = { initialPrice: { $gt: parseInt(min) } };
+    whereQuery.initialPrice = { $gt: parseInt(min) };
   }
   if (max) {
-    whereQuery = { initialPrice: { $lt: parseInt(max) } };
+    whereQuery.initialPrice = { $lt: parseInt(max) };
   }
   if (min && max) {
-    whereQuery = { initialPrice: { $lt: parseInt(max), $gt: parseInt(min) } };
+    whereQuery.initialPrice = { $lt: parseInt(max), $gt: parseInt(min) };
   }
   if (min && max && filter == AUCTION_FILTERS.HAS_OFFER) {
     whereQuery = { initialPrice: { $lt: parseInt(max), $gt: parseInt(min) }, 'bids.0': { $exists: true } };
