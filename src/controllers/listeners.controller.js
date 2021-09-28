@@ -3,17 +3,23 @@ const { MINT_STATUS } = require('../utils/enums');
 
 const addCollectionInUser = async (params) => {
   const { collectionId, userId } = params;
-  await User.findOneAndUpdate(userId, {
-    $push: { collections: collectionId },
-  });
+  await User.findOneAndUpdate(
+    { _id: userId },
+    {
+      $push: { collections: collectionId },
+    }
+  );
   console.log('collection added in user successfully');
 };
 
 const addArtworkInUser = async (params) => {
   const { artworkId, userId } = params;
-  await User.findOneAndUpdate(userId, {
-    $push: { artworks: artworkId },
-  });
+  await User.findOneAndUpdate(
+    { _id: userId },
+    {
+      $push: { artworks: artworkId },
+    }
+  );
   console.log('artwork added in user successfully');
 };
 
