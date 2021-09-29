@@ -7,4 +7,6 @@ const router = express.Router();
 
 router.get('/getAuctionListing', [validate(auctionValidation.getOpenAuctionVS)], auctionController.getAuctionListing);
 
+router.get('/checkIt', [], auctionController.checkIt);
+
 module.exports = router;
