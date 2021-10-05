@@ -14,8 +14,14 @@ const register = catchAsync(async (req, res) => {
 });
 
 const login = catchAsync(async (req, res) => {
-  const { address } = req.body;
-  const user = await authService.loginUserWithAddress(address);
+  const { address,email,password } = req.body;
+  var user;
+  if(address != undefined){
+    user = await authService.loginUserWithAddress(address);
+  }
+   if(email != undefined && password != undefined){
+    user = await authService.loginUserWithEmailAndPassword(email,password)
+  }
   if (user) {
     await tokenService.removeToken(user);
     const tokens = await tokenService.generateAuthTokens(user);
@@ -33,7 +39,6 @@ const login = catchAsync(async (req, res) => {
     });
   }
 });
-
 const logout = catchAsync(async (req, res) => {
   await tokenService.removeToken(user);
   res.status(httpStatus.OK).send({

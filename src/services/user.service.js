@@ -11,12 +11,16 @@ const ApiError = require('../utils/ApiError');
 const createUser = async (userBody) => {
   if (await User.isEmailTaken(userBody.email)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
-  } else if (!(await web3.utils.isAddress(userBody.address))) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'address is not valid');
-  } else if (await User.isAddressTaken(userBody.address)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'address already taken');
-  } else if (await User.isUsernameTaken(userBody.userName)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'userName already taken');
+  } else if(userBody.role=='user'){
+    if(!(await web3.utils.isAddress(userBody.address))) {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'address is not valid');
+    } else if (await User.isAddressTaken(userBody.address)) {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'address already taken')
+  } 
+  } else if(userBody.role !='artist'|| userBody.role != undefined){
+      if (await User.isUsernameTaken(userBody.userName)) {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'userName already taken');
+    }
   }
   const usr = await User.create(userBody);
   return usr.toObject();
@@ -51,12 +55,13 @@ const getUserById = async (id) => {
  * @returns {Promise<User>}
  */
 const getUserByEmail = async (email) => {
-  return User.findOne({ email }).lean();
+  return User.findOne({ email });
 };
 
 const getUserByAddress = async (address) => {
   return User.findOne({ address }).lean();
 };
+
 
 /**
  * Update user by id
