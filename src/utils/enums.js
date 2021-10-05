@@ -13,6 +13,7 @@ const AUC_CONTRACT_EVENTS = {
   NEW_BID: 'newBid',
   CLAIM_SALE: 'collectAuctionAmount',
   NFT_CLAIM: 'NFTclaim',
+  CLAIM_BACK: 'auctionCancelled',
 };
 
 const AUCTION_STATUS = {
