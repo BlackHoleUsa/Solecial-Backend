@@ -8,7 +8,7 @@ const userSchema = mongoose.Schema(
   {
     userName: {
       type: String,
-      required: true,
+      required: false,
       trim: true,
     },
     email: {
@@ -29,29 +29,29 @@ const userSchema = mongoose.Schema(
     },
     address: {
       type: String,
-      required: true,
+      required: false,
       trim: true,
     },
     bio: {
       type: String,
       required: false,
     },
-    // password: {
-    //   type: String,
-    //   required: true,
-    //   trim: true,
-    //   minlength: 8,
-    //   validate(value) {
-    //     if (!value.match(/\d/) || !value.match(/[a-zA-Z]/)) {
-    //       throw new Error('Password must contain at least one letter and one number');
-    //     }
-    //   },
-    //   private: true, // used by the toJSON plugin
-    // },
+    password: {
+      type: String,
+      required: false,
+      trim: true,
+      minlength: 8,
+      validate(value) {
+        if (!value.match(/\d/) || !value.match(/[a-zA-Z]/)) {
+          throw new Error('Password must contain at least one letter and one number');
+        }
+      },
+      private: true, // used by the toJSON plugin
+    },
     role: {
       type: String,
       enum: roles,
-      default: 'user',
+      default: 'artist',
     },
     collections: [
       {
@@ -89,9 +89,10 @@ const userSchema = mongoose.Schema(
         ref: 'Artwork',
       },
     ],
+    isblock:{type:'String',default: false}
   },
   {
-    timestamps: true,
+    timestamps: true
   }
 );
 
@@ -125,6 +126,7 @@ userSchema.statics.isAddressTaken = async function (address, excludeUserId) {
  *
  * @param {string} userName
  * @param {ObjectId} excludeUserId
+ * @param {ObjectId} roles
  * @returns {Promise<boolean>}
  */
 
