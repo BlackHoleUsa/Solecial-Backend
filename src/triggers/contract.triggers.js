@@ -49,6 +49,9 @@ AUCTION_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
     case AUC_CONTRACT_EVENTS.NFT_CLAIM:
       contractController.handleNFTClaim(ev.returnValues);
       break;
+    case AUC_CONTRACT_EVENTS.CLAIM_BACK:
+      contractController.handleClaimBack(ev.returnValues);
+      break;
   }
 });
 

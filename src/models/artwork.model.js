@@ -20,7 +20,6 @@ const artworkSchema = mongoose.Schema(
     owner: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'User',
-      required: false,
     },
     artwork_url: {
       type: String,

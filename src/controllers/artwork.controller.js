@@ -159,6 +159,13 @@ const getSingleArtwork = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: artwork });
 });
 
+const getAuctionDetails = catchAsync(async (req, res) => {
+  const { artworkId } = req.query;
+
+  const artwork = await artworkService.getPopulatedArtwork(artworkId, 'auction creater owner collectionId bids');
+  res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: artwork });
+});
+
 const getAuctionBids = catchAsync(async (req, res) => {
   const { auctionId } = req.query;
 

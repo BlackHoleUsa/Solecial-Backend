@@ -4,7 +4,7 @@ const { AUCTION_CONTRACT_INSTANCE } = require('../config/contract.config');
 const LISTENERS = require('../controllers/listeners.controller');
 const { auctionService, bidService } = require('../services');
 const EVENT = require('../triggers/custom-events').customEvent;
-const { HISTORY_TYPE, TRANSACTION_TYPE, TRANSACTION_ACTIVITY_TYPE } = require('../utils/enums');
+const { HISTORY_TYPE, TRANSACTION_TYPE, TRANSACTION_ACTIVITY_TYPE, AUCTION_STATUS } = require('../utils/enums');
 
 const updateCollectionAddress = async (CollectionAddress, owner, colName) => {
   const user = await User.findOne({ address: owner });
@@ -47,7 +47,8 @@ const handleNewAuction = async (colAddress, tokenId, aucId) => {
     };
 
     const auction = await Auction.create(params);
-    await Artwork.findOneAndUpdate({ _id: artwork._id }, { owner: auction._id }); // Giving ownership of token to auction contract
+    await User.findOneAndUpdate({ _id: owner }, { $pull: artwork._id });
+    await Artwork.findOneAndUpdate({ _id: artwork._id }, { owner: null });
     LISTENERS.openArtworkAuction({ artworkId: artwork._id, auction: auction._id });
   } catch (err) {
     console.log(err);
@@ -120,6 +121,7 @@ const handleNFTClaim = async (values) => {
 
   //call debit transaction
 };
+
 const handleNFTSale = async (values) => {
   const { aucId, owner, amount } = values;
   const auction = await Auction.findOneAndUpdate({ contractAucId: aucId }, { ownerclaim: true }).populate('artwork');
@@ -135,8 +137,21 @@ const handleNFTSale = async (values) => {
       auction: auction._id,
     },
   });
+  console.log('NFT claimed successfully');
+};
 
-  console.log('nft claimed successfully');
+const handleClaimBack = async (values) => {
+  const { aucId } = values;
+  const auction = await Auction.findOneAndUpdate({ contractAucId: aucId }, { cancelled: true, status: AUCTION_STATUS.CLOSED }).populate('artwork');
+  const { artwork } = auction;
+  const usr = await User.findOneAndUpdate({ _id: auction.owner }, { $push: artwork._id });
+  await Artwork.findOneAndUpdate({ _id: artwork._id }, {
+    owner: auction.owner,
+    isAuctionOpen: false,
+    auction: null,
+    auctionMintStatus: null
+  });
+  console.log('NFT claimed back successfully');
 };
 
 module.exports = {
@@ -145,4 +160,5 @@ module.exports = {
   handleNewBid,
   handleNFTClaim,
   handleNFTSale,
+  handleClaimBack
 };
