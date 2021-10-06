@@ -14,12 +14,19 @@ const AUC_CONTRACT_EVENTS = {
   CLAIM_SALE: 'collectAuctionAmount',
   NFT_CLAIM: 'NFTclaim',
   CLAIM_BACK: 'auctionCancelled',
+  NEW_SALE: 'newSale'
 };
 
 const AUCTION_STATUS = {
   OPEN: 'open',
   CLOSED: 'closed',
   TIMEOUT: 'timeout',
+};
+
+const SALE_STATUS = {
+  OPEN: 'open',
+  COMPLETED: 'completed',
+  CANCELLED: 'cancelled',
 };
 
 const MINT_STATUS = {
@@ -77,4 +84,5 @@ module.exports = {
   TRANSACTION_TYPE,
   NOTIFICATION_TYPE,
   TRANSACTION_ACTIVITY_TYPE,
+  SALE_STATUS
 };
