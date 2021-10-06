@@ -99,6 +99,27 @@ const handleCancelSale = async (saleFromContract) => {
   }
 };
 
+const handleSaleComplete = async (saleFromContract) => {
+  const { saleId } = saleFromContract;
+  try {
+    const { owner } = await AUCTION_CONTRACT_INSTANCE.methods.SaleList(saleId).call();
+    const sale = await BuySell.findOneAndUpdate({ contractSaleId: saleId }, { status: SALE_STATUS.COMPLETED }).populate('artwork');
+    const { artwork } = sale;
+    const usr = await User.findOneAndUpdate({ _id: sale.owner }, { $pull: artwork._id });
+    const newArtworkOwner = await User.findOneAndUpdate({ address: owner }, { $push: artwork._id });
+    await Artwork.findOneAndUpdate({ _id: artwork._id }, {
+      owner: newArtworkOwner._id,
+      isAuctionOpen: false,
+      openForSale: false,
+      auction: null,
+      sale: null,
+      auctionMintStatus: null
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 const handleNewBid = async (par) => {
   let { bid, bidder, aucId } = par;
 
@@ -215,5 +236,6 @@ module.exports = {
   handleNFTSale,
   handleClaimBack,
   handleNewSale,
-  handleCancelSale
+  handleCancelSale,
+  handleSaleComplete
 };

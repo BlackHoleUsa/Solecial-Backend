@@ -20,8 +20,15 @@ const getPaginatedCollections = async (page, perPage, userId) => {
     .lean();
 };
 
-const getPopulatedCollection = async (collectionId, fieldToPopulate) => {
-  return await Collection.findOne({ _id: collectionId }).populate(fieldToPopulate).lean();
+const getPopulatedCollection = async (userId, collectionId) => {
+  return await Collection.findOne({ _id: collectionId }).populate({
+    path: 'artworks',
+    match: {
+      isAuctionOpen: false,
+      openForSale: false,
+      owner: userId
+    }
+  }).lean();
 };
 
 const updateCollectionImages = async (collectionId, profileImage, coverImage) => {

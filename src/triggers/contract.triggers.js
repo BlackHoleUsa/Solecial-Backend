@@ -56,6 +56,9 @@ AUCTION_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
     case AUC_CONTRACT_EVENTS.SALE_CANCELLED:
       contractController.handleCancelSale(ev.returnValues);
       break;
+    case AUC_CONTRACT_EVENTS.SALE_COMPLETED:
+      contractController.handleSaleComplete(ev.returnValues);
+      break;
   }
 });
 
