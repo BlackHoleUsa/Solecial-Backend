@@ -4,6 +4,7 @@ const userRoute = require('./user.route');
 const docsRoute = require('./docs.route');
 const collectionRoute = require('./collection.route');
 const artworkRoute = require('./artwork.route');
+const salesRoute = require('./sales.route');
 const auctionRoute = require('./auction.route');
 const generalRoute = require('./general.route');
 
@@ -27,6 +28,10 @@ const defaultRoutes = [
   {
     path: '/artwork',
     route: artworkRoute,
+  },
+  {
+    path: '/sales',
+    route: salesRoute,
   },
   {
     path: '/auction',

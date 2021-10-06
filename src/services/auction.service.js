@@ -28,12 +28,40 @@ const getOpenAuctions = async (page, perPage, sort, whereQuery) => {
 const getOpenSales = async (page, perPage, sort, whereQuery) => {
   const sales = await BuySell.find(whereQuery)
     .sort(sort)
-    .populate('artwork owner creater bids')
+    .populate('artwork owner')
     .limit(parseInt(perPage))
     .skip(page * perPage)
     .lean();
 
   return sales;
+};
+
+const getSaleDetails = async (saleId) => {
+  const sales = await BuySell.findOne({ _id: saleId })
+    .populate({
+      path: 'artwork',
+      populate: {
+        path: 'creater'
+      }
+    })
+    .populate('owner')
+    .lean();
+
+  return sales;
+};
+
+const getAuctionDetails = async (aucId) => {
+  const auction = await Auction.findOne({ _id: aucId })
+    .populate({
+      path: 'artwork',
+      populate: {
+        path: 'creater'
+      }
+    })
+    .populate('owner bids')
+    .lean();
+
+  return auction;
 };
 
 const checkAndCompleteAuctionStatus = async () => {
@@ -146,5 +174,7 @@ module.exports = {
   getClosedAuctions,
   getSoldAuctions,
   getTimeoutAuctions,
-  getOpenSales
+  getOpenSales,
+  getSaleDetails,
+  getAuctionDetails
 };
