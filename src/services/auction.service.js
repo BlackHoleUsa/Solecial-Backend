@@ -1,4 +1,4 @@
-const { Bid, Auction, User } = require('../models');
+const { Bid, Auction, User, BuySell } = require('../models');
 const { AUCTION_STATUS, HISTORY_TYPE, NOTIFICATION_TYPE } = require('../utils/enums');
 const artworkService = require('./artwork.service');
 const { AUCTION_CONTRACT_INSTANCE } = require('../config/contract.config');
@@ -23,6 +23,17 @@ const getOpenAuctions = async (page, perPage, sort, whereQuery) => {
     .lean();
 
   return auctions;
+};
+
+const getOpenSales = async (page, perPage, sort, whereQuery) => {
+  const sales = await BuySell.find(whereQuery)
+    .sort(sort)
+    .populate('artwork owner creater bids')
+    .limit(parseInt(perPage))
+    .skip(page * perPage)
+    .lean();
+
+  return sales;
 };
 
 const checkAndCompleteAuctionStatus = async () => {
@@ -90,7 +101,7 @@ const checkAndCompleteAuctionStatus = async () => {
 };
 
 const getTimeoutAuctions = async (userId, page, perPage) => {
-  const auctions = await Auction.find({ status: AUCTION_STATUS.TIMEOUT })
+  const auctions = await Auction.find({ status: AUCTION_STATUS.TIMEOUT, cancelled: false, owner: userId })
     .populate('owner creater bids artwork')
     .limit(parseInt(perPage))
     .skip(page * perPage)
@@ -135,4 +146,5 @@ module.exports = {
   getClosedAuctions,
   getSoldAuctions,
   getTimeoutAuctions,
+  getOpenSales
 };

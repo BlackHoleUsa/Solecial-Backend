@@ -1,4 +1,4 @@
-const { User, Collection, Artwork, Auction } = require('../models');
+const { User, Collection, Artwork, Auction, BuySell } = require('../models');
 const { getUserByAddress } = require('../services/user.service');
 const { AUCTION_CONTRACT_INSTANCE } = require('../config/contract.config');
 const LISTENERS = require('../controllers/listeners.controller');
@@ -50,6 +50,31 @@ const handleNewAuction = async (colAddress, tokenId, aucId) => {
     await User.findOneAndUpdate({ _id: owner }, { $pull: artwork._id });
     await Artwork.findOneAndUpdate({ _id: artwork._id }, { owner: null });
     LISTENERS.openArtworkAuction({ artworkId: artwork._id, auction: auction._id });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const handleNewSale = async (saleFromContract) => {
+  const { colAddress, tokenId, saleId, price } = saleFromContract;
+  try {
+    const collection = await Collection.findOne({ collectionAddress: colAddress });
+    const artwork = await Artwork.findOne({ collectionId: collection._id, tokenId: tokenId });
+    if (!artwork.openForSale) {
+      const { owner } = artwork;
+      const params = {
+        price: price,
+        artwork: artwork._id,
+        owner,
+        contractSaleId: saleId,
+      };
+
+      const sale = await BuySell.create(params);
+      await User.findOneAndUpdate({ _id: owner }, { $pull: artwork._id });
+      await Artwork.findOneAndUpdate({ _id: artwork._id }, { owner: null, sale: sale._id, openForSale: true });
+    } else {
+      console.log('Artwork is already on sale');
+    }
   } catch (err) {
     console.log(err);
   }
@@ -160,5 +185,6 @@ module.exports = {
   handleNewBid,
   handleNFTClaim,
   handleNFTSale,
-  handleClaimBack
+  handleClaimBack,
+  handleNewSale
 };

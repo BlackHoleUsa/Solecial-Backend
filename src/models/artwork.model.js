@@ -57,6 +57,14 @@ const artworkSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    openForSale: {
+      type: Boolean,
+      default: false,
+    },
+    sale: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'BuySell',
+    },
     auction: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Auction',
