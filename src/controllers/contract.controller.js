@@ -4,7 +4,7 @@ const { AUCTION_CONTRACT_INSTANCE } = require('../config/contract.config');
 const LISTENERS = require('../controllers/listeners.controller');
 const { auctionService, bidService } = require('../services');
 const EVENT = require('../triggers/custom-events').customEvent;
-const { HISTORY_TYPE, TRANSACTION_TYPE, TRANSACTION_ACTIVITY_TYPE, AUCTION_STATUS } = require('../utils/enums');
+const { HISTORY_TYPE, TRANSACTION_TYPE, TRANSACTION_ACTIVITY_TYPE, AUCTION_STATUS, SALE_STATUS } = require('../utils/enums');
 
 const updateCollectionAddress = async (CollectionAddress, owner, colName) => {
   const user = await User.findOne({ address: owner });
@@ -80,6 +80,25 @@ const handleNewSale = async (saleFromContract) => {
   }
 };
 
+const handleCancelSale = async (saleFromContract) => {
+  const { saleId } = saleFromContract;
+  try {
+    const sale = await BuySell.findOneAndUpdate({ contractSaleId: saleId }, { status: SALE_STATUS.CANCELLED }).populate('artwork');
+    const { artwork } = sale;
+    const usr = await User.findOneAndUpdate({ _id: sale.owner }, { $push: artwork._id });
+    await Artwork.findOneAndUpdate({ _id: artwork._id }, {
+      owner: sale.owner,
+      isAuctionOpen: false,
+      openForSale: false,
+      auction: null,
+      sale: null,
+      auctionMintStatus: null
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 const handleNewBid = async (par) => {
   let { bid, bidder, aucId } = par;
 
@@ -131,8 +150,15 @@ const handleNFTClaim = async (values) => {
   const { artwork } = auction;
   const usr = await User.findOneAndUpdate({ _id: artwork.owner }, { $pull: artwork._id });
   const newArtworkOwner = await User.findOneAndUpdate({ address: newOwner }, { $push: artwork._id });
-  await Artwork.findOneAndUpdate({ _id: artwork._id }, { owner: newArtworkOwner._id });
-  console.log('nft claimed successfully');
+  await Artwork.findOneAndUpdate({ _id: artwork._id }, {
+    owner: newArtworkOwner._id,
+    isAuctionOpen: false,
+    auction: null,
+    auctionMintStatus: null,
+    sale: null,
+    openForSale: false,
+  });
+  console.log('NFT claimed successfully');
 
   EVENT.emit('record-transaction', {
     user: newArtworkOwner._id,
@@ -174,7 +200,9 @@ const handleClaimBack = async (values) => {
     owner: auction.owner,
     isAuctionOpen: false,
     auction: null,
-    auctionMintStatus: null
+    auctionMintStatus: null,
+    sale: null,
+    openForSale: false,
   });
   console.log('NFT claimed back successfully');
 };
@@ -186,5 +214,6 @@ module.exports = {
   handleNFTClaim,
   handleNFTSale,
   handleClaimBack,
-  handleNewSale
+  handleNewSale,
+  handleCancelSale
 };

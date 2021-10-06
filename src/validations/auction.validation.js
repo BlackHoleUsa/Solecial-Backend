@@ -19,7 +19,20 @@ const getOpenSalesVS = {
   }),
 };
 
+const getSaleDetailsVs = {
+  query: Joi.object().keys({
+    saleId: Joi.string().required()
+  }),
+};
+const getAuctionDetailsVs = {
+  query: Joi.object().keys({
+    aucId: Joi.string().required()
+  }),
+};
+
 module.exports = {
   getOpenAuctionVS,
-  getOpenSalesVS
+  getOpenSalesVS,
+  getSaleDetailsVs,
+  getAuctionDetailsVs
 };

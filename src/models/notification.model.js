@@ -24,6 +24,10 @@ const notificationSchema = mongoose.Schema(
         type: mongoose.SchemaTypes.ObjectId,
         ref: 'Auction',
       },
+      sale: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'BuySell',
+      }
     },
   },
   {

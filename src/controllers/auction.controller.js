@@ -2,7 +2,7 @@ const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
 const { auctionService } = require('../services');
 
-const { AUCTION_FILTERS, AUCTION_STATUS, SALE_STATUS } = require('../utils/enums');
+const { AUCTION_FILTERS, AUCTION_STATUS } = require('../utils/enums');
 
 const getAuctionListing = catchAsync(async (req, res) => {
   const { page, perPage, filter, min, max } = req.query;
@@ -43,25 +43,10 @@ const getAuctionListing = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send({ status: true, message: 'successfull', page, data });
 });
 
-const getSaleListing = catchAsync(async (req, res) => {
-  const { page, perPage, min, max } = req.query;
-
-  let sort = { createdAt: -1 };
-  let whereQuery = {};
-
-  if (min) {
-    whereQuery.price = { $gt: parseInt(min) };
-  }
-  if (max) {
-    whereQuery.price = { $lt: parseInt(max) };
-  }
-  if (min && max) {
-    whereQuery.price = { $lt: parseInt(max), $gt: parseInt(min) };
-  }
-
-  whereQuery.status = SALE_STATUS.OPEN;
-  const data = await auctionService.getOpenSales(page, perPage, sort, whereQuery);
-  res.status(httpStatus.OK).send({ status: true, message: 'successfull', page, data });
+const getAuctionDetails = catchAsync(async (req, res) => {
+  const { aucId } = req.query;
+  const data = await auctionService.getAuctionDetails(aucId);
+  res.status(httpStatus.OK).send({ status: true, message: 'successfull', data });
 });
 
 const checkIt = catchAsync(async (req, res) => {
@@ -73,6 +58,6 @@ const checkIt = catchAsync(async (req, res) => {
 
 module.exports = {
   getAuctionListing,
-  getSaleListing,
+  getAuctionDetails,
   checkIt,
 };
