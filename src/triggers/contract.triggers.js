@@ -53,6 +53,7 @@ AUCTION_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
       contractController.handleClaimBack(ev.returnValues);
     case AUC_CONTRACT_EVENTS.NEW_SALE:
       contractController.handleNewSale(ev.returnValues);
+      break;
     case AUC_CONTRACT_EVENTS.SALE_CANCELLED:
       contractController.handleCancelSale(ev.returnValues);
       break;
