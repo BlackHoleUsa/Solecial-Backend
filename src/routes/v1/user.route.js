@@ -11,6 +11,7 @@ const router = express.Router();
  *   name: Users
  *   description: Users
  */
+router.get('/getAllUsers', userController.getAllUsers);
 router
   .route('/')
   .post(auth('manageUsers'), validate(userValidation.createUser), userController.createUser)

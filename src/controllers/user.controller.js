@@ -29,7 +29,7 @@ const getUser = catchAsync(async (req, res) => {
 
 const updateUser = catchAsync(async (req, res) => {
   if (req.files.length > 0) {
-    let img = await uploadToAws(req.files[0].buffer, `${req.params.userId}/${req.params.userId}-profile-pic.png`);
+    const img = await uploadToAws(req.files[0].buffer, `${req.params.userId}/${req.params.userId}-profile-pic.png`);
     req.body.profilePic = img.Location;
   }
   const user = await userService.updateUserById(req.params.userId, req.body);
@@ -43,7 +43,7 @@ const deleteUser = catchAsync(async (req, res) => {
 
 const followUser = catchAsync(async (req, res) => {
   const { otherUserId } = req.body;
-  const user = req.user;
+  const { user } = req;
   await userService.followOtherUser(user._id, otherUserId);
 
   EVENT.emit('send-and-save-notification', {
@@ -62,7 +62,7 @@ const followUser = catchAsync(async (req, res) => {
 
 const unfollowUser = catchAsync(async (req, res) => {
   const { otherUserId } = req.body;
-  const user = req.user;
+  const { user } = req;
 
   await userService.unFollowUser(user._id, otherUserId);
   res.status(httpStatus.OK).send({
@@ -92,6 +92,11 @@ const getUserFollowing = catchAsync(async (req, res) => {
     data: following,
   });
 });
+
+const getAllUsers = catchAsync(async (req, res) => {
+  const allUsers = await userService.getAllUsers();
+  res.status(httpStatus.OK).send({ allUsers });
+});
 module.exports = {
   createUser,
   getUsers,
@@ -102,4 +107,5 @@ module.exports = {
   unfollowUser,
   getUserFollowing,
   getUserFollowers,
+  getAllUsers,
 };

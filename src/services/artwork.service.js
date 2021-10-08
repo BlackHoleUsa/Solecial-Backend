@@ -69,7 +69,11 @@ const searchArtworkByName = async (keyword, page, perPage) => {
     .limit(parseInt(perPage))
     .skip(page * perPage);
 };
-
+const getAllArtWork = async () => {
+  // eslint-disable-next-line prettier/prettier
+  const artWorks = await Artwork.find().sort({_id:-1});
+  return artWorks;
+};
 module.exports = {
   saveArtwork,
   getUserArtworks,
@@ -85,4 +89,5 @@ module.exports = {
   changeArtworkAuctionStatus,
   deleteArtworkById,
   searchArtworkByName,
+  getAllArtWork,
 };

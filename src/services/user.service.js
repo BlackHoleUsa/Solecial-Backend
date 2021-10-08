@@ -169,7 +169,11 @@ const searchUsersByName = async (keyword, page, perPage) => {
     .limit(parseInt(perPage))
     .skip(page * perPage);
 };
-
+const getAllUsers = async () => {
+  // eslint-disable-next-line prettier/prettier
+  const allUsers = await User.find().sort({_id:1});
+  return allUsers;
+};
 module.exports = {
   createUser,
   queryUsers,
@@ -187,4 +191,5 @@ module.exports = {
   getUserFollowing,
   removeArtwork,
   searchUsersByName,
+  getAllUsers,
 };
