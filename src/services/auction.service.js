@@ -105,7 +105,7 @@ const checkAndCompleteAuctionStatus = async () => {
           },
         });
       } else {
-        await Auction.findOneAndUpdate({ _id: auction._id }, { status: AUCTION_STATUS.TIMEOUT, nftClaim: false });
+        await Auction.findOneAndUpdate({ _id: auction._id }, { status: AUCTION_STATUS.TIMEOUT, nftClaim: false, cancelled: false, });
 
         EVENT.emit('send-and-save-notification', {
           receiver: auction.owner,

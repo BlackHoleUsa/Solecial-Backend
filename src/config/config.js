@@ -82,11 +82,8 @@ module.exports = {
     bucket: envVars.AWS_BUCKET,
   },
   ETH_CONTRACTS: {
-    // MINT_NFT_CONTRACT_ADDRESS: '0x95C3251876cdf276efa2625AbcB4Acb0374fA839',
-    // MINT_NFT_CONTRACT_ADDRESS: '0x0296D857eA22Ac65b1d0AE63d8c6A951E4027B49',
-    // MINT_NFT_CONTRACT_ADDRESS: '0xB60DC87BB4908bB42b5Ed9766FCb5618ea617C77',
-    MINT_NFT_CONTRACT_ADDRESS: '0xfE5915fb228f632A468cE83f6f8b6bB061d99aAE',
-    AUCTION_CONTRACT_ADDRESS: '0xf07404bBc59b9449b14a4fB36c9d675d78e4f905',
+    MINT_NFT_CONTRACT_ADDRESS: '0x2F0A9E000ea85dd0c0bF1974A61904Ddbb3E6940',
+    AUCTION_CONTRACT_ADDRESS: '0x902bC16C14bFbbBe3F9E775bA07F43aed0B562A8',
     MINT_NFT_ABI: [
       {
         "inputs": [
@@ -422,6 +419,12 @@ module.exports = {
             "internalType": "uint256",
             "name": "saleId",
             "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "address",
+            "name": "newOwner_",
+            "type": "address"
           }
         ],
         "name": "saleCompleted",
@@ -648,7 +651,7 @@ module.exports = {
             "type": "uint256"
           }
         ],
-        "name": "canelSale",
+        "name": "cancelSale",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
