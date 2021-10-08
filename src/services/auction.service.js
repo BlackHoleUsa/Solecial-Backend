@@ -1,4 +1,4 @@
-const { Bid, Auction, User } = require('../models');
+const { Bid, Auction, User, BuySell } = require('../models');
 const { AUCTION_STATUS, HISTORY_TYPE, NOTIFICATION_TYPE } = require('../utils/enums');
 const artworkService = require('./artwork.service');
 const { AUCTION_CONTRACT_INSTANCE } = require('../config/contract.config');
@@ -23,6 +23,52 @@ const getOpenAuctions = async (page, perPage, sort, whereQuery) => {
     .lean();
 
   return auctions;
+};
+
+const getOpenSales = async (page, perPage, sort, whereQuery) => {
+  const sales = await BuySell.find(whereQuery)
+    .sort(sort)
+    .populate('artwork owner')
+    .limit(parseInt(perPage))
+    .skip(page * perPage)
+    .lean();
+
+  return sales;
+};
+
+const getSaleDetails = async (saleId) => {
+  const sales = await BuySell.findOne({ _id: saleId })
+    .populate({
+      path: 'artwork',
+      populate: {
+        path: 'creater'
+      }
+    })
+    .populate('owner')
+    .lean();
+
+  return sales;
+};
+
+const getAuctionDetails = async (aucId) => {
+  const auction = await Auction.findOne({ _id: aucId })
+    .populate({
+      path: 'artwork',
+      populate: {
+        path: 'creater'
+      }
+    })
+    .populate({
+      path: 'bids',
+      populate: {
+        path: 'bidder'
+      },
+      options: { sort: { 'bid_amount': -1 } }
+    })
+    .populate('owner')
+    .lean();
+
+  return auction;
 };
 
 const checkAndCompleteAuctionStatus = async () => {
@@ -66,7 +112,7 @@ const checkAndCompleteAuctionStatus = async () => {
           },
         });
       } else {
-        await Auction.findOneAndUpdate({ _id: auction._id }, { status: AUCTION_STATUS.TIMEOUT, nftClaim: false });
+        await Auction.findOneAndUpdate({ _id: auction._id }, { status: AUCTION_STATUS.TIMEOUT, nftClaim: false, cancelled: false, });
 
         EVENT.emit('send-and-save-notification', {
           receiver: auction.owner,
@@ -90,7 +136,7 @@ const checkAndCompleteAuctionStatus = async () => {
 };
 
 const getTimeoutAuctions = async (userId, page, perPage) => {
-  const auctions = await Auction.find({ status: AUCTION_STATUS.TIMEOUT })
+  const auctions = await Auction.find({ status: AUCTION_STATUS.TIMEOUT, cancelled: false, owner: userId })
     .populate('owner creater bids artwork')
     .limit(parseInt(perPage))
     .skip(page * perPage)
@@ -135,4 +181,7 @@ module.exports = {
   getClosedAuctions,
   getSoldAuctions,
   getTimeoutAuctions,
+  getOpenSales,
+  getSaleDetails,
+  getAuctionDetails
 };

@@ -14,12 +14,21 @@ const AUC_CONTRACT_EVENTS = {
   CLAIM_SALE: 'collectAuctionAmount',
   NFT_CLAIM: 'NFTclaim',
   CLAIM_BACK: 'auctionCancelled',
+  NEW_SALE: 'newSale',
+  SALE_CANCELLED: "saleCancelled",
+  SALE_COMPLETED: "saleCompleted"
 };
 
 const AUCTION_STATUS = {
   OPEN: 'open',
   CLOSED: 'closed',
   TIMEOUT: 'timeout',
+};
+
+const SALE_STATUS = {
+  OPEN: 'open',
+  COMPLETED: 'completed',
+  CANCELLED: 'cancelled',
 };
 
 const MINT_STATUS = {
@@ -58,11 +67,14 @@ const NOTIFICATION_TYPE = {
   AUCTION_TIMEOUT: 'auctionTimeout',
   AUCTION_END: 'auctionEnd',
   AUCTION_WIN: 'auctionWin',
+  NFT_BUY: 'NFT_BUY'
 };
 
 TRANSACTION_ACTIVITY_TYPE = {
   NFT_CLAIM: 'nftClaim',
   NFT_SALE: 'nftSale',
+  SELL_OP: 'sale_nft',
+  BUY_OP: 'buy_nft'
 };
 
 module.exports = {
@@ -77,4 +89,5 @@ module.exports = {
   TRANSACTION_TYPE,
   NOTIFICATION_TYPE,
   TRANSACTION_ACTIVITY_TYPE,
+  SALE_STATUS
 };

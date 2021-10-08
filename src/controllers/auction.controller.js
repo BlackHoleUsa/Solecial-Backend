@@ -43,6 +43,12 @@ const getAuctionListing = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send({ status: true, message: 'successfull', page, data });
 });
 
+const getAuctionDetails = catchAsync(async (req, res) => {
+  const { aucId } = req.query;
+  const data = await auctionService.getAuctionDetails(aucId);
+  res.status(httpStatus.OK).send({ status: true, message: 'successfull', data });
+});
+
 const checkIt = catchAsync(async (req, res) => {
   const { page, perPage } = req.query;
 
@@ -52,5 +58,6 @@ const checkIt = catchAsync(async (req, res) => {
 
 module.exports = {
   getAuctionListing,
+  getAuctionDetails,
   checkIt,
 };

@@ -26,6 +26,7 @@ const saveArtwork = catchAsync(async (req, res) => {
     body.artwork_url = imgData;
   }
   body.owner = body.creater;
+  body.basePrice = body.price;
   const artwork = await artworkService.saveArtwork(body);
   const user = await userService.getUserById(creater);
   const metaUrl = await pinMetaDataToIPFS({

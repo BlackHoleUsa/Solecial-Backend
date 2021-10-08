@@ -30,6 +30,10 @@ const artworkSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
+    basePrice: {
+      type: Number,
+      required: false,
+    },
     tokenId: {
       type: String,
       required: false,
@@ -56,6 +60,14 @@ const artworkSchema = mongoose.Schema(
     isAuctionOpen: {
       type: Boolean,
       default: false,
+    },
+    openForSale: {
+      type: Boolean,
+      default: false,
+    },
+    sale: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'BuySell',
     },
     auction: {
       type: mongoose.SchemaTypes.ObjectId,

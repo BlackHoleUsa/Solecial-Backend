@@ -42,15 +42,18 @@ const auctionSchema = mongoose.Schema(
     },
     nftClaim: {
       type: Boolean,
-      required: false
+      required: false,
+      default: false,
     },
     cancelled: {
       type: Boolean,
-      required: false
+      required: false,
+      default: false,
     },
     ownerclaim: {
       type: Boolean,
-      required: false
+      required: false,
+      default: false,
     },
     bids: [
       {

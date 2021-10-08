@@ -145,7 +145,7 @@ router.get('/getUserCollections', [validate(getCollectionVS)], collectionControl
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  */
-router.get('/getCollectionDetails', [validate(singleCollectionVS)], collectionController.getCollectionDetails);
+router.get('/getCollectionDetails', [auth('manageUsers'), validate(singleCollectionVS)], collectionController.getCollectionDetails);
 
 router.post(
   '/updateCollection',
