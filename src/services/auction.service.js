@@ -58,7 +58,14 @@ const getAuctionDetails = async (aucId) => {
         path: 'creater'
       }
     })
-    .populate('owner bids')
+    .populate({
+      path: 'bids',
+      populate: {
+        path: 'bidder'
+      },
+      options: { sort: { 'bid_amount': -1 } }
+    })
+    .populate('owner')
     .lean();
 
   return auction;
