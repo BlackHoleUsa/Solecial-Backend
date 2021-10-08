@@ -30,6 +30,10 @@ const artworkSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
+    basePrice: {
+      type: Number,
+      required: false,
+    },
     tokenId: {
       type: String,
       required: false,

@@ -67,11 +67,14 @@ const NOTIFICATION_TYPE = {
   AUCTION_TIMEOUT: 'auctionTimeout',
   AUCTION_END: 'auctionEnd',
   AUCTION_WIN: 'auctionWin',
+  NFT_BUY: 'NFT_BUY'
 };
 
 TRANSACTION_ACTIVITY_TYPE = {
   NFT_CLAIM: 'nftClaim',
   NFT_SALE: 'nftSale',
+  SELL_OP: 'sale_nft',
+  BUY_OP: 'buy_nft'
 };
 
 module.exports = {
