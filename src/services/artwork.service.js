@@ -17,6 +17,20 @@ const getUserArtworks = async (userId, page, perPage) => {
     .lean();
 };
 
+const getArtworkType = async (artworkType, page, perPage) => {
+  if(artworkType == 'All'){
+    return await Artwork.find()
+    .limit(parseInt(perPage))
+    .skip(page * perPage)
+    .lean();
+  }else{
+    return await Artwork.find({ artwork_type: artworkType })
+      .limit(parseInt(perPage))
+      .skip(page * perPage)
+      .lean();
+  }
+};
+
 const increaseArtworkViews = async (artworkId) => {
   return await Artwork.findOneAndUpdate({ _id: artworkId }, { $inc: { views: 1 } }, { new: true }).lean();
 };
@@ -26,7 +40,7 @@ const updateArtwork = async (id, fieldToUpdate, value) => {
 };
 
 const updateArtworkMetaUrl = async (id, value) => {
-  return await Artwork.findOneAndUpdate({ _id: id }, { meta_url: value }, { new: true }).lean();
+  return await Artwork.findOneAndUpdate({ _id: id }, {$set:{ meta_url: value }}, { new: true }).lean();
 };
 
 const getArtworkById = async (id) => {
@@ -73,6 +87,7 @@ const searchArtworkByName = async (keyword, page, perPage) => {
 module.exports = {
   saveArtwork,
   getUserArtworks,
+  getArtworkType,
   increaseArtworkViews,
   updateArtwork,
   updateArtworkMetaUrl,

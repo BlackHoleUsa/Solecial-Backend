@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { toJSON } = require('./plugins');
 const { ARTWORK_TYPE } = require('../utils/enums');
+const { artCategories } = require('../config/roles');
 
 const artworkSchema = mongoose.Schema(
   {
@@ -35,10 +36,11 @@ const artworkSchema = mongoose.Schema(
       type: String,
       required: false,
     },
-    collectionId: {
-      type: mongoose.SchemaTypes.ObjectId,
-      ref: 'Collection',
-    },
+    // collectionId: {
+    //   type: mongoose.SchemaTypes.ObjectId,
+    //   ref: 'Collection',
+    // },
+    
     views: {
       type: Number,
       required: false,
@@ -47,7 +49,7 @@ const artworkSchema = mongoose.Schema(
     artwork_type: {
       type: String,
       required: false,
-      default: ARTWORK_TYPE.IMAGE,
+      default: ARTWORK_TYPE.ART,
     },
     meta_url: {
       type: String,

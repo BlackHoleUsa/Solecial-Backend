@@ -19,7 +19,7 @@ const { HISTORY_TYPE, NOTIFICATION_TYPE } = require('../utils/enums');
 const saveArtwork = catchAsync(async (req, res) => {
   const body = req.body;
   const files = req.files;
-  const { name, description, creater, collectionId } = body;
+  const { name, description, creater, } = body;
   let imgData;
   if (files.length > 0) {
     imgData = await addFilesToIPFS(files[0].buffer, 'image');
@@ -32,21 +32,21 @@ const saveArtwork = catchAsync(async (req, res) => {
     name,
     description,
     creater: {
-      name: user.userName,
+      // name: user.userName,
       id: user._id,
     },
-    collectionId,
+    // collectionId,
     artwork_url: imgData,
   });
   const updatedArtwork = await artworkService.updateArtworkMetaUrl(artwork._id, metaUrl);
   EVENT.emit('add-artwork-in-user', {
-    artworkId: artwork._id,
-    userId: body.creater,
+     artworkId: artwork._id,
+     userId: body.creater,
   });
-  EVENT.emit('add-artwork-in-collection', {
-    artworkId: artwork._id,
-    collectionId: body.collectionId,
-  });
+  // EVENT.emit('add-artwork-in-collection', {
+  //   artworkId: artwork._id,
+  //   collectionId: body.collectionId,
+  // });
 
   EVENT.emit('update-artwork-history', {
     artwork: artwork._id,
@@ -62,6 +62,12 @@ const getUserArtworks = catchAsync(async (req, res) => {
   const { page, perPage, userId } = req.query;
 
   const artworks = await artworkService.getUserArtworks(userId, page, perPage);
+  res.status(httpStatus.OK).send({ status: true, message: 'successfull', data: artworks });
+});
+const getArtworkType = catchAsync(async (req, res) => {
+  const { page, perPage, artwork_type} = req.query;
+
+  const artworks = await artworkService.getArtworkType(artwork_type, page, perPage);
   res.status(httpStatus.OK).send({ status: true, message: 'successfull', data: artworks });
 });
 
@@ -154,7 +160,6 @@ const placeBid = catchAsync(async (req, res) => {
 
 const getSingleArtwork = catchAsync(async (req, res) => {
   const { artworkId } = req.query;
-
   const artwork = await artworkService.getPopulatedArtwork(artworkId, 'auction creater owner collectionId bids');
   res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: artwork });
 });
@@ -199,7 +204,7 @@ const deleteArtwork = catchAsync(async (req, res) => {
     type: HISTORY_TYPE.ARTWORK_DELETED,
   });
 
-  await collectionService.removeArtwork(artworkId, artwork.collectionId);
+  // await collectionService.removeArtwork(artworkId, artwork.collectionId);
   await userService.removeArtwork(artwork.creater, artworkId);
   await artworkService.deleteArtworkById(artworkId);
 
@@ -235,6 +240,7 @@ const getTimeoutItems = catchAsync(async (req, res) => {
 module.exports = {
   saveArtwork,
   getUserArtworks,
+  getArtworkType,
   addToFavourite,
   removeFromFavourites,
   getFavouriteArtworks,

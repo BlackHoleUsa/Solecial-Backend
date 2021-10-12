@@ -7,7 +7,7 @@ const createArtworkVS = {
     creater: Joi.string().required(),
     price: Joi.string().required(),
     image: Joi.string().optional(),
-    collectionId: Joi.string().required(),
+    // collectionId: Joi.string().required(),
     artwork_type: Joi.string().required(),
     tokenId: Joi.string().optional(),
   }),
@@ -18,6 +18,13 @@ const getArtworksVS = {
     page: Joi.string().required(),
     perPage: Joi.string().required(),
     userId: Joi.string().required(),
+  }),
+};
+const getArtworkType = {
+  query: Joi.object().keys({
+    page: Joi.string().required(),
+    perPage: Joi.string().required(),
+    artwork_type: Joi.string().required(),
   }),
 };
 
@@ -119,6 +126,7 @@ const nftClaimListVS = {
 module.exports = {
   createArtworkVS,
   getArtworksVS,
+  getArtworkType,
   addFavouriteVS,
   removeFavouriteVS,
   getFavouriteVS,

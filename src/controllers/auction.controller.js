@@ -51,6 +51,6 @@ const checkIt = catchAsync(async (req, res) => {
 });
 
 module.exports = {
-  getAuctionListing,
-  checkIt,
+   getAuctionListing,
+   checkIt,
 };

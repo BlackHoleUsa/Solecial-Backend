@@ -28,14 +28,13 @@ const getUser = catchAsync(async (req, res) => {
 });
 
 const updateUser = catchAsync(async (req, res) => {
-  if (req.files.length > 0) {
+  if (req.files !== undefined && req.files.length > 0 ) {
     let img = await uploadToAws(req.files[0].buffer, `${req.params.userId}/${req.params.userId}-profile-pic.png`);
     req.body.profilePic = img.Location;
   }
   const user = await userService.updateUserById(req.params.userId, req.body);
   res.send(user);
 });
-
 const deleteUser = catchAsync(async (req, res) => {
   await userService.deleteUserById(req.params.userId);
   res.status(httpStatus.NO_CONTENT).send();
