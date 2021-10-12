@@ -5,6 +5,7 @@ const Token = require('../models/token.model');
 const ApiError = require('../utils/ApiError');
 const { tokenTypes } = require('../config/tokens');
 const web3 = require('web3');
+const bcrypt = require('bcryptjs')
 
 
 // /**
@@ -15,6 +16,9 @@ const web3 = require('web3');
 //  */
 const loginUserWithEmailAndPassword = async (email, password) => {
   const user = await userService.getUserByEmail(email);
+  if(user.isblock === true){
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Account is Blocked!') 
+  }
   console.log(user);
   if (!user || !(await user.isPasswordMatch(password))) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect email or password');
@@ -57,18 +61,25 @@ const refreshAuth = async (refreshToken) => {
 
 /**
  * Reset password
- * @param {string} resetPasswordToken
+ * @headers {string} resetPasswordToken
+ * @param {string} password
  * @param {string} newPassword
  * @returns {Promise}
  */
 
-const resetPassword = async (email, newPassword) => {
+const resetPassword = async ( dbUser , password , newPassword ) => {
   try {
-    const user = await userService.getUserByEmail(email);
-    if (!user) {
+    // const user = await userService.getUserByEmail(email);
+    if (!dbUser) {
       throw new Error('Wrong User');
     }
-    await userService.updateUserById(user.id, { password: newPassword });
+    const passwordConfirmed= await dbUser.isPasswordMatch(password)
+    if(passwordConfirmed === true){ 
+      const hashPassword = await bcrypt.hash(newPassword,8)
+      await userService.updateUserById(dbUser._id, { password: hashPassword});
+    }else if(passwordConfirmed === false){
+      throw new ApiError(httpStatus.UNAUTHORIZED, 'current password not verified');
+    }
   } catch (error) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Password reset failed');
   }

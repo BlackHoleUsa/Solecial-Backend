@@ -1,6 +1,6 @@
 const ARTWORK_TYPE = {
-  IMAGE: 'image',
-  MUSIC: 'music',
+  ART: 'image',
+  GIF: 'gif',
   VIDEO: 'video',
 };
 

@@ -1,5 +1,5 @@
 const express = require('express');
-const auth = require('../../middlewares/auth');
+const {auth} = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
 const userValidation = require('../../validations/user.validation');
 const userController = require('../../controllers/user.controller');
@@ -21,7 +21,35 @@ router
 router.get('/:userId', validate(userValidation.getUser), userController.getUser);
 //router.get('/getUserStatistics/:userId', validate(userValidation.getUser), userController.getUserStatistics);
 
-// router.get(auth('manageUsers'), validate(userValidation.getUser), userController.getUser);
+// /**
+//   * @swagger
+//   * /user/block-artist:
+//   *   put:
+//   *     summary: block artist
+//   *     tags: [Auth]
+//   *     parameters:
+//   *       - in: query
+//   *         name: _id
+//   *         required: true
+//   *         schema:
+//   *           type: objectId
+//   *         description: turns flag into true of isBlock
+//   *     responses:
+//   *       "204":
+//   *         description: artist blocked
+//   *       "401":
+//   *         description: blocked function failed
+//   *         content:
+//   *           application/json:
+//   *             schema:
+//   *               $ref: '#/components/schemas/Error'
+//   *             example:
+//   *               code: 401
+//   *               message: block function failed
+//   */
+//  router.put('/block-user',validate(userValidation(blockUser)),userController.blockUser)
+
+router.get('/',auth('manageUsers'), validate(userValidation.getUser), userController.getUser);
 /**
  * @swagger
  * /users/{userId}:
@@ -236,5 +264,7 @@ router.post(
   [auth('manageUsers'), validate(userValidation.getUserFollowing)],
   userController.getUserFollowing
 );
+
+
 
 module.exports = router;

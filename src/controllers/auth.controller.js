@@ -16,6 +16,7 @@ const register = catchAsync(async (req, res) => {
 const login = catchAsync(async (req, res) => {
   const { address,email,password } = req.body;
   var user;
+
   if(address != undefined){
     user = await authService.loginUserWithAddress(address);
   }
@@ -40,7 +41,7 @@ const login = catchAsync(async (req, res) => {
   }
 });
 const logout = catchAsync(async (req, res) => {
-  await tokenService.removeToken(user);
+  await tokenService.removeToken(req.user);
   res.status(httpStatus.OK).send({
     status: true,
   });
@@ -64,16 +65,22 @@ const forgotPassword = catchAsync(async (req, res) => {
 });
 
 const resetPassword = catchAsync(async (req, res) => {
-  let dbUser = await userService.getUserByEmail(req.body.email);
-
+  const {password,newPassword} = req.body
+  let dbUser;
+  if(req.body.email !== undefined){
+    dbUser = await userService.getUserByEmail(req.body.email);
+  }else{
+    const {headers:{authorization}}=req;
+    const headersToken = authorization.split(' ')[1]
+    dbUser = await userService.getUserByToken(headersToken)
+  }
   if (!dbUser) {
     return res.status(404).send({
       status: 404,
       message: 'User not found',
     });
   }
-
-  await authService.resetPassword(req.body.email, req.body.password);
+  await authService.resetPassword(dbUser, password, newPassword );
   res.status(httpStatus.OK).send({
     status: 200,
     message: 'Password changed successfully!',

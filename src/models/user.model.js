@@ -3,6 +3,7 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const { toJSON, paginate } = require('./plugins');
 const { roles } = require('../config/roles');
+const { boolean } = require('joi');
 
 const userSchema = mongoose.Schema(
   {
@@ -31,6 +32,7 @@ const userSchema = mongoose.Schema(
       type: String,
       required: false,
       trim: true,
+      default:''
     },
     bio: {
       type: String,
@@ -59,41 +61,41 @@ const userSchema = mongoose.Schema(
     },
     collections: [
       {
-        type: mongoose.SchemaTypes.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Collection',
       },
     ],
     artworks: [
       {
-        type: mongoose.SchemaTypes.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Artwork',
       },
     ],
     favouriteArtworks: [
       {
-        type: mongoose.SchemaTypes.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Artwork',
       },
     ],
     followers: [
       {
-        type: mongoose.SchemaTypes.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
       },
     ],
     following: [
       {
-        type: mongoose.SchemaTypes.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
       },
     ],
     creations: [
       {
-        type: mongoose.SchemaTypes.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Artwork',
       },
     ],
-    isblock:{type:'String',default: false}
+    isblock:{type:Boolean,default: false}
   },
   {
     timestamps: true
@@ -157,6 +159,15 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
+
+userSchema.pre('updateOne', async function (next) {
+  console.log('update entrance hook')
+  const user = this;
+  if (user.isModified(password)) {
+    user.password = await bcrypt.hash(user.password, 8);
+  }
+  next();
+});
 /**
  * @typedef User
  */

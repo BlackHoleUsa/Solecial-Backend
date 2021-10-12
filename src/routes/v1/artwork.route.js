@@ -3,7 +3,7 @@ const validate = require('../../middlewares/validate');
 const artworkController = require('../../controllers/artwork.controller');
 
 const artworkValidation = require('../../validations/artwork.validation');
-const auth = require('../../middlewares/auth');
+const {auth} = require('../../middlewares/auth');
 
 const router = express.Router();
 /**
@@ -111,6 +111,51 @@ router.post('/saveArtwork', validate(artworkValidation.createArtworkVS), artwork
  *         $ref: '#/components/responses/Unauthorized'
  */
 router.get('/getUserArtworks', [validate(artworkValidation.getArtworksVS)], artworkController.getUserArtworks);
+
+/**
+ * @swagger
+ * /artwork/getArtworkType?Artwork_type={artwork_type}&page={page}&perPage={perPage}&:
+ *   get:
+ *     security:
+ *      - bearerAuth: []
+ *     summary: Get all User Artworks
+ *     tags: [Artworks]
+ *     parameters:
+ *      - in: path
+ *        name: artwork_type
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: Artwork type
+ *      - in: path
+ *        name: page
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: Page Number
+ *      - in: path
+ *        name: perPage
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: Number of Artworks Per Page
+ *     responses:
+ *       "201":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 collection:
+ *                   $ref: '#/components/schemas/Artwork'
+ *                 tokens:
+ *                   $ref: '#/components/schemas/AuthTokens'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ */
+ router.get('/getArtworkType', [validate(artworkValidation.getArtworkType)], artworkController.getArtworkType);
+
 /**
  * @swagger
  * /artwork/addToFavourite:
@@ -288,6 +333,11 @@ router.post('/placeBid', [auth('manageUsers'), validate(artworkValidation.placeB
 router.post(
   '/openArtworkAuction',
   [auth('manageUsers'), validate(artworkValidation.openAuctionVS)],
+  artworkController.createAuction
+);
+router.post(
+  '/openArtworkAuction1',
+  [ validate(artworkValidation.openAuctionVS)],
   artworkController.createAuction
 );
 

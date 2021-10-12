@@ -1,7 +1,8 @@
 const httpStatus = require('http-status');
-const web3 = require('web3');
-const { User } = require('../models');
+const { User,Token } = require('../models');
 const ApiError = require('../utils/ApiError');
+const web3 = require('web3');
+const {adminAuthforBlock}=require('../middlewares/auth')
 
 /**
  * Create a user
@@ -9,6 +10,7 @@ const ApiError = require('../utils/ApiError');
  * @returns {Promise<User>}
  */
 const createUser = async (userBody) => {
+  console.log(userBody);
   if (await User.isEmailTaken(userBody.email)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
   } else if(userBody.role=='user'){
@@ -17,10 +19,14 @@ const createUser = async (userBody) => {
     } else if (await User.isAddressTaken(userBody.address)) {
       throw new ApiError(httpStatus.BAD_REQUEST, 'address already taken')
   } 
-  } else if(userBody.role !='artist'|| userBody.role != undefined){
+  } else if(userBody.role !=='artist'|| userBody.role !== undefined){
+    console.log(userBody.userName);
+    if(userBody.userName !== undefined){
       if (await User.isUsernameTaken(userBody.userName)) {
-      throw new ApiError(httpStatus.BAD_REQUEST, 'userName already taken');
+        throw new ApiError(httpStatus.BAD_REQUEST, 'userName already taken');
+      }
     }
+      
   }
   const usr = await User.create(userBody);
   return usr.toObject();
@@ -62,6 +68,27 @@ const getUserByAddress = async (address) => {
   return User.findOne({ address }).lean();
 };
 
+ /**
+  * Get user by token
+  * @authorization {token} token
+  * @returns {Promise<User>}
+  */
+const getUserByToken = async (reqToken,next)=>{
+  const tokens=await Token.findOne({token:reqToken})
+  const user= await User.findById(tokens.user)
+  return user 
+  }
+
+// /**
+//  * Get user by id
+//  * @param {ObjectId} userId
+//  * @param {Object} updateBody
+//  * @returns {Promise<User>}
+//  */
+// const blockUserById = async (userId,updateBody)=>{
+//   const user = await User.findByIdAndUpdate(userId,updateBody,{new:true}).lean()
+//   return user;
+// }
 
 /**
  * Update user by id
@@ -70,10 +97,12 @@ const getUserByAddress = async (address) => {
  * @returns {Promise<User>}
  */
 const updateUserById = async (userId, updateBody) => {
+  if(updateBody?.isblock===true){
+    adminAuthforBlock(updateBody)
+  }
   const user = await User.findByIdAndUpdate(userId, updateBody, {
     new: true,
-  }).lean();
-
+  });
   return user;
 };
 
@@ -212,6 +241,7 @@ module.exports = {
   queryUsers,
   getUserById,
   getUserByEmail,
+  getUserByToken,
   updateUserById,
   deleteUserById,
   getUserByAddress,

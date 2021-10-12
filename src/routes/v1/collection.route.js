@@ -9,7 +9,7 @@ const {
   getAllCollectionsVS,
   deleteCollectionsVS,
 } = require('../../validations/collection.validation');
-const auth = require('../../middlewares/auth');
+const {auth} = require('../../middlewares/auth');
 
 const router = express.Router();
 /**

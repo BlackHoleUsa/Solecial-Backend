@@ -1,6 +1,6 @@
 const express = require('express');
 const { generalController } = require('../../controllers');
-const auth = require('../../middlewares/auth');
+const {auth} = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
 const { generalValidation } = require('../../validations');
 
