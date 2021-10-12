@@ -1,7 +1,7 @@
 const httpStatus = require('http-status');
+const web3 = require('web3');
 const { User } = require('../models');
 const ApiError = require('../utils/ApiError');
-const web3 = require('web3');
 
 /**
  * Create a user
@@ -106,6 +106,10 @@ const removeArtworkFromFavourite = async (userId, artworkId) => {
   return await User.findOneAndUpdate({ _id: userId }, { $pull: { favouriteArtworks: artworkId } }).lean();
 };
 
+const getSingleFavouriteArtWork = async (userId) => {
+  const result = await User.findOne({ _id: userId });
+  return result;
+};
 /**
  *
  * @param {ObjectId} userId
@@ -192,4 +196,5 @@ module.exports = {
   removeArtwork,
   searchUsersByName,
   getAllUsers,
+  getSingleFavouriteArtWork,
 };
