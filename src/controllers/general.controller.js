@@ -75,6 +75,19 @@ const getNotifications = catchAsync(async (req, res) => {
   });
 });
 
+const getTransactions = catchAsync(async (req, res) => {
+  const user = req.user;
+  const { page, perPage } = req.query;
+
+  const notifications = await notificationService.getUserNotifications(user._id, page, perPage);
+  res.status(httpStatus.OK).send({
+    status: true,
+    message: 'Successfull',
+    page,
+    data: notifications,
+  });
+});
+
 module.exports = {
   handleSearch,
   getAppActivity,

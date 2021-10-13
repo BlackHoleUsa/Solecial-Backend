@@ -72,66 +72,71 @@ const getAuctionDetails = async (aucId) => {
 };
 
 const checkAndCompleteAuctionStatus = async () => {
-  const auctions = await Auction.find({ status: AUCTION_STATUS.OPEN });
+  try {
+    const auctions = await Auction.find({ status: AUCTION_STATUS.OPEN });
+    if (auctions) {
+      for (auction of auctions) {
+        const currentDate = new Date();
+        const closingDate = new Date(auction.endTime);
+        if (currentDate > closingDate) {
+          await Auction.findOneAndUpdate({ _id: auction._id }, { status: AUCTION_STATUS.CLOSED });
+          await artworkService.closeArtworkAuction(auction.artwork);
+          let aucData = await AUCTION_CONTRACT_INSTANCE.methods.AuctionList(auction.contractAucId).call();
+          const { bidderAdd, latestBid, nftClaim, cancelled, ownerclaim } = aucData;
+          let user = await User.findOne({ address: bidderAdd });
 
-  for (auction of auctions) {
-    const currentDate = new Date();
-    const closingDate = new Date(auction.endTime);
-    if (currentDate > closingDate) {
-      await Auction.findOneAndUpdate({ _id: auction._id }, { status: AUCTION_STATUS.CLOSED });
-      await artworkService.closeArtworkAuction(auction.artwork);
-      let aucData = await AUCTION_CONTRACT_INSTANCE.methods.AuctionList(auction.contractAucId).call();
-      const { bidderAdd, latestBid, nftClaim, cancelled, ownerclaim } = aucData;
-      let user = await User.findOne({ address: bidderAdd });
+          if (auction.bids.length > 0) {
+            await Auction.findOneAndUpdate(
+              { _id: auction._id },
+              {
+                auctionWinner: user._id,
+                bidAmount: latestBid,
+                nftClaim,
+                cancelled,
+                ownerclaim,
+              }
+            );
 
-      if (auction.bids.length > 0) {
-        await Auction.findOneAndUpdate(
-          { _id: auction._id },
-          {
-            auctionWinner: user._id,
-            bidAmount: latestBid,
-            nftClaim,
-            cancelled,
-            ownerclaim,
+            EVENT.emit('send-and-save-notification', {
+              receiver: user._id,
+              type: NOTIFICATION_TYPE.AUCTION_WIN,
+              extraData: {
+                auction: auction._id,
+              },
+            });
+
+            EVENT.emit('send-and-save-notification', {
+              receiver: auction.owner,
+              type: NOTIFICATION_TYPE.AUCTION_END,
+              extraData: {
+                auction: auction._id,
+              },
+            });
+          } else {
+            await Auction.findOneAndUpdate({ _id: auction._id }, { status: AUCTION_STATUS.TIMEOUT, nftClaim: false, cancelled: false, });
+
+            EVENT.emit('send-and-save-notification', {
+              receiver: auction.owner,
+              type: NOTIFICATION_TYPE.AUCTION_TIMEOUT,
+              extraData: {
+                auction: auction._id,
+              },
+            });
+
+            console.log(`${auction.contractAucId} auction is cancelled`);
           }
-        );
 
-        EVENT.emit('send-and-save-notification', {
-          receiver: user._id,
-          type: NOTIFICATION_TYPE.AUCTION_WIN,
-          extraData: {
+          EVENT.emit('update-artwork-history', {
+            artwork: auction.artwork,
+            message: `auction closed`,
             auction: auction._id,
-          },
-        });
-
-        EVENT.emit('send-and-save-notification', {
-          receiver: auction.owner,
-          type: NOTIFICATION_TYPE.AUCTION_END,
-          extraData: {
-            auction: auction._id,
-          },
-        });
-      } else {
-        await Auction.findOneAndUpdate({ _id: auction._id }, { status: AUCTION_STATUS.TIMEOUT, nftClaim: false, cancelled: false, });
-
-        EVENT.emit('send-and-save-notification', {
-          receiver: auction.owner,
-          type: NOTIFICATION_TYPE.AUCTION_TIMEOUT,
-          extraData: {
-            auction: auction._id,
-          },
-        });
-
-        console.log(`${auction.contractAucId} auction is cancelled`);
+            type: HISTORY_TYPE.AUCTION_END,
+          });
+        }
       }
-
-      EVENT.emit('update-artwork-history', {
-        artwork: auction.artwork,
-        message: `auction closed`,
-        auction: auction._id,
-        type: HISTORY_TYPE.AUCTION_END,
-      });
     }
+  } catch (e) {
+    console.log(e);
   }
 };
 
