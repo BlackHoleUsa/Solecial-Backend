@@ -28,9 +28,11 @@ const getUser = catchAsync(async (req, res) => {
 });
 
 const updateUser = catchAsync(async (req, res) => {
-  if (req.files.length > 0) {
-    const img = await uploadToAws(req.files[0].buffer, `${req.params.userId}/${req.params.userId}-profile-pic.png`);
-    req.body.profilePic = img.Location;
+  if (req.files) {
+    if (req.files.length > 0) {
+      const img = await uploadToAws(req.files[0].buffer, `${req.params.userId}/${req.params.userId}-profile-pic.png`);
+      req.body.profilePic = img.Location;
+    }
   }
   const user = await userService.updateUserById(req.params.userId, req.body);
   res.send(user);
