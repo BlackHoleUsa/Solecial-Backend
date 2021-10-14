@@ -22,7 +22,12 @@ const getAllHistoriesPaginated = async (page, perPage) => {
     .skip(page * perPage).lean();
 };
 
+const getHistoryCount = async () => {
+  // eslint-disable-next-line no-return-await
+  return await History.find().count();
+}
 module.exports = {
   getArtworkHistory,
   getAllHistoriesPaginated,
+  getHistoryCount,
 };

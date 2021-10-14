@@ -8,7 +8,7 @@ const createCollectionVS = {
     owner: Joi.string().required(),
     coverImage: Joi.string().optional(),
     profileImage: Joi.string().optional(),
-    symbol: Joi.string().optional(),
+    symbol: Joi.string().required(),
   }),
 };
 

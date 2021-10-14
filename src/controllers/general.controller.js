@@ -1,7 +1,7 @@
+const httpStatus = require('http-status');
 const { userService, artworkService, collectionService, historyService, notificationService } = require('../services');
 
 const catchAsync = require('../utils/catchAsync');
-const httpStatus = require('http-status');
 const { SEARCH_FILTERS } = require('../utils/enums');
 
 const handleSearch = catchAsync(async (req, res) => {
@@ -42,10 +42,37 @@ const handleSearch = catchAsync(async (req, res) => {
       data,
     });
   } else {
+    let users;
+    let data = {};
+    let artworks;
+    let collections;
+    switch (filter) {
+      case SEARCH_FILTERS.USERS:
+        users = await userService.getAllUsers();
+        data.users = users;
+        break;
+
+      case SEARCH_FILTERS.ARTWORKS:
+        artworks = await artworkService.getAllArtWork();
+        data.artworks = artworks;
+        break;
+
+      case SEARCH_FILTERS.COLLECTIONS:
+        collections = await collectionService.getAllCollections();
+        data.collections = collections;
+        break;
+
+      default:
+        data = {
+          users,
+          artworks,
+          collections,
+        };
+    }
     res.status(httpStatus.OK).send({
       status: true,
       message: 'Successfull',
-      data: [],
+      data,
     });
   }
 });
@@ -55,15 +82,18 @@ const getAppActivity = catchAsync(async (req, res) => {
 
   const histories = await historyService.getAllHistoriesPaginated(page, perPage);
 
+  const count = await historyService.getHistoryCount();
+
   res.status(httpStatus.OK).send({
     status: true,
     message: 'Successfull',
     data: histories,
+    count,
   });
 });
 
 const getNotifications = catchAsync(async (req, res) => {
-  const user = req.user;
+  const { user } = req;
   const { page, perPage } = req.query;
 
   const notifications = await notificationService.getUserNotifications(user._id, page, perPage);

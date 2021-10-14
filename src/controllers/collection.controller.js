@@ -7,15 +7,19 @@ const EVENT = require('../triggers/custom-events').customEvent;
 const ApiError = require('../utils/ApiError');
 
 const createCollection = catchAsync(async (req, res) => {
-  const { owner, name } = req.body;
-  const files = req.files;
+  const { owner, name, symbol } = req.body;
+  const { files } = req;
   if (await collectionService.collectionExists(owner, name)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Collection with name already exists');
   }
+  if (await collectionService.collectionWithSymbolExists(owner, symbol)) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Collection with symbol already exists');
+  }
   let col = await collectionService.saveCollection(req.body);
-  let cover, profile;
+  let cover;
+  let profile;
   if (files.length > 0) {
-    for (let file of files) {
+    for (const file of files) {
       if (file.fieldname == 'profileImage') {
         profile = await helpers.uploadToAws(file.buffer, `/collections/${col._id}/profile`);
       } else if (file.fieldname == 'coverImage') {
@@ -52,12 +56,13 @@ const getCollectionDetails = catchAsync(async (req, res) => {
 });
 
 const updateCollection = catchAsync(async (req, res) => {
-  const files = req.files;
-  let body = req.body;
+  const { files } = req;
+  const { body } = req;
   const { collectionId } = body;
-  let profile, cover;
+  let profile;
+  let cover;
   if (files.length > 0) {
-    for (let file of files) {
+    for (const file of files) {
       if (file.fieldname == 'profileImage') {
         await helpers.deleteFromAWS(`/collections/${collectionId}/profile`);
         profile = await helpers.uploadToAws(file.buffer, `/collections/${collectionId}/profile`);

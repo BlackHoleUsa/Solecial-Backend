@@ -21,14 +21,16 @@ const getPaginatedCollections = async (page, perPage, userId) => {
 };
 
 const getPopulatedCollection = async (userId, collectionId) => {
-  return await Collection.findOne({ _id: collectionId }).populate({
-    path: 'artworks',
-    match: {
-      isAuctionOpen: false,
-      openForSale: false,
-      owner: userId
-    }
-  }).lean();
+  return await Collection.findOne({ _id: collectionId })
+    .populate({
+      path: 'artworks',
+      match: {
+        isAuctionOpen: false,
+        openForSale: false,
+        owner: userId,
+      },
+    })
+    .lean();
 };
 
 const updateCollectionImages = async (collectionId, profileImage, coverImage) => {
@@ -47,6 +49,13 @@ const collectionExists = async (userId, colName) => {
   return collection.length > 0;
 };
 
+const collectionWithSymbolExists = async (userId, symbol) => {
+  const collection = await Collection.find({ owner: userId, symbol });
+  if (collection.length > 0) {
+    return true;
+  }
+  return false;
+};
 const deleteCollectionById = async (collectionId) => {
   return await Collection.findOneAndDelete({ _id: collectionId });
 };
@@ -85,4 +94,5 @@ module.exports = {
   getAllCollections,
   removeArtwork,
   searchCollectionByName,
+  collectionWithSymbolExists,
 };
