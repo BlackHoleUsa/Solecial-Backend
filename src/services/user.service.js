@@ -148,7 +148,10 @@ const getUserFollowers = async (userId, page, perPage) => {
       },
     })
     .lean();
-  return user.followers;
+  if (user) {
+    return user.followers;
+  }
+  return user;
 };
 
 const getUserFollowing = async (userId, page, perPage) => {
@@ -161,7 +164,10 @@ const getUserFollowing = async (userId, page, perPage) => {
       },
     })
     .lean();
-  return user.following;
+  if (user) {
+    return user.following;
+  }
+  return user;
 };
 
 const removeArtwork = async (userId, artworkId) => {

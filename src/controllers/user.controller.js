@@ -74,8 +74,8 @@ const unfollowUser = catchAsync(async (req, res) => {
 });
 
 const getUserFollowers = catchAsync(async (req, res) => {
-  const { page, perPage, userId } = req.query;
-
+  const { page, perPage } = req.query;
+  const { userId } = req.body;
   const followers = await userService.getUserFollowers(userId, page, perPage);
   res.status(httpStatus.OK).send({
     status: true,
@@ -85,8 +85,8 @@ const getUserFollowers = catchAsync(async (req, res) => {
 });
 
 const getUserFollowing = catchAsync(async (req, res) => {
-  const { page, perPage, userId } = req.query;
-
+  const { page, perPage } = req.query;
+  const { userId } = req.body;
   const following = await userService.getUserFollowing(userId, page, perPage);
   res.status(httpStatus.OK).send({
     status: true,

@@ -45,17 +45,21 @@ const deleteUser = {
 
 const getUserFollowers = {
   query: Joi.object().keys({
-    userId: Joi.string().required(),
     page: Joi.string().required(),
     perPage: Joi.string().required(),
+  }),
+  body: Joi.object().keys({
+    userId: Joi.string().required(),
   }),
 };
 
 const getUserFollowing = {
   query: Joi.object().keys({
-    userId: Joi.string().required(),
     page: Joi.string().required(),
     perPage: Joi.string().required(),
+  }),
+  body: Joi.object().keys({
+    userId: Joi.string().required(),
   }),
 };
 

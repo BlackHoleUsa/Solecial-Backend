@@ -183,7 +183,7 @@ router.post('/unfollowUser', [auth('manageUsers'), validate(userValidation.unfol
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  */
-router.get(
+router.post(
   '/getUserFollowers',
   [auth('manageUsers'), validate(userValidation.getUserFollowers)],
   userController.getUserFollowers
@@ -230,7 +230,7 @@ router.get(
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  */
-router.get(
+router.post(
   '/getUserFollowing',
   [auth('manageUsers'), validate(userValidation.getUserFollowing)],
   userController.getUserFollowing
