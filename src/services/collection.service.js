@@ -33,8 +33,8 @@ const getPopulatedCollection = async (userId, collectionId) => {
     .lean();
 };
 
-const updateCollectionImages = async (collectionId, profileImage, coverImage) => {
-  return await Collection.findOneAndUpdate({ _id: collectionId }, { profileImage, coverImage }, { new: true }).lean();
+const updateCollectionImages = async (collectionId, profileImage) => {
+  return await Collection.findOneAndUpdate({ _id: collectionId }, { profileImage}, { new: true }).lean();
 };
 
 const updateCollectioById = async (collectionId, updateBody) => {

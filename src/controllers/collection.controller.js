@@ -26,7 +26,7 @@ const createCollection = catchAsync(async (req, res) => {
         cover = await helpers.uploadToAws(file.buffer, `/collections/${col._id}/cover`);
       }
     }
-    col = await collectionService.updateCollectionImages(col._id, profile.Location, cover.Location);
+    col = await collectionService.updateCollectionImages(col._id, profile.Location);
   }
   const data = await collectionService.getCollectionById(col._id);
   EVENT.emit('add-collection-in-user', {
