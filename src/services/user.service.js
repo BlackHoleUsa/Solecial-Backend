@@ -184,6 +184,24 @@ const getAllUsers = async () => {
   const allUsers = await User.find().sort({_id:1});
   return allUsers;
 };
+const deleteCollectionByIdFromUser = async (userId, collectionId) => {
+  const response = await User.findOneAndUpdate(
+    { _id: userId },
+    {
+      $pull: { collections: collectionId },
+    }
+  );
+  return response;
+};
+const deleteArtWorksOfCollections = async (userId, artworks) =>{
+  const response = await User.findOneAndUpdate(
+    { _id: userId },
+    {
+      $pull: { artworks: { $in: artworks } },
+    }
+  );
+  return response;
+};
 module.exports = {
   createUser,
   queryUsers,
@@ -203,4 +221,6 @@ module.exports = {
   searchUsersByName,
   getAllUsers,
   getSingleFavouriteArtWork,
+  deleteCollectionByIdFromUser,
+  deleteArtWorksOfCollections,
 };

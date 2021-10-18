@@ -5,6 +5,8 @@ const { User } = require('../models');
 const helpers = require('../utils/helpers');
 const EVENT = require('../triggers/custom-events').customEvent;
 const ApiError = require('../utils/ApiError');
+const { collection } = require('../models/token.model');
+const { HISTORY_TYPE, NOTIFICATION_TYPE } = require('../utils/enums');
 
 const createCollection = catchAsync(async (req, res) => {
   const { owner, name, symbol } = req.body;
@@ -80,7 +82,17 @@ const updateCollection = catchAsync(async (req, res) => {
 
 const deleteCollection = catchAsync(async (req, res) => {
   const { collectionId } = req.body;
-
+  const collections = await collectionService.getCollectionById(collectionId);
+  const artWorkIds = collections.artworks;
+  await userService.deleteCollectionByIdFromUser(req.user._id, collectionId);
+  if (artWorkIds) {
+    await userService.deleteArtWorksOfCollections(req.user._id, artWorkIds);
+    EVENT.emit('update-artwork-history', {
+      artwork: artWorkIds,
+      message: `Artwork deleted`,
+      type: HISTORY_TYPE.ARTWORK_DELETED,
+    });
+  }
   await collectionService.deleteCollectionById(collectionId);
   await artworkService.deleteArtworksByCollection(collectionId);
   res.send({ status: true, message: 'collection deleted successfully' });

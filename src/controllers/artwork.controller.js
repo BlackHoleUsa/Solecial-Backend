@@ -11,6 +11,7 @@ const {
   bidService,
   auctionService,
   historyService,
+  buysellService,
 } = require('../services');
 const EVENT = require('../triggers/custom-events').customEvent;
 const { addFilesToIPFS, pinMetaDataToIPFS } = require('../utils/helpers');
@@ -161,7 +162,10 @@ const getSingleArtwork = catchAsync(async (req, res) => {
   const { artworkId } = req.query;
 
   const artwork = await artworkService.getPopulatedArtwork(artworkId, 'auction creater owner collectionId bids');
-  res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: artwork });
+  const response = await buysellService.getBuySellSaleId(artworkId);
+  res
+    .status(httpStatus.OK)
+    .send({ status: true, message: 'Successfull', data: artwork, contractSaleId: response.contractSaleId });
 });
 
 const getAuctionDetails = catchAsync(async (req, res) => {
