@@ -163,9 +163,13 @@ const getSingleArtwork = catchAsync(async (req, res) => {
 
   const artwork = await artworkService.getPopulatedArtwork(artworkId, 'auction creater owner collectionId bids');
   const response = await buysellService.getBuySellSaleId(artworkId);
-  res
-    .status(httpStatus.OK)
-    .send({ status: true, message: 'Successfull', data: artwork, contractSaleId: response.contractSaleId });
+  if (response) {
+    res
+      .status(httpStatus.OK)
+      .send({ status: true, message: 'Successfull', data: artwork, contractSaleId: response.contractSaleId });
+  } else {
+    res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: artwork });
+  }
 });
 
 const getAuctionDetails = catchAsync(async (req, res) => {
