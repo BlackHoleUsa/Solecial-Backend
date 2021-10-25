@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
+const { boolean } = require('joi');
 const { toJSON, paginate } = require('./plugins');
 const { roles } = require('../config/roles');
-const { boolean } = require('joi');
 
 const userSchema = mongoose.Schema(
   {
@@ -32,7 +32,7 @@ const userSchema = mongoose.Schema(
       type: String,
       required: false,
       trim: true,
-      default:''
+      default: '',
     },
     bio: {
       type: String,
@@ -95,10 +95,10 @@ const userSchema = mongoose.Schema(
         ref: 'Artwork',
       },
     ],
-    isblock:{type:Boolean,default: false}
+    isblock: { type: Boolean, default: false },
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 
@@ -159,9 +159,8 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-
 userSchema.pre('updateOne', async function (next) {
-  console.log('update entrance hook')
+  console.log('update entrance hook');
   const user = this;
   if (user.isModified(password)) {
     user.password = await bcrypt.hash(user.password, 8);

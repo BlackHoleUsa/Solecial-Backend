@@ -42,7 +42,7 @@ const adminAuthforBlock=async (req,res,next)=>{
       return result
     })
     await User.findOne(tokenfound.user).then(result=>{
-      result[0].role == 'admin'
+      result.role == 'admin'
       next()
     })
   }catch(err){
