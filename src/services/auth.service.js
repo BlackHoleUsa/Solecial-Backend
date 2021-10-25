@@ -1,12 +1,11 @@
 const httpStatus = require('http-status');
+const web3 = require('web3');
+const bcrypt = require('bcryptjs');
 const tokenService = require('./token.service');
 const userService = require('./user.service');
 const Token = require('../models/token.model');
 const ApiError = require('../utils/ApiError');
 const { tokenTypes } = require('../config/tokens');
-const web3 = require('web3');
-const bcrypt = require('bcryptjs')
-
 
 // /**
 //  * Login with username and password
@@ -16,12 +15,13 @@ const bcrypt = require('bcryptjs')
 //  */
 const loginUserWithEmailAndPassword = async (email, password) => {
   const user = await userService.getUserByEmail(email);
-  if(user.isblock === true){
-    throw new ApiError(httpStatus.UNAUTHORIZED, 'Account is Blocked!') 
-  }
-  console.log(user);
   if (!user || !(await user.isPasswordMatch(password))) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect email or password');
+  }
+  if ('isblock' in user) {
+    if (user.isblock === true) {
+      throw new ApiError(httpStatus.UNAUTHORIZED, 'Account is Blocked!');
+    }
   }
   return user;
 };
@@ -40,7 +40,7 @@ const loginUserWithAddress = async (address) => {
   return user;
 };
 
- /**
+/**
  * Refresh auth tokens
  * @param {string} refreshToken
  * @returns {Promise<Object>}
@@ -67,17 +67,17 @@ const refreshAuth = async (refreshToken) => {
  * @returns {Promise}
  */
 
-const resetPassword = async ( dbUser , password , newPassword ) => {
+const resetPassword = async (dbUser, password, newPassword) => {
   try {
     // const user = await userService.getUserByEmail(email);
     if (!dbUser) {
       throw new Error('Wrong User');
     }
-    const passwordConfirmed= await dbUser.isPasswordMatch(password)
-    if(passwordConfirmed === true){ 
-      const hashPassword = await bcrypt.hash(newPassword,8)
-      await userService.updateUserById(dbUser._id, { password: hashPassword});
-    }else if(passwordConfirmed === false){
+    const passwordConfirmed = await dbUser.isPasswordMatch(password);
+    if (passwordConfirmed === true) {
+      const hashPassword = await bcrypt.hash(newPassword, 8);
+      await userService.updateUserById(dbUser._id, { password: hashPassword });
+    } else if (passwordConfirmed === false) {
       throw new ApiError(httpStatus.UNAUTHORIZED, 'current password not verified');
     }
   } catch (error) {
@@ -109,5 +109,5 @@ module.exports = {
   resetPassword,
   verifyEmail,
   loginUserWithAddress,
-  loginUserWithEmailAndPassword
+  loginUserWithEmailAndPassword,
 };
