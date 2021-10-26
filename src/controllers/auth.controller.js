@@ -10,14 +10,14 @@ const register = catchAsync(async (req, res) => {
 });
 
 const login = catchAsync(async (req, res) => {
-  const { address,email,password } = req.body;
-  var user;
+  const { address, email, password } = req.body;
+  let user;
 
-  if(address != undefined){
+  if (address !== undefined) {
     user = await authService.loginUserWithAddress(address);
   }
-   if(email != undefined && password != undefined){
-    user = await authService.loginUserWithEmailAndPassword(email,password)
+  if (email !== undefined && password !== undefined) {
+    user = await authService.loginUserWithEmailAndPassword(email, password);
   }
   if (user) {
     await tokenService.removeToken(user);
@@ -44,7 +44,7 @@ const logout = catchAsync(async (req, res) => {
 });
 
 const forgotPassword = catchAsync(async (req, res) => {
-  let dbUser = await userService.getUserByEmail(req.body.email);
+  const dbUser = await userService.getUserByEmail(req.body.email);
 
   if (!dbUser) {
     return res.status(404).send({
@@ -61,14 +61,16 @@ const forgotPassword = catchAsync(async (req, res) => {
 });
 
 const resetPassword = catchAsync(async (req, res) => {
-  const {password,newPassword} = req.body
+  const { password, newPassword } = req.body;
   let dbUser;
-  if(req.body.email !== undefined){
+  if (req.body.email !== undefined) {
     dbUser = await userService.getUserByEmail(req.body.email);
-  }else{
-    const {headers:{authorization}}=req;
-    const headersToken = authorization.split(' ')[1]
-    dbUser = await userService.getUserByToken(headersToken)
+  } else {
+    const {
+      headers: { authorization },
+    } = req;
+    const headersToken = authorization.split(' ')[1];
+    dbUser = await userService.getUserByToken(headersToken);
   }
   if (!dbUser) {
     return res.status(404).send({
@@ -76,7 +78,7 @@ const resetPassword = catchAsync(async (req, res) => {
       message: 'User not found',
     });
   }
-  await authService.resetPassword(dbUser, password, newPassword );
+  await authService.resetPassword(dbUser, password, newPassword);
   res.status(httpStatus.OK).send({
     status: 200,
     message: 'Password changed successfully!',
