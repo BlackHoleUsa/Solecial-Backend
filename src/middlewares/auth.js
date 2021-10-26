@@ -6,7 +6,6 @@ const  User  = require('../models/user.model');
 const Token = require('../models/token.model')
 
 const verifyCallback = (req, resolve, reject, requiredRights) => async (err, user, info) => {
-  console.log(user)
   if (err || info || !user) {
     return reject(new ApiError(httpStatus.UNAUTHORIZED, 'Please authenticate'));
   }
@@ -32,10 +31,11 @@ const auth = (...requiredRights) => async (req, res, next) => {
 };
 
 
-const adminAuthforBlock=async (req,res,next)=>{
+const adminAuthforBlock=async (reqUser,next)=>{
   try{
-    const reqToken=req.headers.authorization.split(' ')[1]
-    const tokenfound=await Token.findOne(reqToken,(err,result)=>{
+    console.log(reqUser)
+    const reqToken=reqUser.headers.authorization.split(' ')[1]
+    const tokenfound=await Token.findOne({token: reqToken},(err,result)=>{
       if(err){
         return reject(new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized due to not found user\'s Token'))  
       }
