@@ -43,7 +43,7 @@ const updateUser = catchAsync(async (req, res) => {
       req.body.profilePic = img.Location;
     }
   }
-  const user = await userService.updateUserById(req.params.userId, req.body);
+  const user = await userService.updateUserById(req.params.userId, req);
   res.send(user);
 });
 const deleteUser = catchAsync(async (req, res) => {

@@ -97,7 +97,7 @@ const getUserByToken = async (reqToken,next)=>{
  * @returns {Promise<User>}
  */
 const updateUserById = async (userId, updateBody) => {
-  if(updateBody?.isblock===true){
+  if(updateBody.body.isblock === true){
     adminAuthforBlock(updateBody)
   }
   const user = await User.findByIdAndUpdate(userId, updateBody, {
