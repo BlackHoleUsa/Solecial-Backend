@@ -32,7 +32,7 @@ const updateUser = catchAsync(async (req, res) => {
     let img = await uploadToAws(req.files[0].buffer, `${req.params.userId}/${req.params.userId}-profile-pic.png`);
     req.body.profilePic = img.Location;
   }
-  const user = await userService.updateUserById(req.params.userId, req.body);
+  const user = await userService.updateUserById(req.params.userId, req);
   res.send(user);
 });
 const deleteUser = catchAsync(async (req, res) => {
