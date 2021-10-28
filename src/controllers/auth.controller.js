@@ -54,6 +54,7 @@ const forgotPassword = catchAsync(async (req, res) => {
   }
 
   await emailService.sendResetPasswordEmail(req.body.email, req.body.code);
+  await userService.saveForgotPasswordCode(req.body.email, req.body.code);
   res.status(200).send({
     code: 200,
     message: 'Password reset email has been successfully sent to your email',
@@ -90,6 +91,28 @@ const verifyEmail = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+const verifyCode = catchAsync(async (req, res) => {
+  const flag = await authService.verifyCode(req.body.code, req.body.email);
+  if (flag) {
+    if (req.body.newPassword) {
+      await userService.updateUserByEmail(req.body.email, req.body.newPassword);
+      res.status(httpStatus.OK).send({
+        status: 200,
+        message: 'Password updated Successfully',
+      });
+    } else {
+      res.status(httpStatus.OK).send({
+        status: 200,
+        message: 'Code verified',
+      });
+    }
+  } else {
+    res.status(httpStatus.EXPECTATION_FAILED).send({
+      status: 400,
+      message: 'code didnt verified',
+    });
+  }
+});
 module.exports = {
   register,
   login,
@@ -97,4 +120,5 @@ module.exports = {
   forgotPassword,
   resetPassword,
   verifyEmail,
+  verifyCode,
 };

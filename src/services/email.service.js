@@ -24,13 +24,12 @@ const sendEmail = async (msg) => {
  */
 const sendResetPasswordEmail = async (to, code) => {
   const msg = {
-    to: to,
-    from: 'siteseekrr@gmail.com',
+    to,
+    from: 'usablackhole@gmail.com',
     subject: 'Password reset email',
     text: 'Change Your Password',
     html: `Your Password reset code is ${code} `,
   };
-
   await sendEmail(msg);
 };
 

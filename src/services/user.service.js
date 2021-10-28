@@ -204,6 +204,12 @@ const searchUsersByName = async (keyword, page, perPage) => {
     .skip(page * perPage);
 };
 
+const saveForgotPasswordCode= async(email, code) => {
+  return await User.findOneAndUpdate({email:email},{$set:{"code":code}});
+}
+const updateUserByEmail= async(email,password) => {
+  return await User.findOneAndUpdate({email:email},{"password":password});
+}
 module.exports = {
   createUser,
   queryUsers,
@@ -222,5 +228,6 @@ module.exports = {
   getUserFollowing,
   removeArtwork,
   searchUsersByName,
-  
+  saveForgotPasswordCode,
+  updateUserByEmail
 };

@@ -104,10 +104,18 @@ const verifyEmail = async (verifyEmailToken) => {
   }
 };
 
+const verifyCode = async (verifyEmailCode, email) => {
+  const user = await userService.getUserByEmail(email);
+  if(user?.code === verifyEmailCode){
+    return true;
+  }
+  return false;
+};
 module.exports = {
   refreshAuth,
   resetPassword,
   verifyEmail,
+  verifyCode,
   loginUserWithAddress,
   loginUserWithEmailAndPassword,
 };
