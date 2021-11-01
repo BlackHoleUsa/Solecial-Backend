@@ -2,7 +2,7 @@ const httpStatus = require('http-status');
 const { User,Token } = require('../models');
 const ApiError = require('../utils/ApiError');
 const web3 = require('web3');
-const {adminAuthforBlock}=require('../middlewares/auth')
+
 
 /**
  * Create a user
@@ -73,7 +73,7 @@ const getUserByAddress = async (address) => {
   * @authorization {token} token
   * @returns {Promise<User>}
   */
-const getUserByToken = async (reqToken,next)=>{
+const getUserByToken = async (reqToken,res)=>{
   const tokens=await Token.findOne({token:reqToken})
   const user= await User.findById(tokens.user)
   return user 
@@ -97,10 +97,7 @@ const getUserByToken = async (reqToken,next)=>{
  * @returns {Promise<User>}
  */
 const updateUserById = async (userId, updateBody) => {
-  if(updateBody?.isblock===true){
-    adminAuthforBlock(updateBody)
-  }
-  const user = await User.findByIdAndUpdate(userId, updateBody, {
+  const user = await User.findByIdAndUpdate(userId,updateBody, {
     new: true,
   });
   return user;

@@ -6,6 +6,7 @@ const { userService } = require('../services');
 const { uploadToAws } = require('../utils/helpers');
 const EVENT = require('../triggers/custom-events').customEvent;
 const { NOTIFICATION_TYPE } = require('../utils/enums');
+const {adminAuthforBlock}=require('../middlewares/auth')
 
 const createUser = catchAsync(async (req, res) => {
   const user = await userService.createUser(req.body);
@@ -35,6 +36,15 @@ const updateUser = catchAsync(async (req, res) => {
   const user = await userService.updateUserById(req.params.userId, req.body);
   res.send(user);
 });
+
+const blockUser = catchAsync(async (req,res,next)=>{
+    const isAdmin = await adminAuthforBlock(req);
+    if(isAdmin){
+      const user = await userService.updateUserById(req.params.userId, req.body);
+      res.send(`user blocked Status: ${user.isblock}`); 
+    }
+}) 
+
 const deleteUser = catchAsync(async (req, res) => {
   await userService.deleteUserById(req.params.userId);
   res.status(httpStatus.NO_CONTENT).send();
@@ -97,6 +107,7 @@ module.exports = {
   getUser,
   updateUser,
   deleteUser,
+  blockUser,
   followUser,
   unfollowUser,
   getUserFollowing,
