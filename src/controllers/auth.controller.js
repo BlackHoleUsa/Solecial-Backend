@@ -63,23 +63,20 @@ const forgotPassword = catchAsync(async (req, res) => {
 const resetPassword = catchAsync(async (req, res) => {
   const {password,newPassword} = req.body
   let dbUser;
-  if(req.body.email !== undefined){
-    dbUser = await userService.getUserByEmail(req.body.email);
-  }else{
-    const {headers:{authorization}}=req;
+    const authorization=req.headers.authorization;
     const headersToken = authorization.split(' ')[1]
-    dbUser = await userService.getUserByToken(headersToken)
-  }
+    dbUser = await userService.getUserByToken(headersToken,res)
   if (!dbUser) {
     return res.status(404).send({
       status: 404,
       message: 'User not found',
     });
   }
-  await authService.resetPassword(dbUser, password, newPassword );
-  res.status(httpStatus.OK).send({
+  const passwordUpdatedUser = await authService.resetPassword(dbUser, password, newPassword );
+  res.status(httpStatus.OK).json({
     status: 200,
     message: 'Password changed successfully!',
+    "userUpdated":passwordUpdatedUser
   });
 });
 

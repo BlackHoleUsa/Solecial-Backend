@@ -1,8 +1,10 @@
 const express = require('express');
-const {auth} = require('../../middlewares/auth');
+const {auth,adminAuthforBlock} = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
 const userValidation = require('../../validations/user.validation');
 const userController = require('../../controllers/user.controller');
+
+
 
 const router = express.Router();
 /**
@@ -14,7 +16,7 @@ const router = express.Router();
 router
   .route('/')
   .post(auth('manageUsers'), validate(userValidation.createUser), userController.createUser)
-  .get(auth('manageUsers'), validate(userValidation.getUsers), userController.getUsers)
+  router.get('/getUsers',auth('manageUsers'), validate(userValidation.getUsers), userController.getUsers)
 
 // router.route('/:userId').delete(auth('manageUsers'), validate(userValidation.deleteUser), userController.getUser);
 router.get('/:userId', validate(userValidation.getUser), userController.getUser);
@@ -45,54 +47,54 @@ router.get('/:userId', validate(userValidation.getUser), userController.getUser)
 //   *               code: 401
 //   *               message: block function failed
 //   */
-//  router.put('/block-user',validate(userValidation(blockUser)),userController.blockUser)
+ router.put('/blockUser/:userId',validate(userValidation.blockUser),userController.blockUser)
 
-router.get('/',auth('manageUsers'), validate(userValidation.getUser), userController.getUser);
-/**
- * @swagger
- * /users/{userId}:
- *   put:
- *     security:
- *      - bearerAuth: []
- *     summary: Follow other User
- *     tags: [Users]
- *     parameters:
- *      - in: path
- *        name: userId
- *        schema:
- *          type: string
- *        required: true
- *        description: User Id
- *     requestBody:
- *       required: true
- *       content:
- *         multipart/form-data:
- *           schema:
- *             type: object
- *             required:
- *               - bio
- *             properties:
- *               bio:
- *                 type: string
- *               profilePic:
- *                 type: string
- *             example:
- *               bio: I am cool
- *     responses:
- *       "201":
- *         description: OK
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 collection:
- *                   $ref: '#/components/schemas/User'
- *                 tokens:
- *                   $ref: '#/components/schemas/AuthTokens'
- *       "401":
- *         $ref: '#/components/responses/Unauthorized'
- */
+
+// /**
+//  * @swagger
+//  * /users/{userId}:
+//  *   put:
+//  *     security:
+//  *      - bearerAuth: []
+//  *     summary: Follow other User
+//  *     tags: [Users]
+//  *     parameters:
+//  *      - in: path
+//  *        name: userId
+//  *        schema:
+//  *          type: string
+//  *        required: true
+//  *        description: User Id
+//  *     requestBody:
+//  *       required: true
+//  *       content:
+//  *         multipart/form-data:
+//  *           schema:
+//  *             type: object
+//  *             required:
+//  *               - bio
+//  *             properties:
+//  *               bio:
+//  *                 type: string
+//  *               profilePic:
+//  *                 type: string
+//  *             example:
+//  *               bio: I am cool
+//  *     responses:
+//  *       "201":
+//  *         description: OK
+//  *         content:
+//  *           application/json:
+//  *             schema:
+//  *               type: object
+//  *               properties:
+//  *                 collection:
+//  *                   $ref: '#/components/schemas/User'
+//  *                 tokens:
+//  *                   $ref: '#/components/schemas/AuthTokens'
+//  *       "401":
+//  *         $ref: '#/components/responses/Unauthorized'
+//  */
 router.put('/:userId', [auth('manageUsers'), validate(userValidation.updateUser)], userController.updateUser);
 /**
  * @swagger

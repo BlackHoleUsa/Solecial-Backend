@@ -19,11 +19,13 @@ const { HISTORY_TYPE, NOTIFICATION_TYPE } = require('../utils/enums');
 const saveArtwork = catchAsync(async (req, res) => {
   const body = req.body;
   const files = req.files;
-  const { name, description, creater, } = body;
+  const { name, description, creater,artist_name,artist_description } = body;
   let imgData;
   if (files.length > 0) {
     imgData = await addFilesToIPFS(files[0].buffer, 'image');
+    artistimgData = await addFilesToIPFS(files[1].buffer, 'artist_image');
     body.artwork_url = imgData;
+    body.artist_url = artistimgData;
   }
   body.owner = body.creater;
   const artwork = await artworkService.saveArtwork(body);
@@ -31,11 +33,9 @@ const saveArtwork = catchAsync(async (req, res) => {
   const metaUrl = await pinMetaDataToIPFS({
     name,
     description,
-    creater: {
-      // name: user.userName,
-      id: user._id,
-    },
-    // collectionId,
+    artist_name,
+    artist_description,
+    artist_url: artistimgData,
     artwork_url: imgData,
   });
   const updatedArtwork = await artworkService.updateArtworkMetaUrl(artwork._id, metaUrl);

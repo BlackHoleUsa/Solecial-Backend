@@ -144,7 +144,7 @@ userSchema.statics.isUsernameTaken = async function (userName, excludeUserId) {
  */
 userSchema.methods.isPasswordMatch = async function (password) {
   const user = this;
-  return bcrypt.compare(password, user.password);
+  return await bcrypt.compare(password, user.password);
 };
 
 userSchema.pre('save', async function (next) {
