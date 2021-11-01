@@ -164,7 +164,7 @@ router.post('/logout', auth('manageUsers'), authController.logout);
   *       "404":
   *         $ref: '#/components/responses/NotFound'
   */
- router.post('/forgot-password', validate(authValidation.forgotPassword), authController.forgotPassword);
+  router.post('/forgot-password', validate(authValidation.forgotPassword), authController.forgotPassword);
 
  /**
   * @swagger
@@ -237,6 +237,8 @@ router.post('/logout', auth('manageUsers'), authController.logout);
 //  */
 
 // router.post('/verify-email', validate(authValidation.verifyEmail), authController.verifyEmail);
+
+    router.post('/verfiy-code', validate(authValidation.verifyCode), authController.verifyCode);
 
  
 module.exports = router;
