@@ -59,6 +59,7 @@ AUCTION_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
 //   await contract.events.newCollection()
 //     .on('data', (event) => {
 //       console.log("Got Event on eth")
+//console.log("asd")
 //       // if (event.returnValues.to) {
 
 //       to = event.returnValues.CollectionAddress
