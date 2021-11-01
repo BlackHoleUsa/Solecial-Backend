@@ -64,6 +64,10 @@ const getUserByEmail = async (email) => {
   return User.findOne({ email });
 };
 
+const updateUserByEmail= async(email,password) => {
+  return await User.findOneAndUpdate({email:email},{"password":password});
+}
+
 const getUserByAddress = async (address) => {
   return User.findOne({ address }).lean();
 };
@@ -238,6 +242,7 @@ module.exports = {
   queryUsers,
   getUserById,
   getUserByEmail,
+  updateUserByEmail,
   getUserByToken,
   updateUserById,
   deleteUserById,

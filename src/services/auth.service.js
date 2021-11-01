@@ -85,6 +85,14 @@ const resetPassword = async (dbUser, password, newPassword) => {
   }
 };
 
+const verifyCode = async (verifyEmailCode, email) => {
+  const user = await userService.getUserByEmail;
+  if(user?.code === verifyEmailCode){
+    return true;
+  }
+  return false;
+};
+
 /**
  * Verify email
  * @param {string} verifyEmailToken
@@ -108,6 +116,7 @@ module.exports = {
   refreshAuth,
   resetPassword,
   verifyEmail,
+  verifyCode,
   loginUserWithAddress,
   loginUserWithEmailAndPassword,
 };

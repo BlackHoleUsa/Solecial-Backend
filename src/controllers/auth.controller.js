@@ -48,7 +48,7 @@ const logout = catchAsync(async (req, res) => {
 });
 
 const forgotPassword = catchAsync(async (req, res) => {
-  let dbUser = await userService.getUserByEmail(req.body.email);
+  const dbUser = await userService.getUserByEmail(req.body.email);
 
   if (!dbUser) {
     return res.status(404).send({
@@ -58,10 +58,34 @@ const forgotPassword = catchAsync(async (req, res) => {
   }
 
   await emailService.sendResetPasswordEmail(req.body.email, req.body.code);
+  await userService.saveForgotPasswordCode(req.body.email, req.body.code);
   res.status(200).send({
     code: 200,
     message: 'Password reset email has been successfully sent to your email',
   });
+});
+
+const verifyCode = catchAsync(async (req, res) => {
+  const flag = await authService.verifyCode(req.body.code, req.body.email);
+  if (flag) {
+    if (req.body.newPassword) {
+      await userService.updateUserByEmail(req.body.email, req.body.newPassword);
+      res.status(httpStatus.OK).send({
+        status: 200,
+        message: 'Password updated Successfully',
+      });
+    } else {
+      res.status(httpStatus.OK).send({
+        status: 200,
+        message: 'Code verified',
+      });
+    }
+  } else {
+    res.status(httpStatus.EXPECTATION_FAILED).send({
+      status: 400,
+      message: 'code didnt verified',
+    });
+  }
 });
 
 const resetPassword = catchAsync(async (req, res) => {
@@ -94,6 +118,7 @@ module.exports = {
   login,
   logout,
   forgotPassword,
+  verifyCode,
   resetPassword,
   verifyEmail,
 };
