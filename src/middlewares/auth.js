@@ -31,28 +31,27 @@ const auth = (...requiredRights) => async (req, res, next) => {
 };
 
 
-const adminAuthforBlock=async (reqUser,next)=>{
-  try{
-    console.log(reqUser)
-    const reqToken=reqUser.headers.authorization.split(' ')[1]
+const adminAuthforBlock=async (req)=>{
+  let FLAG;
+    const reqToken=req.headers.authorization.split(' ')[1]
     const tokenfound=await Token.findOne({token: reqToken},(err,result)=>{
       if(err){
         return reject(new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized due to not found user\'s Token'))  
       }
       return result
     })
-    await User.findOne(tokenfound.user).then(result=>{
-      result.role == 'admin'
-      next()
+     await User.findOne(tokenfound.user).then((result)=>{
+      if(result.role == 'admin'){
+        FLAG = true;
+      }
     })
-  }catch(err){
-    console.log(err)
-    next(err)
-  }
+    .catch((err)=>{  
+      return reject(new ApiError(httpStatus.UNAUTHORIZED,err))
+    })
+    return FLAG;
 }
 
 module.exports = {
   auth,
   adminAuthforBlock
-} 
-  
+}

@@ -13,6 +13,19 @@ const artworkSchema = mongoose.Schema(
       type: String,
       required: false,
     },
+    artist_name: {
+      type:String,
+      required:true
+    },
+    artist_description: {
+      type:String,
+      required:true
+    },
+    artist_url: {
+      type:String,
+      required:false,
+      trim:true
+    },
     creater: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'User',
@@ -39,11 +52,7 @@ const artworkSchema = mongoose.Schema(
       type: String,
       required: false,
     },
-    // collectionId: {
-    //   type: mongoose.SchemaTypes.ObjectId,
-    //   ref: 'Collection',
-    // },
-    
+
     views: {
       type: Number,
       required: false,

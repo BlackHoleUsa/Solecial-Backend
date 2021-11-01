@@ -4,12 +4,15 @@ const createArtworkVS = {
   body: Joi.object().keys({
     name: Joi.string().required(),
     description: Joi.string().required(),
-    creater: Joi.string().required(),
-    price: Joi.string().required(),
     image: Joi.string().optional(),
-    // collectionId: Joi.string().required(),
+    artist_name: Joi.string().required(),
+    artist_description: Joi.string().required(),
+    price: Joi.string().required(),
+    music:Joi.string().required(),
+    artist_image:Joi.string().optional(),
     artwork_type: Joi.string().required(),
     tokenId: Joi.string().optional(),
+    creater:Joi.string()
   }),
 };
 
