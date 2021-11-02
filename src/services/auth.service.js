@@ -86,7 +86,7 @@ const resetPassword = async (dbUser, password, newPassword) => {
 };
 
 const verifyCode = async (verifyEmailCode, email) => {
-  const user = await userService.getUserByEmail;
+  const user = await userService.getUserByEmail(email);
   if(user?.code === verifyEmailCode){
     return true;
   }

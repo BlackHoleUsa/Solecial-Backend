@@ -3,6 +3,7 @@ const { userService, artworkService, collectionService, historyService, notifica
 const EVENT = require('../triggers/custom-events').customEvent;
 const catchAsync = require('../utils/catchAsync');
 const { SEARCH_FILTERS } = require('../utils/enums');
+const settings = require('../models/setting.model');
 
 const handleSearch = catchAsync(async (req, res) => {
   const { keyword, filter, page, perPage } = req.query;
@@ -10,7 +11,7 @@ const handleSearch = catchAsync(async (req, res) => {
   if (keyword) {
     const users = await userService.searchUsersByName(keyword, page, perPage);
     const artworks = await artworkService.searchArtworkByName(keyword, page, perPage);
-    const collections = await collectionService.searchCollectionByName(keyword, page, perPage);
+
 
     let data = {};
 
@@ -23,15 +24,10 @@ const handleSearch = catchAsync(async (req, res) => {
         data.artworks = artworks;
         break;
 
-      case SEARCH_FILTERS.COLLECTIONS:
-        data.collections = collections;
-        break;
-
       default:
         data = {
           users,
           artworks,
-          collections,
         };
     }
 

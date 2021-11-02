@@ -238,7 +238,7 @@ router.post('/logout', auth('manageUsers'), authController.logout);
 
 // router.post('/verify-email', validate(authValidation.verifyEmail), authController.verifyEmail);
 
-    router.post('/verfiy-code', validate(authValidation.verifyCode), authController.verifyCode);
+    router.post('/verify-code', validate(authValidation.verifyCode), authController.verifyCode);
 
  
 module.exports = router;

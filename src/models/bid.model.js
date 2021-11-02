@@ -20,6 +20,11 @@ const bidSchema = mongoose.Schema(
       required: true,
     },
 
+    minimum_bid:{
+      type:Number,
+      required:false
+    },
+
     owner: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'User',

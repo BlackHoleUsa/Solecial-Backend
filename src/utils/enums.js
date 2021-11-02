@@ -39,7 +39,6 @@ const MINT_STATUS = {
 const SEARCH_FILTERS = {
   USERS: 'users',
   ARTWORKS: 'artworks',
-  COLLECTIONS: 'collections',
 };
 
 const AUCTION_FILTERS = {

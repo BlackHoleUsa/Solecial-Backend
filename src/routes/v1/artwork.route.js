@@ -346,11 +346,11 @@ router.get('/getSingleArtwork', [validate(artworkValidation.getSingleArtVS)], ar
 router.get('/getAllArtWorks', artworkController.getAllArtWorks);
 router.get('/getAuctionBids', [validate(artworkValidation.getAuctionBidsVS)], artworkController.getAuctionBids);
 
-router.get(
-  '/getCollectionArtworks',
-  [validate(artworkValidation.getCollectionArtworksVS)],
-  artworkController.getArtworksByCollection
-);
+// router.get(
+//   '/getCollectionArtworks',
+//   [validate(artworkValidation.getCollectionArtworksVS)],
+//   artworkController.getArtworksByCollection
+// );
 
 router.post(
   '/changeAuctionStatus',

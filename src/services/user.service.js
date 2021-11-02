@@ -19,8 +19,7 @@ const createUser = async (userBody) => {
     } else if (await User.isAddressTaken(userBody.address)) {
       throw new ApiError(httpStatus.BAD_REQUEST, 'address already taken')
   } 
-  } else if(userBody.role !=='artist'|| userBody.role !== undefined){
-    console.log(userBody.userName);
+  } else if(userBody.role !=='admin'|| userBody.role !== undefined){
     if(userBody.userName !== undefined){
       if (await User.isUsernameTaken(userBody.userName)) {
         throw new ApiError(httpStatus.BAD_REQUEST, 'userName already taken');
@@ -214,6 +213,11 @@ const searchUsersByName = async (keyword, page, perPage) => {
     .limit(parseInt(perPage))
     .skip(page * perPage);
 };
+
+const saveForgotPasswordCode= async(email, code) => {
+  return await User.findOneAndUpdate({email:email},{$set:{"code":code}});
+}
+
 const getAllUsers = async () => {
   // eslint-disable-next-line prettier/prettier
   const allUsers = await User.find().sort({_id:1});
@@ -260,4 +264,5 @@ module.exports = {
   getSingleFavouriteArtWork,
   deleteCollectionByIdFromUser,
   deleteArtWorksOfCollections,
+  saveForgotPasswordCode
 };

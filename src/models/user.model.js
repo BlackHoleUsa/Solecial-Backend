@@ -43,11 +43,11 @@ const userSchema = mongoose.Schema(
       required: false,
       trim: true,
       minlength: 8,
-      validate(value) {
-        if (!value.match(/\d/) || !value.match(/[a-zA-Z]/)) {
-          throw new Error('Password must contain at least one letter and one number');
-        }
-      },
+      // validate(value) {
+      //   if (!value.match(/\d/) || !value.match(/[a-zA-Z]/)) {
+      //     throw new Error('Password must contain at least one letter and one number');
+      //   }
+      // },
       private: true, // used by the toJSON plugin
     },
     role: {
@@ -96,6 +96,7 @@ const userSchema = mongoose.Schema(
       },
     ],
     isblock: { type: Boolean, default: false },
+    code: { type: String },
   },
   {
     timestamps: true,
@@ -159,11 +160,10 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-userSchema.pre('updateOne', async function (next) {
-  console.log('update entrance hook');
+userSchema.pre(['updateOne', 'findOneAndUpdate'], async function (next) {
   const user = this;
-  if (user.isModified(password)) {
-    user.password = await bcrypt.hash(user.password, 8);
+  if (this._update.password) {
+    this._update.password = await bcrypt.hash(String(this._update.password), 8);
   }
   next();
 });

@@ -2,7 +2,6 @@ const express = require('express');
 const authRoute = require('./auth.route');
 const userRoute = require('./user.route');
 const docsRoute = require('./docs.route');
-const collectionRoute = require('./collection.route');
 const artworkRoute = require('./artwork.route');
 const salesRoute = require('./sales.route');
 const auctionRoute = require('./auction.route');
@@ -20,10 +19,6 @@ const defaultRoutes = [
   {
     path: '/users',
     route: userRoute,
-  },
-  {
-    path: '/collection',
-    route: collectionRoute,
   },
   {
     path: '/artwork',

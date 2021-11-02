@@ -7,7 +7,16 @@ const getActivityVS = {
     perPage: Joi.string().required(),
   }),
 };
+const getSettingsVS = {
+  body:Joi.object().keys({
+    notifications: Joi.boolean(),
+    bid_notifications: Joi.boolean(),
+    royalty:Joi.number(),
+    minimum_bid:Joi.number()
+  })
+}
 
 module.exports = {
   getActivityVS,
+  getSettingsVS
 };

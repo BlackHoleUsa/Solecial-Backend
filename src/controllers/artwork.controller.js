@@ -6,7 +6,6 @@ const {
   userService,
   tokenService,
   emailService,
-  collectionService,
   artworkService,
   bidService,
   auctionService,
@@ -45,11 +44,7 @@ const saveArtwork = catchAsync(async (req, res) => {
      artworkId: artwork._id,
      userId: body.creater,
   });
-  // EVENT.emit('add-artwork-in-collection', {
-  //   artworkId: artwork._id,
-  //   collectionId: body.collectionId,
-  // });
-
+  
   EVENT.emit('update-artwork-history', {
     artwork: artwork._id,
     owner: body.creater,
@@ -136,7 +131,8 @@ const placeBid = catchAsync(async (req, res) => {
   const { body } = req;
   const { user } = req;
 
-  const { artwork, auctionId } = body;
+  const { artwork, auctionId, } = body;
+  
   const bid = await bidService.saveBid(body);
 
   EVENT.emit('save-bid-in-artwork', {
@@ -205,13 +201,6 @@ const updateTokenId = catchAsync(async (req, res) => {
   });
 });
 
-const getArtworksByCollection = catchAsync(async (req, res) => {
-  const { collectionId } = req.query;
-  const artworks = await artworkService.getArtworksByCollection(collectionId);
-
-  res.status(httpStatus.OK).send({ status: true, message: 'successfull', data: artworks });
-});
-
 const changeAuctionStatus = catchAsync(async (req, res) => {
   const { artworkId, status } = req.body;
   const artwork = await artworkService.changeArtworkAuctionStatus(artworkId, status);
@@ -231,7 +220,6 @@ const deleteArtwork = catchAsync(async (req, res) => {
     type: HISTORY_TYPE.ARTWORK_DELETED,
   });
 
-  // await collectionService.removeArtwork(artworkId, artwork.collectionId);
   await userService.removeArtwork(artwork.creater, artworkId);
   await artworkService.deleteArtworkById(artworkId);
 
@@ -281,7 +269,6 @@ module.exports = {
   getSingleArtwork,
   getAuctionBids,
   updateTokenId,
-  getArtworksByCollection,
   changeAuctionStatus,
   deleteArtwork,
   getWinnedAuctions,

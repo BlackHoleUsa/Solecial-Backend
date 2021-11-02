@@ -3,7 +3,7 @@
 //   artist: ['consumedByArtistOnly'],
 //   admin: ['getUsers', 'manageUsers'],
 // };
-const roles = ['user', 'artist', 'admin'];
+const roles = ['user', 'admin', 'superAdmin'];
 
 const roleRights = new Map();
 roleRights.set(roles[0], ['manageUsers','logout']);
