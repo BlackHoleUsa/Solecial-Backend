@@ -94,6 +94,7 @@ const resetPassword = catchAsync(async (req, res) => {
     const authorization=req.headers.authorization;
     const headersToken = authorization.split(' ')[1]
     dbUser = await userService.getUserByToken(headersToken,res)
+    console.log(dbUser)
   if (!dbUser) {
     return res.status(404).send({
       status: 404,

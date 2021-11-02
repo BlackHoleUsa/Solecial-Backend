@@ -11,6 +11,7 @@ const {
   auctionService,
   historyService,
   buysellService,
+  settingService
 } = require('../services');
 const EVENT = require('../triggers/custom-events').customEvent;
 const { addFilesToIPFS, pinMetaDataToIPFS } = require('../utils/helpers');
@@ -154,10 +155,21 @@ const placeBid = catchAsync(async (req, res) => {
     type: NOTIFICATION_TYPE.NEW_BID,
     extraData: {
       bid: bid._id,
-    },
-  });
-
-  res.status(httpStatus.OK).send({ status: true, message: 'Your bid has been placed successfully', data: bid });
+      type: HISTORY_TYPE.BID_PLACED,
+    });
+    if(bidNotification === false){
+      EVENT.emit('send-and-save-notification', {
+        receiver: user._id,
+        type: NOTIFICATION_TYPE.NEW_BID,
+        extraData: {
+          bid: bid._id,
+        },
+      });
+    }
+    res.status(httpStatus.OK).send({ status: true, message: 'Your bid has been placed successfully', data: bid });
+  }else{
+    res.status(httpStatus.PRECONDITION_FAILED).send(`Bid amount is less than the solecial required bid amount which is ${minBid}`)
+  }
 });
 
 const getSingleArtwork = catchAsync(async (req, res) => {

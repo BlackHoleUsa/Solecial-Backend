@@ -144,6 +144,29 @@ const tempUdateUser = catchAsync(async (req, res) => {
     status: true
   });
 });
+const getSettings = catchAsync(async (req, res) =>{
+    const foundSetting =await settingService.getSettings()
+    res.status(200).json({
+      message:'Successful!',
+      foundSetting
+    })
+})
+
+const updateSettings = catchAsync(async (req,res) => {
+  const existSetting = await settingService.getSettings()
+  console.log(existSetting)
+  if( existSetting.length == 0){
+    await settingService.createSettings(req.body)
+    res.status(200).send('Setting created')
+  }else if(existSetting[0]){
+    const id=existSetting[0]._id
+    const updatedSetting = await settingService.updateSettings(id,req.body)
+    res.status(200).json({
+      message:'settings_updated',
+      updatedSetting
+    })
+  }
+})
 
 module.exports = {
   handleSearch,

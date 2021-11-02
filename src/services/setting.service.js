@@ -1,7 +1,7 @@
 const Setting = require('../models/setting.model')
 
 const getSettings = async ()=>{
-    const result= Setting.find()
+    const result=await Setting.find()
     return result;
 }
 const updateSettings=async (id,updateBody)=>{

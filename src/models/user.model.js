@@ -65,6 +65,7 @@ const userSchema = mongoose.Schema(
         ref: 'Collection',
       },
     ],
+    
     artworks: [
       {
         type: mongoose.Schema.Types.ObjectId,

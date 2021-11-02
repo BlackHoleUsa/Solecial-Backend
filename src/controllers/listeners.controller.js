@@ -1,5 +1,8 @@
 const { User, Collection, Artwork, Auction, History, Notification, Transaction, Stats } = require('../models');
 const { MINT_STATUS, STATS_UPDATE_TYPE } = require('../utils/enums');
+const { User, Artwork, Auction, History, Notification, Transaction } = require('../models');
+const { settingService } = require('../services');
+const { MINT_STATUS } = require('../utils/enums');
 
 const addCollectionInUser = async (params) => {
   const { collectionId, userId } = params;
@@ -71,7 +74,12 @@ const updateArtworkHistory = async (params) => {
 };
 
 const createNotification = async (params) => {
-  await Notification.create(params);
+  const setting =await settingService.getSettings()
+  const notificationPermissioninSetting = setting[0].notifications
+  if(notificationPermissioninSetting === false){
+    await Notification.create(params);
+    console.log('notification sent')
+  }
 };
 
 const createTransaction = async (params) => {

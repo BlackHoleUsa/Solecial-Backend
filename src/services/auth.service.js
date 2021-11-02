@@ -74,9 +74,9 @@ const resetPassword = async (dbUser, password, newPassword) => {
       throw new Error('Wrong User');
     }
     const passwordConfirmed = await dbUser.isPasswordMatch(password);
+    
     if (passwordConfirmed === true) {
-      const hashPassword = await bcrypt.hash(newPassword, 8);
-      await userService.updateUserById(dbUser._id, { password: hashPassword });
+      await userService.updateUserById(dbUser._id, { password: newPassword });
     } else if (passwordConfirmed === false) {
       throw new ApiError(httpStatus.UNAUTHORIZED, 'current password not verified');
     }
