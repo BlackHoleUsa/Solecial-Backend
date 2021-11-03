@@ -1,5 +1,5 @@
-const { User, Collection, Artwork, Auction, History, Notification, Transaction } = require('../models');
-const { MINT_STATUS } = require('../utils/enums');
+const { User, Collection, Artwork, Auction, History, Notification, Transaction, Stats } = require('../models');
+const { MINT_STATUS, STATS_UPDATE_TYPE } = require('../utils/enums');
 
 const addCollectionInUser = async (params) => {
   const { collectionId, userId } = params;
@@ -79,6 +79,35 @@ const createTransaction = async (params) => {
   console.log('--transaction created successfully--:', transact);
 };
 
+const createStats = async (params) => {
+  let stats = await Stats.create({
+    user: params.userId,
+    ownedArts: 0,
+    purchasedArts: 0,
+    soldArts: 0,
+    totalPurchasesAmount: 0,
+    totalSoldAmount: 0
+  });
+  let sts = stats.toObject()
+  console.log(stats);
+  await User.findOneAndUpdate({ _id: params.userId }, {
+    stats: stats._id
+  });
+  console.log('stats updated successfully');
+}
+
+const userStatsUpdate = async (params) => {
+  const { userId, type } = params;
+  if (type === STATS_UPDATE_TYPE.ownedArts)
+    await Stats.findOneAndUpdate({
+      user: userId
+    }, {
+      $inc: { ownedArts: 1 }
+    });
+
+  console.log('STATS done');
+}
+
 module.exports = {
   addCollectionInUser,
   addArtworkInUser,
@@ -88,4 +117,6 @@ module.exports = {
   updateArtworkHistory,
   createNotification,
   createTransaction,
+  createStats,
+  userStatsUpdate
 };

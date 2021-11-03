@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { User } = require('../models');
+const { User, Stats } = require('../models');
 const ApiError = require('../utils/ApiError');
 const web3 = require('web3');
 
@@ -170,6 +170,41 @@ const searchUsersByName = async (keyword, page, perPage) => {
     .skip(page * perPage);
 };
 
+const getUsersByMostArtworks = async () => {
+  return await Stats.aggregate([
+    {
+      $lookup: {
+        from: "users",
+        localField: "user",
+        foreignField: "_id",
+        as: "user"
+      }
+    }, {
+      $match: {
+        $and: [{
+          'user.role': 'artist'
+        }, {
+          soldArts: { $gt: 0 }
+        }]
+      }
+    },
+    {
+      $sort: {
+        soldArts: -1
+      }
+    },
+    {
+      $unwind: "$user"
+    }
+  ]).limit(5);
+  // return await Stats.find().populate({
+  //   path: 'user',
+  //   match: {
+  //     role: 'artist'
+  //   }
+  // }).sort({ soldArts: -1 }).lean();
+}
+
 module.exports = {
   createUser,
   queryUsers,
@@ -187,4 +222,5 @@ module.exports = {
   getUserFollowing,
   removeArtwork,
   searchUsersByName,
+  getUsersByMostArtworks
 };

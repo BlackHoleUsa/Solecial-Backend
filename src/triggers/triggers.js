@@ -10,3 +10,5 @@ EVENT.addListener('open-artwork-auction', LISTENERS.openArtworkAuction);
 EVENT.addListener('update-artwork-history', LISTENERS.updateArtworkHistory);
 EVENT.addListener('send-and-save-notification', LISTENERS.createNotification);
 EVENT.addListener('record-transaction', LISTENERS.createTransaction);
+EVENT.addListener('create-stats', LISTENERS.createStats)
+EVENT.addListener('stats-artwork-mint', LISTENERS.userStatsUpdate)

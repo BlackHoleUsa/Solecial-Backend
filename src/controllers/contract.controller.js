@@ -4,7 +4,7 @@ const { AUCTION_CONTRACT_INSTANCE } = require('../config/contract.config');
 const LISTENERS = require('../controllers/listeners.controller');
 const { auctionService, bidService } = require('../services');
 const EVENT = require('../triggers/custom-events').customEvent;
-const { HISTORY_TYPE, TRANSACTION_TYPE, TRANSACTION_ACTIVITY_TYPE, AUCTION_STATUS, NOTIFICATION_TYPE, SALE_STATUS } = require('../utils/enums');
+const { HISTORY_TYPE, TRANSACTION_TYPE, TRANSACTION_ACTIVITY_TYPE, AUCTION_STATUS, NOTIFICATION_TYPE, SALE_STATUS, STATS_UPDATE_TYPE } = require('../utils/enums');
 
 const updateCollectionAddress = async (CollectionAddress, owner, colName) => {
   const user = await User.findOne({ address: owner });
@@ -22,6 +22,11 @@ const updateCollectionAddress = async (CollectionAddress, owner, colName) => {
       tokenId: 1,
     }
   );
+
+  EVENT.emit('stats-artwork-mint', {
+    userId: user._id,
+    type: STATS_UPDATE_TYPE.ownedArts
+  })
   console.log('collection address and artwork token id updated successfully');
 };
 

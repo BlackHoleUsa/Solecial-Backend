@@ -1,5 +1,5 @@
 const { userService, artworkService, collectionService, historyService, notificationService } = require('../services');
-
+const EVENT = require('../triggers/custom-events').customEvent;
 const catchAsync = require('../utils/catchAsync');
 const httpStatus = require('http-status');
 const { SEARCH_FILTERS } = require('../utils/enums');
@@ -88,8 +88,32 @@ const getTransactions = catchAsync(async (req, res) => {
   });
 });
 
+const getTranscendingArtists = catchAsync(async (req, res) => {
+  const user = req.user;
+  const { page, perPage } = req.query;
+
+  const artists = await userService.getUsersByMostArtworks();
+  res.status(httpStatus.OK).send({
+    status: true,
+    data: artists,
+  });
+
+
+});
+
+const tempUdateUser = catchAsync(async (req, res) => {
+  EVENT.emit('create-stats', {
+    userId: req.query.userId
+  });
+  res.status(httpStatus.CREATED).send({
+    status: true
+  });
+});
+
 module.exports = {
   handleSearch,
   getAppActivity,
+  getTranscendingArtists,
   getNotifications,
+  tempUdateUser
 };
