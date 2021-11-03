@@ -178,7 +178,9 @@ const updateTokenId = catchAsync(async (req, res) => {
   const { artworkId, tokenId } = req.body;
   const artwork = await artworkService.updateArtworkTokenId(artworkId, tokenId);
 
-  res.status(httpStatus.OK).send({ status: true, message: 'token id updated successfully', data: artwork });
+  res.status(httpStatus.OK).send({
+    status: true, message: 'token id updated successfully', data: artwork
+  });
 });
 
 const getArtworksByCollection = catchAsync(async (req, res) => {

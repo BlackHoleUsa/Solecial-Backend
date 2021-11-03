@@ -15,4 +15,16 @@ router.get(
   generalController.getNotifications
 );
 
+router.get(
+  '/getTranscendingArtists',
+  [],
+  generalController.getTranscendingArtists
+);
+
+router.get(
+  '/tempUdateUser',
+  [],
+  generalController.tempUdateUser
+);
+
 module.exports = router;
