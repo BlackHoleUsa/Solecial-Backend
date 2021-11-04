@@ -11,7 +11,6 @@ const updateSettings=async (id,updateBody)=>{
 
 const createSettings= async (body)=>{
     const setting=await Setting.create(body);
-    console.log('service',setting);
     return setting
 }
 

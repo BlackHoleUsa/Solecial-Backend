@@ -33,7 +33,7 @@ const updateUser = {
   body: Joi.object().keys({
     bio: Joi.string().optional(),
     profilePic: Joi.string().optional(),
-    isblock: Joi.boolean()
+    email:Joi.string().optional()
   }),
 };
 
