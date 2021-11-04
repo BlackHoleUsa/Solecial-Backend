@@ -24,35 +24,6 @@ router.get('/:userId', validate(userValidation.getUser), userController.getUser)
 //router.get('/getUserStatistics/:userId', validate(userValidation.getUser), userController.getUserStatistics);
 
 // /**
-//   * @swagger
-//   * /user/block-artist:
-//   *   put:
-//   *     summary: block artist
-//   *     tags: [Auth]
-//   *     parameters:
-//   *       - in: query
-//   *         name: _id
-//   *         required: true
-//   *         schema:
-//   *           type: objectId
-//   *         description: turns flag into true of isBlock
-//   *     responses:
-//   *       "204":
-//   *         description: artist blocked
-//   *       "401":
-//   *         description: blocked function failed
-//   *         content:
-//   *           application/json:
-//   *             schema:
-//   *               $ref: '#/components/schemas/Error'
-//   *             example:
-//   *               code: 401
-//   *               message: block function failed
-//   */
- router.put('/blockUser/:userId',validate(userValidation.blockUser),userController.blockUser)
-
-
-// /**
 //  * @swagger
 //  * /users/{userId}:
 //  *   put:

@@ -16,7 +16,6 @@ const {
 
 const updateCollectionAddress = async (CollectionAddress, owner, colName) => {
   const user = await User.findOne({ address: owner });
-
   const collection = await Collection.findOneAndUpdate(
     { owner: user._id, name: colName },
     {

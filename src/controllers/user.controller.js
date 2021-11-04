@@ -48,13 +48,6 @@ const updateUser = catchAsync(async (req, res) => {
   res.send(user);
 });
 
-const blockUser = catchAsync(async (req,res,next)=>{
-    const isAdmin = await adminAuthforBlock(req);
-    if(isAdmin){
-      const user = await userService.updateUserById(req.params.userId, req.body);
-      res.send(`user blocked Status: ${user.isblock}`); 
-    }
-}) 
 
 const deleteUser = catchAsync(async (req, res) => {
   await userService.deleteUserById(req.params.userId);
@@ -130,7 +123,6 @@ module.exports = {
   getUser,
   updateUser,
   deleteUser,
-  blockUser,
   followUser,
   unfollowUser,
   getUserFollowing,

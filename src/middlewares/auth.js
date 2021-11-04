@@ -36,17 +36,20 @@ const adminAuthforBlock=async (req)=>{
     const reqToken=req.headers.authorization.split(' ')[1]
     const tokenfound=await Token.findOne({token: reqToken},(err,result)=>{
       if(err){
-        return reject(new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized due to not found user\'s Token'))  
+        throw(new ApiError(httpStatus.UNAUTHORIZED, 'Unauthorized due to not found user\'s Token'))
       }
       return result
     })
      await User.findOne(tokenfound.user).then((result)=>{
-      if(result.role == 'admin'){
+      if(result.role == 'superAdmin'){
         FLAG = true;
+      }else{
+        FLAG = false;
       }
     })
     .catch((err)=>{  
-      return reject(new ApiError(httpStatus.UNAUTHORIZED,err))
+      console.log(err);
+      return res.status(500).send(err)
     })
     return FLAG;
 }

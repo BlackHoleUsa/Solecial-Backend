@@ -25,11 +25,7 @@ const getUser = {
     userId: Joi.string().custom(objectId),
   }),
 };
-const blockUser={
-  params:Joi.object().keys({
-    userId:Joi.required().custom(objectId)
-  })
-}
+
 const updateUser = {
   params: Joi.object().keys({
     userId: Joi.required().custom(objectId),
@@ -89,5 +85,4 @@ module.exports = {
   followUser,
   getUserFollowing,
   getUserFollowers,
-  blockUser
 };

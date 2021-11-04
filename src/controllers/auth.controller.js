@@ -3,6 +3,7 @@ const catchAsync = require('../utils/catchAsync');
 const { authService, userService, tokenService, emailService } = require('../services');
 const { User } = require('../models');
 const EVENT = require('../triggers/custom-events').customEvent;
+const {adminAuthforBlock} = require('../middlewares/auth')
 
 const register = catchAsync(async (req, res) => {
   const user = await userService.createUser(req.body);
@@ -46,6 +47,16 @@ const logout = catchAsync(async (req, res) => {
     status: true,
   });
 });
+
+const blockUser = catchAsync(async (req,res,next)=>{
+  const isAdmin = await adminAuthforBlock(req);
+  if(isAdmin){
+    const user = await userService.updateUserById(req.params.userId, req.body);
+    res.send(`user blocked Status: ${user.isblock}`); 
+  }else{
+    res.status(httpStatus.UNAUTHORIZED).send('Role is not superAdmin of requested User!');
+  }
+}) 
 
 const forgotPassword = catchAsync(async (req, res) => {
   const dbUser = await userService.getUserByEmail(req.body.email);
@@ -118,6 +129,7 @@ module.exports = {
   register,
   login,
   logout,
+  blockUser,
   forgotPassword,
   verifyCode,
   resetPassword,
