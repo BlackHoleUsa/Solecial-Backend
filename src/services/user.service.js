@@ -197,12 +197,6 @@ const getUsersByMostArtworks = async () => {
       $unwind: "$user"
     }
   ]).limit(5);
-  // return await Stats.find().populate({
-  //   path: 'user',
-  //   match: {
-  //     role: 'artist'
-  //   }
-  // }).sort({ soldArts: -1 }).lean();
 }
 
 module.exports = {

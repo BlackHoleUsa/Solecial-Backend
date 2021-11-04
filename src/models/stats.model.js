@@ -10,18 +10,23 @@ const statsSchema = mongoose.Schema(
     },
     ownedArts: {
       type: Number,
+      default: 0
     },
     purchasedArts: {
       type: Number,
+      default: 0
     },
     soldArts: {
       type: Number,
+      default: 0
     },
     totalPurchasesAmount: {
       type: Number,
+      default: 0
     },
     totalSoldAmount: {
-      type: Number
+      type: Number,
+      default: 0
     }
   },
   {

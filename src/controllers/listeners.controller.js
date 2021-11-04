@@ -97,13 +97,33 @@ const createStats = async (params) => {
 }
 
 const userStatsUpdate = async (params) => {
-  const { userId, type } = params;
-  if (type === STATS_UPDATE_TYPE.ownedArts)
+  const { userId, type, amount } = params;
+  if (type === STATS_UPDATE_TYPE.ownedArts) {
     await Stats.findOneAndUpdate({
       user: userId
     }, {
       $inc: { ownedArts: 1 }
     });
+  } else if (type === STATS_UPDATE_TYPE.purchasedArts) {
+    await Stats.findOneAndUpdate({
+      user: userId
+    }, {
+      $inc: {
+        purchasedArts: 1,
+        totalPurchasesAmount: amount
+      },
+    });
+  } else if (type === STATS_UPDATE_TYPE.soldArts) {
+    await Stats.findOneAndUpdate({
+      user: userId
+    }, {
+      $inc: {
+        ownedArts: -1,
+        soldArts: 1,
+        totalSoldAmount: amount
+      },
+    });
+  }
 
   console.log('STATS done');
 }
