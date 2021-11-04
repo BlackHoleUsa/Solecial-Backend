@@ -6,6 +6,7 @@ const compression = require('compression');
 const cors = require('cors');
 const passport = require('passport');
 const httpStatus = require('http-status');
+const { fileParser } = require('express-multipart-file-parser');
 const config = require('./config/config');
 const morgan = require('./config/morgan');
 const { jwtStrategy } = require('./config/passport');
@@ -13,7 +14,6 @@ const { authLimiter } = require('./middlewares/rateLimiter');
 const routes = require('./routes/v1');
 const { errorConverter, errorHandler } = require('./middlewares/error');
 const ApiError = require('./utils/ApiError');
-const { fileParser } = require('express-multipart-file-parser');
 require('./config/aws.config');
 require('./triggers/triggers');
 require('./triggers/contract.triggers');
@@ -32,16 +32,16 @@ app.use(helmet());
 // parse json request body
 app.use(express.json());
 
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: true }));
 
 app.use(
   fileParser({
     rawBodyOptions: {
-      limit: '5000mb', //file size limit
+      limit: '5000mb', // file size limit
     },
     busboyOptions: {
       limits: {
-        fields: 50, //Number text fields allowed
+        fields: 50, // Number text fields allowed
       },
     },
   })
