@@ -78,7 +78,9 @@ TRANSACTION_ACTIVITY_TYPE = {
 };
 
 const STATS_UPDATE_TYPE = {
-  ownedArts: 'artwork_minted'
+  ownedArts: 'artwork_minted',
+  purchasedArts: 'artwork_purchased',
+  soldArts: 'artworks_sold'
 }
 
 module.exports = {

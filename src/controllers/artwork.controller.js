@@ -14,7 +14,7 @@ const {
 } = require('../services');
 const EVENT = require('../triggers/custom-events').customEvent;
 const { addFilesToIPFS, pinMetaDataToIPFS } = require('../utils/helpers');
-const { HISTORY_TYPE, NOTIFICATION_TYPE } = require('../utils/enums');
+const { HISTORY_TYPE, NOTIFICATION_TYPE, STATS_UPDATE_TYPE } = require('../utils/enums');
 
 const saveArtwork = catchAsync(async (req, res) => {
   const body = req.body;
@@ -177,6 +177,11 @@ const getAuctionBids = catchAsync(async (req, res) => {
 const updateTokenId = catchAsync(async (req, res) => {
   const { artworkId, tokenId } = req.body;
   const artwork = await artworkService.updateArtworkTokenId(artworkId, tokenId);
+
+  EVENT.emit('stats-artwork-mint', {
+    userId: artwork.owner,
+    type: STATS_UPDATE_TYPE.ownedArts
+  });
 
   res.status(httpStatus.OK).send({
     status: true, message: 'token id updated successfully', data: artwork
