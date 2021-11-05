@@ -224,6 +224,10 @@ const fetchLeadingCollectors = async () => {
   ]).limit(5);
 }
 
+const getUserStats = async (userId) => {
+  return await Stats.findOne({ user: userId }).lean();
+}
+
 module.exports = {
   createUser,
   queryUsers,
@@ -242,5 +246,6 @@ module.exports = {
   removeArtwork,
   searchUsersByName,
   getUsersByMostArtworks,
-  fetchLeadingCollectors
+  fetchLeadingCollectors,
+  getUserStats
 };
