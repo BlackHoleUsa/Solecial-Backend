@@ -18,6 +18,7 @@ router
 
 // router.route('/:userId').delete(auth('manageUsers'), validate(userValidation.deleteUser), userController.getUser);
 router.get('/:userId', validate(userValidation.getUser), userController.getUser);
+router.get('/getUserStatistics/:userId', validate(userValidation.getUser), userController.getUserStatistics);
 
 // router.get(auth('manageUsers'), validate(userValidation.getUser), userController.getUser);
 /**

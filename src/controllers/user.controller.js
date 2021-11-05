@@ -28,6 +28,14 @@ const getUser = catchAsync(async (req, res) => {
   res.send({ status: true, message: 'Successfull', user });
 });
 
+const getUserStatistics = catchAsync(async (req, res) => {
+  const stats = await userService.getUserStats(req.params.userId);
+  if (!stats) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Stats not found');
+  }
+  res.send({ status: true, message: 'Successfull', stats });
+});
+
 const updateUser = catchAsync(async (req, res) => {
   if (req.files.length > 0) {
     let img = await uploadToAws(req.files[0].buffer, `${req.params.userId}/${req.params.userId}-profile-pic.png`);
@@ -103,4 +111,5 @@ module.exports = {
   unfollowUser,
   getUserFollowing,
   getUserFollowers,
+  getUserStatistics
 };

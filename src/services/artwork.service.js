@@ -64,8 +64,26 @@ const deleteArtworkById = async (artworkId) => {
   await Artwork.findOneAndDelete({ _id: artworkId });
 };
 
-const searchArtworkByName = async (keyword, page, perPage) => {
-  return await Artwork.find({ name: { $regex: keyword, $options: 'i' } })
+const searchArtworkByName = async (keyword, page, perPage, artist, min, max) => {
+  let query = {};
+  if (keyword) {
+    query['name'] = { $regex: keyword, $options: 'i' };
+  }
+  if (artist) {
+    query['owner'] = artist;
+  }
+  if (min && max) {
+    query['$and'] = [
+      {
+        price: { $gte: parseInt(min) }
+      },
+      {
+        price: { $lte: parseInt(max) }
+      }
+    ]
+  }
+
+  return await Artwork.find(query)
     .limit(parseInt(perPage))
     .skip(page * perPage);
 };
