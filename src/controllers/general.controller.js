@@ -97,8 +97,17 @@ const getTranscendingArtists = catchAsync(async (req, res) => {
     status: true,
     data: artists,
   });
+});
 
+const getLeadingCollectors = catchAsync(async (req, res) => {
+  const user = req.user;
+  const { page, perPage } = req.query;
 
+  const artists = await userService.fetchLeadingCollectors();
+  res.status(httpStatus.OK).send({
+    status: true,
+    data: artists,
+  });
 });
 
 const tempUdateUser = catchAsync(async (req, res) => {
@@ -115,5 +124,6 @@ module.exports = {
   getAppActivity,
   getTranscendingArtists,
   getNotifications,
-  tempUdateUser
+  tempUdateUser,
+  getLeadingCollectors
 };
