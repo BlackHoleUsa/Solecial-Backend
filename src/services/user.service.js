@@ -199,6 +199,31 @@ const getUsersByMostArtworks = async () => {
   ]).limit(5);
 }
 
+const fetchLeadingCollectors = async () => {
+  return await Stats.aggregate([
+    {
+      $lookup: {
+        from: "users",
+        localField: "user",
+        foreignField: "_id",
+        as: "user"
+      }
+    }, {
+      $match: {
+        purchasedArts: { $gt: 0 }
+      }
+    },
+    {
+      $sort: {
+        purchasedArts: -1
+      }
+    },
+    {
+      $unwind: "$user"
+    }
+  ]).limit(5);
+}
+
 module.exports = {
   createUser,
   queryUsers,
@@ -216,5 +241,6 @@ module.exports = {
   getUserFollowing,
   removeArtwork,
   searchUsersByName,
-  getUsersByMostArtworks
+  getUsersByMostArtworks,
+  fetchLeadingCollectors
 };

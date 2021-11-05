@@ -22,6 +22,12 @@ router.get(
 );
 
 router.get(
+  '/getLeadingCollectors',
+  [],
+  generalController.getLeadingCollectors
+);
+
+router.get(
   '/tempUdateUser',
   [],
   generalController.tempUdateUser

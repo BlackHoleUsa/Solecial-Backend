@@ -113,6 +113,16 @@ const userStatsUpdate = async (params) => {
         totalPurchasesAmount: amount
       },
     });
+    let stat = await Stats.findOne({
+      user: userId
+    });
+    if (stat.biggestPurchase < parseInt(amount)) {
+      await Stats.findOneAndUpdate({
+        user: userId
+      }, {
+        biggestPurchase: amount
+      });
+    }
   } else if (type === STATS_UPDATE_TYPE.soldArts) {
     await Stats.findOneAndUpdate({
       user: userId

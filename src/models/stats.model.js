@@ -27,6 +27,10 @@ const statsSchema = mongoose.Schema(
     totalSoldAmount: {
       type: Number,
       default: 0
+    },
+    biggestPurchase: {
+      type: Number,
+      default: 0
     }
   },
   {
