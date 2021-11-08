@@ -19,6 +19,7 @@ MINT_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
 
   switch (ev.event) {
     case MINT_CONTRACT_EVENTS.NEW_COLLECTION:
+      console.log("ev.returnValues",ev.returnValues);
       const { CollectionAddress, owner, colName } = ev.returnValues;
       contractController.updateCollectionAddress(CollectionAddress, owner, colName);
       break;
