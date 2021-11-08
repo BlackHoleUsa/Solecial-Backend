@@ -77,6 +77,12 @@ TRANSACTION_ACTIVITY_TYPE = {
   BUY_OP: 'buy_nft'
 };
 
+const STATS_UPDATE_TYPE = {
+  ownedArts: 'artwork_minted',
+  purchasedArts: 'artwork_purchased',
+  soldArts: 'artworks_sold'
+}
+
 module.exports = {
   ARTWORK_TYPE,
   MINT_CONTRACT_EVENTS,
@@ -89,5 +95,6 @@ module.exports = {
   TRANSACTION_TYPE,
   NOTIFICATION_TYPE,
   TRANSACTION_ACTIVITY_TYPE,
-  SALE_STATUS
+  SALE_STATUS,
+  STATS_UPDATE_TYPE
 };

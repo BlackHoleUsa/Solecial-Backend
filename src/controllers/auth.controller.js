@@ -2,9 +2,13 @@ const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
 const { authService, userService, tokenService, emailService } = require('../services');
 const { User } = require('../models');
+const EVENT = require('../triggers/custom-events').customEvent;
 
 const register = catchAsync(async (req, res) => {
   const user = await userService.createUser(req.body);
+  EVENT.emit('create-stats', {
+    userId: user._id
+  });
   const tokens = await tokenService.generateAuthTokens(user);
   res.status(httpStatus.OK).send({ user, tokens });
 });

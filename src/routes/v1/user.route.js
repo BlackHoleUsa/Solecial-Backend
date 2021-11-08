@@ -15,10 +15,11 @@ router.get('/getAllUsers', userController.getAllUsers);
 router
   .route('/')
   .post(auth('manageUsers'), validate(userValidation.createUser), userController.createUser)
-  .get(auth('manageUsers'), validate(userValidation.getUsers), userController.getUsers);
+  .get(validate(userValidation.getUsers), userController.getUsers);
 
 // router.route('/:userId').delete(auth('manageUsers'), validate(userValidation.deleteUser), userController.getUser);
 router.get('/:userId', validate(userValidation.getUser), userController.getUser);
+router.get('/getUserStatistics/:userId', validate(userValidation.getUser), userController.getUserStatistics);
 
 // router.get(auth('manageUsers'), validate(userValidation.getUser), userController.getUser);
 /**

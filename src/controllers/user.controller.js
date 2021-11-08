@@ -13,8 +13,9 @@ const createUser = catchAsync(async (req, res) => {
 });
 
 const getUsers = catchAsync(async (req, res) => {
-  const filter = pick(req.query, ['name', 'role']);
+  const filter = pick(req.query, ['userName', 'role']);
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
+  filter.userName = { $regex: filter.userName, $options: 'i' }
   const result = await userService.queryUsers(filter, options);
   res.send(result);
 });
@@ -25,6 +26,14 @@ const getUser = catchAsync(async (req, res) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
   res.send({ status: true, message: 'Successfull', user });
+});
+
+const getUserStatistics = catchAsync(async (req, res) => {
+  const stats = await userService.getUserStats(req.params.userId);
+  if (!stats) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Stats not found');
+  }
+  res.send({ status: true, message: 'Successfull', stats });
 });
 
 const updateUser = catchAsync(async (req, res) => {
