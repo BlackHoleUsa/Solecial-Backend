@@ -352,11 +352,11 @@ router.get('/getAuctionBids', [validate(artworkValidation.getAuctionBidsVS)], ar
 //   artworkController.getArtworksByCollection
 // );
 
-router.post(
-  '/changeAuctionStatus',
-  [auth('manageUsers'), validate(artworkValidation.changeAuctionStatusVS)],
-  artworkController.changeAuctionStatus
-);
+// router.post(
+//   '/changeAuctionStatus',
+//   [auth('manageUsers'), validate(artworkValidation.changeAuctionStatusVS)],
+//   artworkController.changeAuctionStatus
+// );
 
 router.post(
   '/deleteArtwork',

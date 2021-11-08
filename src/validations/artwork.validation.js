@@ -25,9 +25,9 @@ const getArtworksVS = {
 };
 const getArtworkType = {
   query: Joi.object().keys({
-    page: Joi.string().required(),
-    perPage: Joi.string().required(),
-    artwork_type: Joi.string().required(),
+    page: Joi.string(),
+    perPage: Joi.string(),
+    artwork_type: Joi.string(),
   }),
 };
 
