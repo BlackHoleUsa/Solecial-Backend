@@ -15,19 +15,14 @@ const updateCollectionAddress = async (CollectionAddress, owner, colName) => {
       collectionAddress: CollectionAddress,
     }
   );
-  console.log("collection",collection);
-  console.log("collection._id",collection._id);
-  const artWork = await artworkService.getArtworksByCollection(collection._id);
-  console.log("SSS=>",artWork);
-   const artworks = await Artwork.find();
-   console.log("artworkssss=>",artworks);
-  // const artwork = await Artwork.findOneAndUpdate(
-  //   { collectionId: collection._id },
-  //   {
-  //     tokenId: 1,
-  //   }
-  // );
-  // console.log(artwork);
+  console.log(collection._id);
+  const artwork = await Artwork.findOneAndUpdate(
+    { collectionId: collection._id },
+    {
+      tokenId: 1,
+    }
+  );
+  console.log(artwork);
   EVENT.emit('stats-artwork-mint', {
     userId: user._id,
     type: STATS_UPDATE_TYPE.ownedArts
