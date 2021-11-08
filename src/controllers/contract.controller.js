@@ -17,12 +17,13 @@ const updateCollectionAddress = async (CollectionAddress, owner, colName) => {
   );
   // console.log("collection",collection);
   console.log("collection._id",collection._id);
-  const artwork = await Artwork.findOneAndUpdate(
-    { collectionId: collection._id },
-    {
-      tokenId: 1,
-    }
-  );
+  const artwork = await Artwork.findOne({collectionId:collection._id});
+  // const artwork = await Artwork.findOneAndUpdate(
+  //   { collectionId: collection._id },
+  //   {
+  //     tokenId: 1,
+  //   }
+  // );
   console.log(artwork);
   EVENT.emit('stats-artwork-mint', {
     userId: user._id,
