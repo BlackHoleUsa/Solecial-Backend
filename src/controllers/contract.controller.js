@@ -17,7 +17,7 @@ const updateCollectionAddress = async (CollectionAddress, owner, colName) => {
   );
   console.log("collection",collection);
   console.log("collection._id",collection._id);
-  const artWork = await artworkService.updateArtworkcollectionId(collection._id);
+  const artWork = await artworkService.getArtworksByCollection(collection._id);
   console.log(artWork);
   // const artwork = await Artwork.find();
   // const artwork = await Artwork.findOneAndUpdate(
@@ -26,7 +26,7 @@ const updateCollectionAddress = async (CollectionAddress, owner, colName) => {
   //     tokenId: 1,
   //   }
   // );
-  console.log(artwork);
+  // console.log(artwork);
   EVENT.emit('stats-artwork-mint', {
     userId: user._id,
     type: STATS_UPDATE_TYPE.ownedArts

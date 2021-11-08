@@ -50,7 +50,8 @@ const updateArtworkcollectionId = async (collectionId, tokenId) => {
 };
 
 const getArtworksByCollection = async (collectionId) => {
-  return await Artwork.find({ collectionId: collectionId }).lean();
+  const result = await Artwork.find({ collectionId: collectionId }).lean();
+  return result;
 };
 
 const changeArtworkAuctionStatus = async (artworkId, status) => {
