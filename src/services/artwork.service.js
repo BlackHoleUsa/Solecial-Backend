@@ -45,6 +45,10 @@ const updateArtworkTokenId = async (artworkId, tokenId) => {
   return await Artwork.findOneAndUpdate({ _id: artworkId }, { tokenId: tokenId }, { new: true }).lean();
 };
 
+const updateArtworkcollectionId = async (collectionId, tokenId) => {
+  return await Artwork.findOneAndUpdate({ collectionId: collectionId }, { tokenId: tokenId }, { new: true }).lean();
+};
+
 const getArtworksByCollection = async (collectionId) => {
   return await Artwork.find({ collectionId: collectionId }).lean();
 };
@@ -108,4 +112,5 @@ module.exports = {
   deleteArtworkById,
   searchArtworkByName,
   getAllArtWork,
+  updateArtworkcollectionId,
 };

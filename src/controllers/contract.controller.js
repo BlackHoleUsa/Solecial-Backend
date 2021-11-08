@@ -2,7 +2,7 @@ const { User, Collection, Artwork, Auction, BuySell } = require('../models');
 const { getUserByAddress } = require('../services/user.service');
 const { AUCTION_CONTRACT_INSTANCE } = require('../config/contract.config');
 const LISTENERS = require('../controllers/listeners.controller');
-const { auctionService, bidService } = require('../services');
+const { auctionService, bidService, artworkService } = require('../services');
 const EVENT = require('../triggers/custom-events').customEvent;
 const { HISTORY_TYPE, TRANSACTION_TYPE, TRANSACTION_ACTIVITY_TYPE, AUCTION_STATUS, NOTIFICATION_TYPE, SALE_STATUS, STATS_UPDATE_TYPE } = require('../utils/enums');
 
@@ -17,7 +17,9 @@ const updateCollectionAddress = async (CollectionAddress, owner, colName) => {
   );
   console.log("collection",collection);
   console.log("collection._id",collection._id);
-  const artwork = await Artwork.find();
+  const artWork = await artworkService.updateArtworkcollectionId(collection._id);
+  console.log(artWork);
+  // const artwork = await Artwork.find();
   // const artwork = await Artwork.findOneAndUpdate(
   //   { collectionId: collection._id },
   //   {
