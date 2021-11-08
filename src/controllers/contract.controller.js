@@ -15,9 +15,9 @@ const updateCollectionAddress = async (CollectionAddress, owner, colName) => {
       collectionAddress: CollectionAddress,
     }
   );
-  // console.log("collection",collection);
+  console.log("collection",collection);
   console.log("collection._id",collection._id);
-  const artwork = await Artwork.findOne({collectionId:collection._id});
+  const artwork = await Artwork.find({collectionId:collection._id});
   // const artwork = await Artwork.findOneAndUpdate(
   //   { collectionId: collection._id },
   //   {
