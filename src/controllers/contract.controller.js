@@ -1,10 +1,18 @@
 const { User, Collection, Artwork, Auction, BuySell } = require('../models');
 const { getUserByAddress } = require('../services/user.service');
 const { AUCTION_CONTRACT_INSTANCE } = require('../config/contract.config');
-const LISTENERS = require('../controllers/listeners.controller');
+const LISTENERS = require('./listeners.controller');
 const { auctionService, bidService, artworkService } = require('../services');
 const EVENT = require('../triggers/custom-events').customEvent;
-const { HISTORY_TYPE, TRANSACTION_TYPE, TRANSACTION_ACTIVITY_TYPE, AUCTION_STATUS, NOTIFICATION_TYPE, SALE_STATUS, STATS_UPDATE_TYPE } = require('../utils/enums');
+const {
+  HISTORY_TYPE,
+  TRANSACTION_TYPE,
+  TRANSACTION_ACTIVITY_TYPE,
+  AUCTION_STATUS,
+  NOTIFICATION_TYPE,
+  SALE_STATUS,
+  STATS_UPDATE_TYPE,
+} = require('../utils/enums');
 
 const updateCollectionAddress = async (CollectionAddress, owner, colName) => {
   const user = await User.findOne({ address: owner });
@@ -25,7 +33,7 @@ const updateCollectionAddress = async (CollectionAddress, owner, colName) => {
   console.log(artwork);
   EVENT.emit('stats-artwork-mint', {
     userId: user._id,
-    type: STATS_UPDATE_TYPE.ownedArts
+    type: STATS_UPDATE_TYPE.ownedArts,
   });
   console.log('collection address and artwork token id updated successfully');
 };
@@ -33,13 +41,13 @@ const updateCollectionAddress = async (CollectionAddress, owner, colName) => {
 const handleNewAuction = async (colAddress, tokenId, aucId) => {
   try {
     const collection = await Collection.findOne({ collectionAddress: colAddress });
-    const artwork = await Artwork.findOne({ collectionId: collection._id, tokenId: tokenId });
+    const artwork = await Artwork.findOne({ collectionId: collection._id, tokenId });
 
     if (await auctionService.artworkExistsInAuction(artwork._id)) {
       console.log('Artwork is already on auction');
       return;
     }
-    let auctionData = await AUCTION_CONTRACT_INSTANCE.methods.AuctionList(aucId).call();
+    const auctionData = await AUCTION_CONTRACT_INSTANCE.methods.AuctionList(aucId).call();
     const { endTime, startPrice } = auctionData;
     const { owner, creater } = artwork;
     const params = {
@@ -64,11 +72,11 @@ const handleNewSale = async (saleFromContract) => {
   const { colAddress, tokenId, saleId, price } = saleFromContract;
   try {
     const collection = await Collection.findOne({ collectionAddress: colAddress });
-    const artwork = await Artwork.findOne({ collectionId: collection._id, tokenId: tokenId });
+    const artwork = await Artwork.findOne({ collectionId: collection._id, tokenId });
     if (!artwork.openForSale) {
       const { owner } = artwork;
       const params = {
-        price: price,
+        price,
         artwork: artwork._id,
         owner,
         contractSaleId: saleId,
@@ -88,17 +96,22 @@ const handleNewSale = async (saleFromContract) => {
 const handleCancelSale = async (saleFromContract) => {
   const { saleId } = saleFromContract;
   try {
-    const sale = await BuySell.findOneAndUpdate({ contractSaleId: saleId }, { status: SALE_STATUS.CANCELLED }).populate('artwork');
+    const sale = await BuySell.findOneAndUpdate({ contractSaleId: saleId }, { status: SALE_STATUS.CANCELLED }).populate(
+      'artwork'
+    );
     const { artwork } = sale;
     const usr = await User.findOneAndUpdate({ _id: sale.owner }, { $push: { artworks: artwork._id } });
-    await Artwork.findOneAndUpdate({ _id: artwork._id }, {
-      owner: sale.owner,
-      isAuctionOpen: false,
-      openForSale: false,
-      auction: null,
-      sale: null,
-      auctionMintStatus: null
-    });
+    await Artwork.findOneAndUpdate(
+      { _id: artwork._id },
+      {
+        owner: sale.owner,
+        isAuctionOpen: false,
+        openForSale: false,
+        auction: null,
+        sale: null,
+        auctionMintStatus: null,
+      }
+    );
   } catch (err) {
     console.log(err);
   }
@@ -108,20 +121,26 @@ const handleSaleComplete = async (saleFromContract) => {
   const { saleId, newOwner_ } = saleFromContract;
   try {
     console.log('new owner address', newOwner_);
-    const sale = await BuySell.findOneAndUpdate({ contractSaleId: saleId }, { status: SALE_STATUS.COMPLETED }).populate('artwork');
+    const sale = await BuySell.findOneAndUpdate({ contractSaleId: saleId }, { status: SALE_STATUS.COMPLETED }).populate(
+      'artwork'
+    );
     const { artwork } = sale;
     const usr = await User.findOneAndUpdate({ _id: sale.owner }, { $pull: { artworks: artwork._id } });
     const newArtworkOwner = await User.findOneAndUpdate({ address: newOwner_ }, { $push: { artworks: artwork._id } });
-    await Artwork.findOneAndUpdate({ _id: artwork._id }, {
-      owner: newArtworkOwner._id,
-      basePrice: artwork.price,
-      price: sale.price,
-      isAuctionOpen: false,
-      openForSale: false,
-      auction: null,
-      sale: null,
-      auctionMintStatus: null
-    });
+    console.log('newArtworkOWner', newArtworkOwner);
+    await Artwork.findOneAndUpdate(
+      { _id: artwork._id },
+      {
+        owner: newArtworkOwner._id,
+        basePrice: artwork.price,
+        price: sale.price,
+        isAuctionOpen: false,
+        openForSale: false,
+        auction: null,
+        sale: null,
+        auctionMintStatus: null,
+      }
+    );
     await BuySell.findOneAndUpdate({ _id: sale._id }, { buyer: newArtworkOwner._id });
     console.log('NFT Sale complete');
     EVENT.emit('record-transaction', {
@@ -145,12 +164,12 @@ const handleSaleComplete = async (saleFromContract) => {
     EVENT.emit('stats-artwork-mint', {
       userId: newArtworkOwner._id,
       type: STATS_UPDATE_TYPE.purchasedArts,
-      amount: sale.price
+      amount: sale.price,
     });
     EVENT.emit('stats-artwork-mint', {
       userId: sale.owner,
       type: STATS_UPDATE_TYPE.soldArts,
-      amount: sale.price
+      amount: sale.price,
     });
     EVENT.emit('send-and-save-notification', {
       receiver: sale.owner,
@@ -165,14 +184,14 @@ const handleSaleComplete = async (saleFromContract) => {
 };
 
 const handleNewBid = async (par) => {
-  let { bid, bidder, aucId } = par;
+  const { bid, bidder, aucId } = par;
 
-  let auctionData = await AUCTION_CONTRACT_INSTANCE.methods.AuctionList(aucId).call();
+  const auctionData = await AUCTION_CONTRACT_INSTANCE.methods.AuctionList(aucId).call();
   const { colAddress, owner, tokenId } = auctionData;
   const dbBidder = await User.findOne({ address: bidder });
   const dbOwner = await User.findOne({ address: owner });
   const collection = await Collection.findOne({ collectionAddress: colAddress });
-  const artwork = await Artwork.findOne({ collectionId: collection._id, tokenId: tokenId });
+  const artwork = await Artwork.findOne({ collectionId: collection._id, tokenId });
   const auction = await Auction.findOne({ artwork: artwork._id, contractAucId: aucId });
 
   const params = {
@@ -215,16 +234,19 @@ const handleNFTClaim = async (values) => {
   const { artwork } = auction;
   const usr = await User.findOneAndUpdate({ _id: artwork.owner }, { $pull: artwork._id });
   const newArtworkOwner = await User.findOneAndUpdate({ address: newOwner }, { $push: artwork._id });
-  await Artwork.findOneAndUpdate({ _id: artwork._id }, {
-    owner: newArtworkOwner._id,
-    basePrice: artwork.price,
-    price: latestBid,
-    isAuctionOpen: false,
-    auction: null,
-    auctionMintStatus: null,
-    sale: null,
-    openForSale: false,
-  });
+  await Artwork.findOneAndUpdate(
+    { _id: artwork._id },
+    {
+      owner: newArtworkOwner._id,
+      basePrice: artwork.price,
+      price: latestBid,
+      isAuctionOpen: false,
+      auction: null,
+      auctionMintStatus: null,
+      sale: null,
+      openForSale: false,
+    }
+  );
   console.log('NFT claimed successfully');
 
   EVENT.emit('record-transaction', {
@@ -240,7 +262,7 @@ const handleNFTClaim = async (values) => {
   EVENT.emit('stats-artwork-mint', {
     userId: newArtworkOwner._id,
     type: STATS_UPDATE_TYPE.purchasedArts,
-    amount: latestBid
+    amount: latestBid,
   });
 
   EVENT.emit('send-and-save-notification', {
@@ -261,7 +283,7 @@ const handleNFTSale = async (values) => {
   EVENT.emit('record-transaction', {
     user: user._id,
     type: TRANSACTION_TYPE.CREDIT,
-    amount: amount,
+    amount,
     extraData: {
       activityType: TRANSACTION_ACTIVITY_TYPE.NFT_SALE,
       auction: auction._id,
@@ -271,24 +293,30 @@ const handleNFTSale = async (values) => {
   EVENT.emit('stats-artwork-mint', {
     userId: user._id,
     type: STATS_UPDATE_TYPE.soldArts,
-    amount: amount
+    amount,
   });
   console.log('NFT claimed successfully');
 };
 
 const handleClaimBack = async (values) => {
   const { aucId } = values;
-  const auction = await Auction.findOneAndUpdate({ contractAucId: aucId }, { cancelled: true, status: AUCTION_STATUS.CLOSED }).populate('artwork');
+  const auction = await Auction.findOneAndUpdate(
+    { contractAucId: aucId },
+    { cancelled: true, status: AUCTION_STATUS.CLOSED }
+  ).populate('artwork');
   const { artwork } = auction;
   const usr = await User.findOneAndUpdate({ _id: auction.owner }, { $push: artwork._id });
-  await Artwork.findOneAndUpdate({ _id: artwork._id }, {
-    owner: auction.owner,
-    isAuctionOpen: false,
-    auction: null,
-    auctionMintStatus: null,
-    sale: null,
-    openForSale: false,
-  });
+  await Artwork.findOneAndUpdate(
+    { _id: artwork._id },
+    {
+      owner: auction.owner,
+      isAuctionOpen: false,
+      auction: null,
+      auctionMintStatus: null,
+      sale: null,
+      openForSale: false,
+    }
+  );
   console.log('NFT claimed back successfully');
 };
 
@@ -301,5 +329,5 @@ module.exports = {
   handleClaimBack,
   handleNewSale,
   handleCancelSale,
-  handleSaleComplete
+  handleSaleComplete,
 };
