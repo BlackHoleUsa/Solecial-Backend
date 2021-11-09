@@ -18,16 +18,17 @@ const createArtworkVS = {
 
 const getArtworksVS = {
   query: Joi.object().keys({
-    page: Joi.string().required(),
-    perPage: Joi.string().required(),
+    page: Joi.string(),
+    perPage: Joi.string(),
     userId: Joi.string().required(),
+    artwork_type: Joi.string().optional()
   }),
 };
 const getArtworkType = {
   query: Joi.object().keys({
-    page: Joi.string(),
+    page: Joi.string().required(),
     perPage: Joi.string(),
-    artwork_type: Joi.string(),
+    artwork_type: Joi.string().required(),
   }),
 };
 

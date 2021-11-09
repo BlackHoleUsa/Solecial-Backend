@@ -22,6 +22,7 @@ const saveArtwork = catchAsync(async (req, res) => {
   const files = req.files;
   const { name, description, creater,artist_name,artist_description } = body;
   let imgData;
+  let artistimgData;
   if (files.length > 0) {
     imgData = await addFilesToIPFS(files[0].buffer, 'image');
     artistimgData = await addFilesToIPFS(files[1].buffer, 'artist_image');
@@ -57,10 +58,17 @@ const saveArtwork = catchAsync(async (req, res) => {
 });
 
 const getUserArtworks = catchAsync(async (req, res) => {
-  const { page, perPage, userId } = req.query;
+  const { page, perPage, userId,artwork_type } = req.query;
 
   const artworks = await artworkService.getUserArtworks(userId, page, perPage);
-  res.status(httpStatus.OK).send({ status: true, message: 'successfull', data: artworks });
+  if(artwork_type!= undefined){
+    const filteredarr = artworks.filter(result=>result.artwork_type == artwork_type)
+    res.status(httpStatus.OK).send({ status: true, message: 'successfull', data: filteredarr });
+  
+  }else{
+    res.status(httpStatus.OK).send({ status: true, message: 'successfull', data: artworks });
+  }
+  
 });
 const getArtworkType = catchAsync(async (req, res) => {
   const { page, perPage, artwork_type} = req.query;
