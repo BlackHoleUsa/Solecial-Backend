@@ -84,7 +84,8 @@ const handleNewSale = async (saleFromContract) => {
 
       const sale = await BuySell.create(params);
       await User.findOneAndUpdate({ _id: owner }, { $pull: { artworks: artwork._id } });
-      await Artwork.findOneAndUpdate({ _id: artwork._id }, { owner: null, sale: sale._id, openForSale: true });
+      await Artwork.findOneAndUpdate({ _id: artwork._id }, { owner: owner, sale: sale._id, openForSale: true });
+      // await Artwork.findOneAndUpdate({ _id: artwork._id }, { owner: null, sale: sale._id, openForSale: true });
     } else {
       console.log('Artwork is already on sale');
     }
