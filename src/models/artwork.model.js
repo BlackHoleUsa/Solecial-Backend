@@ -52,6 +52,14 @@ const artworkSchema = mongoose.Schema(
       type: String,
       required: false,
     },
+    amount:{
+      type:String,
+      required:false,
+    },
+    multipleNFT:{
+      type:Boolean,
+      required:false,
+    },
 
     views: {
       type: Number,

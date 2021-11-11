@@ -12,7 +12,8 @@ const createArtworkVS = {
     artist_image:Joi.string().optional(),
     artwork_type: Joi.string().required(),
     tokenId: Joi.string().optional(),
-    creater:Joi.string()
+    creater:Joi.string(),
+    multipleNFT:Joi.boolean().optional()
   }),
 };
 
