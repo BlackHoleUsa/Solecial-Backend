@@ -3,7 +3,7 @@ const validate = require('../../middlewares/validate');
 const artworkController = require('../../controllers/artwork.controller');
 
 const artworkValidation = require('../../validations/artwork.validation');
-const {auth} = require('../../middlewares/auth');
+const { auth } = require('../../middlewares/auth');
 
 const router = express.Router();
 /**
@@ -67,7 +67,11 @@ const router = express.Router();
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  */
-router.post('/saveArtwork', validate(artworkValidation.createArtworkVS), artworkController.saveArtwork);
+router.post(
+  '/saveArtwork',
+  [auth('manageUsers'), validate(artworkValidation.createArtworkVS)],
+  artworkController.saveArtwork
+);
 /**
  * @swagger
  * /artwork/getUserArtworks?userId={userId}&page={page}&perPage={perPage}&:
@@ -154,7 +158,7 @@ router.get('/getUserArtworks', [validate(artworkValidation.getArtworksVS)], artw
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  */
- router.get('/getArtworkType', [validate(artworkValidation.getArtworkType)], artworkController.getArtworkType);
+router.get('/getArtworkType', [validate(artworkValidation.getArtworkType)], artworkController.getArtworkType);
 
 /**
  * @swagger
@@ -329,21 +333,20 @@ router.post(
   artworkController.updateTokenId
 );
 
-router.post('/placeBid', [auth('manageUsers'), validate(artworkValidation.placeBidVS)], artworkController.placeBid);
-router.post(
-  '/openArtworkAuction',
-  [auth('manageUsers'), validate(artworkValidation.openAuctionVS)],
-  artworkController.createAuction
-);
-router.post(
-  '/openArtworkAuction1',
-  [ validate(artworkValidation.openAuctionVS)],
-  artworkController.createAuction
-);
-
+// router.post('/placeBid', [auth('manageUsers'), validate(artworkValidation.placeBidVS)], artworkController.placeBid);
+// router.post(
+//   '/openArtworkAuction',
+//   [auth('manageUsers'), validate(artworkValidation.openAuctionVS)],
+//   artworkController.createAuction
+// );
 router.get('/getSingleArtwork', [validate(artworkValidation.getSingleArtVS)], artworkController.getSingleArtwork);
 
-router.get('/getAllArtWorks', artworkController.getAllArtWorks);
+router.get(
+  '/getAllArtworks',
+  [auth('manageUsers'), validate(artworkValidation.getAllArtworks)],
+  artworkController.getAllArtworks
+);
+
 router.get('/getAuctionBids', [validate(artworkValidation.getAuctionBidsVS)], artworkController.getAuctionBids);
 
 // router.get(
@@ -352,11 +355,11 @@ router.get('/getAuctionBids', [validate(artworkValidation.getAuctionBidsVS)], ar
 //   artworkController.getArtworksByCollection
 // );
 
-// router.post(
-//   '/changeAuctionStatus',
-//   [auth('manageUsers'), validate(artworkValidation.changeAuctionStatusVS)],
-//   artworkController.changeAuctionStatus
-// );
+router.post(
+  '/changeAuctionStatus',
+  [auth('manageUsers'), validate(artworkValidation.changeAuctionStatusVS)],
+  artworkController.changeAuctionStatus
+);
 
 router.post(
   '/deleteArtwork',

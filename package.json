@@ -66,6 +66,7 @@
     "ipfs": "^0.58.1",
     "ipfs-http-client": "^52.0.3",
     "joi": "^17.3.0",
+    "joi-image-extension": "^1.0.0",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.24.0",
     "mongoose": "^5.7.7",

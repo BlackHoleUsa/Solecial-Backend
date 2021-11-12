@@ -1,4 +1,4 @@
-const { MINT_CONTRACT_INSTANCE, AUCTION_CONTRACT_INSTANCE } = require('../config/contract.config');
+const { MINT_MULTIPLE_CONTRACT_INSTANCE, MINT_SINGLE_CONTRACT_INSTANCE } = require('../config/contract.config');
 const { contractController } = require('../controllers');
 const { MINT_CONTRACT_EVENTS, AUC_CONTRACT_EVENTS } = require('../utils/enums');
 // var contractInfo = require('./contractInfo');
@@ -9,7 +9,7 @@ const { MINT_CONTRACT_EVENTS, AUC_CONTRACT_EVENTS } = require('../utils/enums');
 
 // const contract = new web3.eth.Contract(contractInfo.marketMinterabi, contractInfo.marketMinterAddress);
 
-MINT_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
+MINT_SINGLE_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
   if (err) {
     console.error('Error', err);
     return;
@@ -23,10 +23,12 @@ MINT_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
       const { CollectionAddress, owner, colName } = ev.returnValues;
       contractController.updateCollectionAddress(CollectionAddress, owner, colName);
       break;
+    default:
+      console.log('happy');
   }
 });
 
-AUCTION_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
+MINT_SINGLE_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
   if (err) {
     console.error('Error', err);
     return;
@@ -37,7 +39,7 @@ AUCTION_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
   switch (ev.event) {
     case AUC_CONTRACT_EVENTS.NEW_AUCTION:
       console.log('Event', ev);
-      let { colAddress, tokenId, aucId } = ev.returnValues;
+      const { colAddress, tokenId, aucId } = ev.returnValues;
       contractController.handleNewAuction(colAddress, tokenId, aucId);
       break;
     case AUC_CONTRACT_EVENTS.NEW_BID:
@@ -62,6 +64,8 @@ AUCTION_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
     case AUC_CONTRACT_EVENTS.SALE_COMPLETED:
       contractController.handleSaleComplete(ev.returnValues);
       break;
+    default:
+      console.log('done');
   }
 });
 

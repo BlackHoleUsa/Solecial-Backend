@@ -1,7 +1,7 @@
 const { Bid, Auction, User, BuySell } = require('../models');
 const { AUCTION_STATUS, HISTORY_TYPE, NOTIFICATION_TYPE } = require('../utils/enums');
 const artworkService = require('./artwork.service');
-const { AUCTION_CONTRACT_INSTANCE } = require('../config/contract.config');
+const { MINT_SINGLE_CONTRACT_INSTANCE } = require('../config/contract.config');
 const EVENT = require('../triggers/custom-events').customEvent;
 
 const saveAuction = async (params) => {
@@ -25,13 +25,30 @@ const getOpenAuctions = async (page, perPage, sort, whereQuery) => {
   return auctions;
 };
 
-const getOpenSales = async (page, perPage, sort, whereQuery) => {
-  const sales = await BuySell.find(whereQuery)
-    .sort(sort)
-    .populate('artwork owner')
-    .limit(parseInt(perPage))
-    .skip(page * perPage)
-    .lean();
+const checkAndCompleteAuctionStatus = async () => {
+  const auctions = await Auction.find({ status: AUCTION_STATUS.CLOSED });
+
+  for (auction of auctions) {
+    const currentDate = new Date();
+    const closingDate = new Date(auction.endTime);
+    if (currentDate > closingDate) {
+      await Auction.findOneAndUpdate({ _id: auction._id }, { status: AUCTION_STATUS.CLOSED });
+      await artworkService.closeArtworkAuction(auction.artwork);
+      let aucData = await MINT_SINGLE_CONTRACT_INSTANCE.methods.AuctionList(auction.contractAucId).call();
+      const { bidderAdd, latestBid, nftClaim, cancelled, ownerclaim } = aucData;
+      let user = await User.findOne({ address: bidderAdd });
+
+      if (auction.bids.length > 0) {
+        await Auction.findOneAndUpdate(
+          { _id: auction._id },
+          {
+            auctionWinner: user._id,
+            bidAmount: latestBid,
+            nftClaim,
+            cancelled,
+            ownerclaim,
+          }
+        );
 
   return sales;
 };

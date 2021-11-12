@@ -8,12 +8,12 @@ const createArtworkVS = {
     artist_name: Joi.string().required(),
     artist_description: Joi.string().required(),
     price: Joi.string().required(),
-    music:Joi.string().required(),
-    artist_image:Joi.string().optional(),
-    artwork_type: Joi.string().required(),
+    artist_image: Joi.string().optional(),
+    artwork_type: Joi.string().valid('GIF', 'VIDEO', 'IMAGE', 'AUDIO').required(),
     tokenId: Joi.string().optional(),
-    creater:Joi.string(),
-    multipleNFT:Joi.boolean().optional()
+    creater: Joi.string().required(),
+    multipleNFT: Joi.boolean().required(),
+    amount: Joi.string().optional(),
   }),
 };
 
@@ -22,14 +22,14 @@ const getArtworksVS = {
     page: Joi.string(),
     perPage: Joi.string(),
     userId: Joi.string().required(),
-    artwork_type: Joi.string().optional()
+    artwork_type: Joi.string().valid('GIF', 'VIDEO', 'IMAGE', 'AUDIO').optional(),
   }),
 };
 const getArtworkType = {
   query: Joi.object().keys({
     page: Joi.string().required(),
     perPage: Joi.string(),
-    artwork_type: Joi.string().required(),
+    artwork_type: Joi.string().valid('GIF', 'VIDEO', 'IMAGE', 'AUDIO').required(),
   }),
 };
 
@@ -127,7 +127,13 @@ const nftClaimListVS = {
     perPage: Joi.string().required(),
   }),
 };
-
+const getAllArtworks = {
+  query: Joi.object().keys({
+    artwork_type: Joi.string().valid('GIF', 'VIDEO', 'IMAGE', 'AUDIO').optional(),
+    page: Joi.string().optional(),
+    perPage: Joi.string().optional(),
+  }),
+};
 module.exports = {
   createArtworkVS,
   getArtworksVS,
@@ -145,5 +151,6 @@ module.exports = {
   changeAuctionStatusVS,
   deleteArtworkVS,
   getHistoryVS,
-  nftClaimListVS
+  nftClaimListVS,
+  getAllArtworks,
 };

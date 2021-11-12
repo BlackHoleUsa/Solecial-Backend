@@ -1,10 +1,8 @@
 const express = require('express');
-const {auth,adminAuthforBlock} = require('../../middlewares/auth');
+const { auth, adminAuthforBlock } = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
 const userValidation = require('../../validations/user.validation');
 const userController = require('../../controllers/user.controller');
-
-
 
 const router = express.Router();
 /**
@@ -237,7 +235,5 @@ router.post(
   [auth('manageUsers'), validate(userValidation.getUserFollowing)],
   userController.getUserFollowing
 );
-
-
 
 module.exports = router;

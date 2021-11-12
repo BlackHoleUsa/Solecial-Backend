@@ -1,8 +1,7 @@
 const httpStatus = require('http-status');
-const { User,Token } = require('../models');
-const ApiError = require('../utils/ApiError');
 const web3 = require('web3');
-
+const { User, Token } = require('../models');
+const ApiError = require('../utils/ApiError');
 
 /**
  * Create a user
@@ -10,22 +9,20 @@ const web3 = require('web3');
  * @returns {Promise<User>}
  */
 const createUser = async (userBody) => {
-  console.log(userBody);
   if (await User.isEmailTaken(userBody.email)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
-  } else if(userBody.role=='user'){
-    if(!(await web3.utils.isAddress(userBody.address))) {
+  } else if (userBody.role === 'user') {
+    if (!(await web3.utils.isAddress(userBody.address))) {
       throw new ApiError(httpStatus.BAD_REQUEST, 'address is not valid');
     } else if (await User.isAddressTaken(userBody.address)) {
-      throw new ApiError(httpStatus.BAD_REQUEST, 'address already taken')
-  } 
-  } else if(userBody.role !=='admin'|| userBody.role !== undefined){
-    if(userBody.userName !== undefined){
+      throw new ApiError(httpStatus.BAD_REQUEST, 'address already taken');
+    }
+  } else if (userBody.role !== 'admin' || userBody.role !== undefined) {
+    if (userBody.userName !== undefined) {
       if (await User.isUsernameTaken(userBody.userName)) {
         throw new ApiError(httpStatus.BAD_REQUEST, 'userName already taken');
       }
     }
-      
   }
   const usr = await User.create(userBody);
   return usr.toObject();
@@ -63,24 +60,24 @@ const getUserByEmail = async (email) => {
   return User.findOne({ email });
 };
 
-const updateUserByEmail= async(email,password) => {
-  return await User.findOneAndUpdate({email:email},{"password":password});
-}
+const updateUserByEmail = async (email, password) => {
+  return await User.findOneAndUpdate({ email }, { password });
+};
 
 const getUserByAddress = async (address) => {
   return User.findOne({ address }).lean();
 };
 
- /**
-  * Get user by token
-  * @authorization {token} token
-  * @returns {Promise<User>}
-  */
-const getUserByToken = async (reqToken,res)=>{
-  const tokens=await Token.findOne({token:reqToken})
-  const user= await User.findById(tokens.user)
-  return user 
-  }
+/**
+ * Get user by token
+ * @authorization {token} token
+ * @returns {Promise<User>}
+ */
+const getUserByToken = async (reqToken, res) => {
+  const tokens = await Token.findOne({ token: reqToken });
+  const user = await User.findById(tokens.user);
+  return user;
+};
 
 // /**
 //  * Get user by id
@@ -100,7 +97,7 @@ const getUserByToken = async (reqToken,res)=>{
  * @returns {Promise<User>}
  */
 const updateUserById = async (userId, updateBody) => {
-  const user = await User.findByIdAndUpdate(userId,updateBody, {
+  const user = await User.findByIdAndUpdate(userId, updateBody, {
     new: true,
   });
   return user;
@@ -214,9 +211,9 @@ const searchUsersByName = async (keyword, page, perPage) => {
     .skip(page * perPage);
 };
 
-const saveForgotPasswordCode= async(email, code) => {
-  return await User.findOneAndUpdate({email:email},{$set:{"code":code}});
-}
+const saveForgotPasswordCode = async (email, code) => {
+  return await User.findOneAndUpdate({ email }, { $set: { code } });
+};
 
 const getAllUsers = async () => {
   // eslint-disable-next-line prettier/prettier
@@ -260,6 +257,7 @@ module.exports = {
   getUserFollowing,
   removeArtwork,
   searchUsersByName,
+  saveForgotPasswordCode,
   getAllUsers,
   getSingleFavouriteArtWork,
   deleteCollectionByIdFromUser,

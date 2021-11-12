@@ -53,8 +53,9 @@ const userSchema = mongoose.Schema(
     role: {
       type: String,
       enum: roles,
-      default: 'artist',
+      default: 'admin',
     },
+
     stats: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Stats',

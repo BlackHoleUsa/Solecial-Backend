@@ -18,17 +18,16 @@ const getUserArtworks = async (userId, page, perPage) => {
 };
 
 const getArtworkType = async (artworkType, page, perPage) => {
-  if(artworkType == 'All'){
+  if (artworkType == 'All') {
     return await Artwork.find()
-    .limit(parseInt(perPage))
-    .skip(page * perPage)
-    .lean();
-  }else{
-    return await Artwork.find({ artwork_type: artworkType })
       .limit(parseInt(perPage))
       .skip(page * perPage)
       .lean();
   }
+  return await Artwork.find({ artwork_type: artworkType })
+    .limit(parseInt(perPage))
+    .skip(page * perPage)
+    .lean();
 };
 
 const increaseArtworkViews = async (artworkId) => {
@@ -40,7 +39,7 @@ const updateArtwork = async (id, fieldToUpdate, value) => {
 };
 
 const updateArtworkMetaUrl = async (id, value) => {
-  return await Artwork.findOneAndUpdate({ _id: id }, {$set:{ meta_url: value }}, { new: true }).lean();
+  return await Artwork.findOneAndUpdate({ _id: id }, { $set: { meta_url: value } }, { new: true }).lean();
 };
 
 const getArtworkById = async (id) => {
@@ -52,11 +51,11 @@ const closeArtworkAuction = async (artworkId) => {
 };
 
 const deleteArtworksByCollection = async (collectionId) => {
-  return await Artwork.deleteMany({ collectionId: collectionId });
+  return await Artwork.deleteMany({ collectionId });
 };
 
 const updateArtworkTokenId = async (artworkId, tokenId) => {
-  return await Artwork.findOneAndUpdate({ _id: artworkId }, { tokenId: tokenId }, { new: true }).lean();
+  return await Artwork.findOneAndUpdate({ _id: artworkId }, { tokenId }, { new: true }).lean();
 };
 
 const updateArtworkcollectionId = async (collectionId, tokenId) => {
@@ -106,11 +105,18 @@ const searchArtworkByName = async (keyword, page, perPage, artist, min, max) => 
     .limit(parseInt(perPage))
     .skip(page * perPage);
 };
-const getAllArtWork = async () => {
-  // eslint-disable-next-line prettier/prettier
-  const artWorks = await Artwork.find({}).sort({_id:-1}).lean();
-  return artWorks;
+
+const getAllArtworks = async (page, perPage, artwork_type = undefined) => {
+  if (artwork_type != undefined) {
+    return await Artwork.find({ artwork_type })
+      .limit(parseInt(perPage))
+      .skip(page * perPage);
+  }
+  return await Artwork.find()
+    .limit(parseInt(perPage))
+    .skip(page * perPage);
 };
+
 module.exports = {
   saveArtwork,
   getUserArtworks,
@@ -127,6 +133,5 @@ module.exports = {
   changeArtworkAuctionStatus,
   deleteArtworkById,
   searchArtworkByName,
-  getAllArtWork,
-  updateArtworkcollectionId,
+  getAllArtworks,
 };

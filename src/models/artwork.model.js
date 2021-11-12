@@ -14,17 +14,17 @@ const artworkSchema = mongoose.Schema(
       required: false,
     },
     artist_name: {
-      type:String,
-      required:true
+      type: String,
+      required: true,
     },
     artist_description: {
-      type:String,
-      required:true
+      type: String,
+      required: true,
     },
     artist_url: {
-      type:String,
-      required:false,
-      trim:true
+      type: String,
+      required: false,
+      trim: true,
     },
     creater: {
       type: mongoose.SchemaTypes.ObjectId,
@@ -52,15 +52,14 @@ const artworkSchema = mongoose.Schema(
       type: String,
       required: false,
     },
-    amount:{
-      type:String,
-      required:false,
+    amount: {
+      type: String,
+      required: false,
     },
-    multipleNFT:{
-      type:Boolean,
-      required:false,
+    multipleNFT: {
+      type: Boolean,
+      required: false,
     },
-
     views: {
       type: Number,
       required: false,

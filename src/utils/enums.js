@@ -2,6 +2,7 @@ const ARTWORK_TYPE = {
   ART: 'image',
   GIF: 'gif',
   VIDEO: 'video',
+  AUDIO: 'audio',
 };
 
 const MINT_CONTRACT_EVENTS = {

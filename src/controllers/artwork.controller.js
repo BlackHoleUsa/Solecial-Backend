@@ -18,9 +18,10 @@ const { addFilesToIPFS, pinMetaDataToIPFS } = require('../utils/helpers');
 const { HISTORY_TYPE, NOTIFICATION_TYPE, STATS_UPDATE_TYPE } = require('../utils/enums');
 
 const saveArtwork = catchAsync(async (req, res) => {
-  const body = req.body;
-  const files = req.files;
-  const { name, description, creater,artist_name,artist_description } = body;
+  // mutipleNFT, //amount
+  const { body } = req;
+  const { files } = req;
+  const { name, description, creater, artist_name, artist_description } = body;
   let imgData;
   let artistimgData;
   if (files.length > 0) {
@@ -43,10 +44,10 @@ const saveArtwork = catchAsync(async (req, res) => {
   });
   const updatedArtwork = await artworkService.updateArtworkMetaUrl(artwork._id, metaUrl);
   EVENT.emit('add-artwork-in-user', {
-     artworkId: artwork._id,
-     userId: body.creater,
+    artworkId: artwork._id,
+    userId: body.creater,
   });
-  
+
   EVENT.emit('update-artwork-history', {
     artwork: artwork._id,
     owner: body.creater,
@@ -58,20 +59,18 @@ const saveArtwork = catchAsync(async (req, res) => {
 });
 
 const getUserArtworks = catchAsync(async (req, res) => {
-  const { page, perPage, userId,artwork_type } = req.query;
+  const { page, perPage, userId, artwork_type } = req.query;
 
   const artworks = await artworkService.getUserArtworks(userId, page, perPage);
-  if(artwork_type!= undefined){
-    const filteredarr = artworks.filter(result=>result.artwork_type == artwork_type)
+  if (artwork_type != undefined) {
+    const filteredarr = artworks.filter((result) => result.artwork_type == artwork_type);
     res.status(httpStatus.OK).send({ status: true, message: 'successfull', data: filteredarr });
-  
-  }else{
+  } else {
     res.status(httpStatus.OK).send({ status: true, message: 'successfull', data: artworks });
   }
-  
 });
 const getArtworkType = catchAsync(async (req, res) => {
-  const { page, perPage, artwork_type} = req.query;
+  const { page, perPage, artwork_type } = req.query;
 
   const artworks = await artworkService.getArtworkType(artwork_type, page, perPage);
   res.status(httpStatus.OK).send({ status: true, message: 'successfull', data: artworks });
@@ -139,33 +138,27 @@ const createAuction = catchAsync(async (req, res) => {
 const placeBid = catchAsync(async (req, res) => {
   const { body } = req;
   const { user } = req;
+  const setting = await settingService.getSettings();
+  const minBid = setting[0].minimum_bid;
+  const bidNotification = setting[0].bid_notifications;
 
-  const { artwork, auctionId, } = body;
-  
-  const bid = await bidService.saveBid(body);
+  const { artwork, auctionId, bid_amount } = body;
+  if (minBid <= bid_amount) {
+    const bid = await bidService.saveBid(body);
+    EVENT.emit('save-bid-in-artwork', {
+      artworkId: artwork,
+      bidId: bid._id,
+      auctionId,
+    });
 
-  EVENT.emit('save-bid-in-artwork', {
-    artworkId: artwork,
-    bidId: bid._id,
-    auctionId,
-  });
-
-  EVENT.emit('update-artwork-history', {
-    artwork,
-    message: `Bid placed on artwork`,
-    auction: auctionId,
-    bid: bid._id,
-    type: HISTORY_TYPE.BID_PLACED,
-  });
-
-  EVENT.emit('send-and-save-notification', {
-    receiver: user._id,
-    type: NOTIFICATION_TYPE.NEW_BID,
-    extraData: {
+    EVENT.emit('update-artwork-history', {
+      artwork,
+      message: `Bid placed on artwork`,
+      auction: auctionId,
       bid: bid._id,
       type: HISTORY_TYPE.BID_PLACED,
     });
-    if(bidNotification === false){
+    if (bidNotification === false) {
       EVENT.emit('send-and-save-notification', {
         receiver: user._id,
         type: NOTIFICATION_TYPE.NEW_BID,
@@ -175,8 +168,10 @@ const placeBid = catchAsync(async (req, res) => {
       });
     }
     res.status(httpStatus.OK).send({ status: true, message: 'Your bid has been placed successfully', data: bid });
-  }else{
-    res.status(httpStatus.PRECONDITION_FAILED).send(`Bid amount is less than the solecial required bid amount which is ${minBid}`)
+  } else {
+    res
+      .status(httpStatus.PRECONDITION_FAILED)
+      .send(`Bid amount is less than the solecial required bid amount which is ${minBid}`);
   }
 });
 
@@ -272,10 +267,17 @@ const getTimeoutItems = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: winnedAuctions });
 });
 
-const getAllArtWorks = catchAsync(async (req, res) => {
-  const artWorks = await artworkService.getAllArtWork();
-  res.status(httpStatus.OK).send(artWorks);
+const getAllArtworks = catchAsync(async (req, res) => {
+  const { artwork_type, page, perPage } = req.query;
+  if (!artwork_type) {
+    const artWorks = await artworkService.getAllArtworks(page, perPage);
+    res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: artWorks });
+  } else {
+    const artWorks = await artworkService.getAllArtworks(page, perPage, artwork_type);
+    res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: artWorks });
+  }
 });
+
 module.exports = {
   saveArtwork,
   getUserArtworks,
@@ -295,5 +297,5 @@ module.exports = {
   getSoldItems,
   getArtworkHistory,
   getTimeoutItems,
-  getAllArtWorks,
+  getAllArtworks,
 };
