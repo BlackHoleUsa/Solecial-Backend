@@ -277,9 +277,15 @@ const getAllArtworks = catchAsync(async (req, res) => {
     const artWorks = await artworkService.getAllArtworks(page, perPage, user._id, isAuctionOpen, openForSale);
     res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: artWorks });
   } else {
-    const artWorks = await artworkService.getAllArtworks(page, perPage, user._id, artwork_type);
+    const artWorks = await artworkService.getAllArtworks(page, perPage, user._id, undefined, undefined, artwork_type);
     res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: artWorks });
   }
+});
+
+const getOpenArtWorks = catchAsync(async (req, res) => {
+  const { page, perPage } = req.query;
+  const artWorks = await artworkService.getOpenArtWorks(page, perPage);
+  res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: artWorks });
 });
 
 module.exports = {
@@ -302,4 +308,5 @@ module.exports = {
   getArtworkHistory,
   getTimeoutItems,
   getAllArtworks,
+  getOpenArtWorks,
 };

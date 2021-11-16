@@ -119,21 +119,28 @@ const getAllArtworks = async (
       .limit(parseInt(perPage))
       .skip(page * perPage);
   }
-  else if (isAuctionOpen != undefined) {
-    return await Artwork.find({ isAuctionOpen:true, creater: _id })
-    .limit(parseInt(perPage))
-    .skip(page * perPage);
+  if (isAuctionOpen != undefined) {
+    return await Artwork.find({ isAuctionOpen: true, creater: _id })
+      .limit(parseInt(perPage))
+      .skip(page * perPage);
   }
-  else if (openForSale != undefined) {
-    return await Artwork.find({ openForSale:true, creater: _id })
-    .limit(parseInt(perPage))
-    .skip(page * perPage);
+  if (openForSale != undefined) {
+    return await Artwork.find({ openForSale: true, creater: _id })
+      .limit(parseInt(perPage))
+      .skip(page * perPage);
   }
   return await Artwork.find({ creater: _id })
     .limit(parseInt(perPage))
     .skip(page * perPage);
 };
 
+const getOpenArtWorks = async (page, perPage) => {
+  const artworks = await Artwork.find()
+    .limit(parseInt(perPage))
+    .skip(page * perPage);
+  const count = await Artwork.find().count();
+  return { artworks, count };
+};
 module.exports = {
   saveArtwork,
   getUserArtworks,
@@ -151,4 +158,5 @@ module.exports = {
   deleteArtworkById,
   searchArtworkByName,
   getAllArtworks,
+  getOpenArtWorks,
 };

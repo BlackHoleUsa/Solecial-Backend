@@ -136,6 +136,12 @@ const getAllArtworks = {
     perPage: Joi.string().optional(),
   }),
 };
+const getOpenArtWorks = {
+  query: Joi.object().keys({
+    page: Joi.string().required(),
+    perPage: Joi.string().required(),
+  }),
+}
 module.exports = {
   createArtworkVS,
   getArtworksVS,
@@ -155,4 +161,5 @@ module.exports = {
   getHistoryVS,
   nftClaimListVS,
   getAllArtworks,
+  getOpenArtWorks,
 };
