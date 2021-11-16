@@ -130,6 +130,8 @@ const nftClaimListVS = {
 const getAllArtworks = {
   query: Joi.object().keys({
     artwork_type: Joi.string().valid('GIF', 'VIDEO', 'IMAGE', 'AUDIO').optional(),
+    isAuctionOpen: Joi.string().valid('True', 'TRUE').optional(),
+    openForSale: Joi.string().valid('True', 'TRUE').optional(),
     page: Joi.string().optional(),
     perPage: Joi.string().optional(),
   }),

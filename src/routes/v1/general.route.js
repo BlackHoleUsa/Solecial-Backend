@@ -1,6 +1,6 @@
 const express = require('express');
 const { generalController } = require('../../controllers');
-const {auth} = require('../../middlewares/auth');
+const { auth } = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
 const { generalValidation } = require('../../validations');
 
@@ -15,22 +15,18 @@ router.get(
   generalController.getNotifications
 );
 
-router.get(
-  '/getTranscendingArtists',
-  [],
-  generalController.getTranscendingArtists
-);
+router.get('/getTranscendingArtists', [], generalController.getTranscendingArtists);
 
-router.get(
-  '/getLeadingCollectors',
-  [],
-  generalController.getLeadingCollectors
-);
+router.get('/getLeadingCollectors', [], generalController.getLeadingCollectors);
 
-router.get(
-  '/tempUdateUser',
-  [],
-  generalController.tempUdateUser
+router.get('/tempUdateUser', [], generalController.tempUdateUser);
+
+router.get('/getSettings', [auth('manageUsers')], generalController.getSettings);
+
+router.post(
+  '/updateSettings',
+  [auth('manageUsers'), validate(generalValidation.getSettingsVS)],
+  generalController.updateSettings
 );
 
 module.exports = router;

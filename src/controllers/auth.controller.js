@@ -3,26 +3,26 @@ const catchAsync = require('../utils/catchAsync');
 const { authService, userService, tokenService, emailService } = require('../services');
 const { User } = require('../models');
 const EVENT = require('../triggers/custom-events').customEvent;
-const {adminAuthforBlock} = require('../middlewares/auth')
+const { adminAuthforBlock } = require('../middlewares/auth');
 
 const register = catchAsync(async (req, res) => {
   const user = await userService.createUser(req.body);
   EVENT.emit('create-stats', {
-    userId: user._id
+    userId: user._id,
   });
   const tokens = await tokenService.generateAuthTokens(user);
   res.status(httpStatus.OK).send({ user, tokens });
 });
 
 const login = catchAsync(async (req, res) => {
-  const { address,email,password } = req.body;
-  var user;
+  const { address, email, password } = req.body;
+  let user;
 
-  if(address != undefined){
+  if (address != undefined) {
     user = await authService.loginUserWithAddress(address);
   }
-   if(email != undefined && password != undefined){
-    user = await authService.loginUserWithEmailAndPassword(email,password)
+  if (email != undefined && password != undefined) {
+    user = await authService.loginUserWithEmailAndPassword(email, password);
   }
   if (user) {
     await tokenService.removeToken(user);
@@ -48,15 +48,15 @@ const logout = catchAsync(async (req, res) => {
   });
 });
 
-const blockUser = catchAsync(async (req,res,next)=>{
+const blockUser = catchAsync(async (req, res, next) => {
   const isAdmin = await adminAuthforBlock(req);
-  if(isAdmin){
+  if (isAdmin) {
     const user = await userService.updateUserById(req.params.userId, req.body);
-    res.send(`user blocked Status: ${user.isblock}`); 
-  }else{
+    res.send(`user blocked Status: ${user.isblock}`);
+  } else {
     res.status(httpStatus.UNAUTHORIZED).send('Role is not superAdmin of requested User!');
   }
-}) 
+});
 
 const forgotPassword = catchAsync(async (req, res) => {
   const dbUser = await userService.getUserByEmail(req.body.email);
@@ -100,23 +100,23 @@ const verifyCode = catchAsync(async (req, res) => {
 });
 
 const resetPassword = catchAsync(async (req, res) => {
-  const {password,newPassword} = req.body
+  const { password, newPassword } = req.body;
   let dbUser;
-    const authorization=req.headers.authorization;
-    const headersToken = authorization.split(' ')[1]
-    dbUser = await userService.getUserByToken(headersToken,res)
-    console.log(dbUser)
+  const { authorization } = req.headers;
+  const headersToken = authorization.split(' ')[1];
+  dbUser = await userService.getUserByToken(headersToken, res);
+  console.log(dbUser);
   if (!dbUser) {
     return res.status(404).send({
       status: 404,
       message: 'User not found',
     });
   }
-  const passwordUpdatedUser = await authService.resetPassword(dbUser, password, newPassword );
+  const passwordUpdatedUser = await authService.resetPassword(dbUser, password, newPassword);
   res.status(httpStatus.OK).json({
     status: 200,
     message: 'Password changed successfully!',
-    "userUpdated":passwordUpdatedUser
+    userUpdated: passwordUpdatedUser,
   });
 });
 

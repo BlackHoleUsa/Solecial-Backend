@@ -3,7 +3,7 @@ const { userService, artworkService, collectionService, historyService, notifica
 const EVENT = require('../triggers/custom-events').customEvent;
 const catchAsync = require('../utils/catchAsync');
 const { SEARCH_FILTERS } = require('../utils/enums');
-const settings = require('../models/setting.model');
+const settingService = require('../services/setting.service');
 
 const handleSearch = catchAsync(async (req, res) => {
   const { keyword, filter, page, perPage } = req.query;
@@ -11,7 +11,6 @@ const handleSearch = catchAsync(async (req, res) => {
   if (keyword) {
     const users = await userService.searchUsersByName(keyword, page, perPage);
     const artworks = await artworkService.searchArtworkByName(keyword, page, perPage);
-
 
     let data = {};
 
@@ -102,7 +101,7 @@ const getNotifications = catchAsync(async (req, res) => {
 });
 
 const getTransactions = catchAsync(async (req, res) => {
-  const user = req.user;
+  const { user } = req;
   const { page, perPage } = req.query;
 
   const notifications = await notificationService.getUserNotifications(user._id, page, perPage);
@@ -115,7 +114,7 @@ const getTransactions = catchAsync(async (req, res) => {
 });
 
 const getTranscendingArtists = catchAsync(async (req, res) => {
-  const user = req.user;
+  const { user } = req;
   const { page, perPage } = req.query;
 
   const artists = await userService.getUsersByMostArtworks();
@@ -126,7 +125,7 @@ const getTranscendingArtists = catchAsync(async (req, res) => {
 });
 
 const getLeadingCollectors = catchAsync(async (req, res) => {
-  const user = req.user;
+  const { user } = req;
   const { page, perPage } = req.query;
 
   const artists = await userService.fetchLeadingCollectors();
@@ -138,41 +137,43 @@ const getLeadingCollectors = catchAsync(async (req, res) => {
 
 const tempUdateUser = catchAsync(async (req, res) => {
   EVENT.emit('create-stats', {
-    userId: req.query.userId
+    userId: req.query.userId,
   });
   res.status(httpStatus.CREATED).send({
-    status: true
+    status: true,
   });
 });
-const getSettings = catchAsync(async (req, res) =>{
-    const foundSetting =await settingService.getSettings()
-    res.status(200).json({
-      message:'Successful!',
-      foundSetting
-    })
-})
+const getSettings = catchAsync(async (req, res) => {
+  const foundSetting = await settingService.getSettings();
+  res.status(200).json({
+    message: 'Successful!',
+    foundSetting,
+  });
+});
 
-const updateSettings = catchAsync(async (req,res) => {
-  const existSetting = await settingService.getSettings()
-  console.log(existSetting)
-  if( existSetting.length == 0){
-    await settingService.createSettings(req.body)
-    res.status(200).send('Setting created')
-  }else if(existSetting[0]){
-    const id=existSetting[0]._id
-    const updatedSetting = await settingService.updateSettings(id,req.body)
+const updateSettings = catchAsync(async (req, res) => {
+  const existSetting = await settingService.getSettings();
+  if (existSetting.length == 0) {
+    await settingService.createSettings(req.body);
+    res.status(200).send('Setting created');
+  } else if (existSetting[0]) {
+    const id = existSetting[0]._id;
+    const updatedSetting = await settingService.updateSettings(id, req.body);
     res.status(200).json({
-      message:'settings_updated',
-      updatedSetting
-    })
+      message: 'settings_updated',
+      updatedSetting,
+    });
   }
-})
+});
 
 module.exports = {
   handleSearch,
   getAppActivity,
   getTranscendingArtists,
   getNotifications,
+  getTransactions,
   tempUdateUser,
-  getLeadingCollectors
+  getLeadingCollectors,
+  getSettings,
+  updateSettings,
 };

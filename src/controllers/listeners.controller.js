@@ -1,8 +1,6 @@
 const { User, Collection, Artwork, Auction, History, Notification, Transaction, Stats } = require('../models');
 const { MINT_STATUS, STATS_UPDATE_TYPE } = require('../utils/enums');
-const { User, Artwork, Auction, History, Notification, Transaction } = require('../models');
 const { settingService } = require('../services');
-const { MINT_STATUS } = require('../utils/enums');
 
 const addCollectionInUser = async (params) => {
   const { collectionId, userId } = params;

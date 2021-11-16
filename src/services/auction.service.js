@@ -25,33 +25,36 @@ const getOpenAuctions = async (page, perPage, sort, whereQuery) => {
   return auctions;
 };
 
-const checkAndCompleteAuctionStatus = async () => {
-  const auctions = await Auction.find({ status: AUCTION_STATUS.CLOSED });
+// const checkAndCompleteAuctionStatus = async () => {
+//   const auctions = await Auction.find({ status: AUCTION_STATUS.CLOSED });
 
-  for (auction of auctions) {
-    const currentDate = new Date();
-    const closingDate = new Date(auction.endTime);
-    if (currentDate > closingDate) {
-      await Auction.findOneAndUpdate({ _id: auction._id }, { status: AUCTION_STATUS.CLOSED });
-      await artworkService.closeArtworkAuction(auction.artwork);
-      let aucData = await MINT_SINGLE_CONTRACT_INSTANCE.methods.AuctionList(auction.contractAucId).call();
-      const { bidderAdd, latestBid, nftClaim, cancelled, ownerclaim } = aucData;
-      let user = await User.findOne({ address: bidderAdd });
+//   for (auction of auctions) {
+//     const currentDate = new Date();
+//     const closingDate = new Date(auction.endTime);
+//     if (currentDate > closingDate) {
+//       await Auction.findOneAndUpdate({ _id: auction._id }, { status: AUCTION_STATUS.CLOSED });
+//       await artworkService.closeArtworkAuction(auction.artwork);
+//       let aucData = await MINT_SINGLE_CONTRACT_INSTANCE.methods.AuctionList(auction.contractAucId).call();
+//       const { bidderAdd, latestBid, nftClaim, cancelled, ownerclaim } = aucData;
+//       let user = await User.findOne({ address: bidderAdd });
 
-      if (auction.bids.length > 0) {
-        await Auction.findOneAndUpdate(
-          { _id: auction._id },
-          {
-            auctionWinner: user._id,
-            bidAmount: latestBid,
-            nftClaim,
-            cancelled,
-            ownerclaim,
-          }
-        );
+//       if (auction.bids.length > 0) {
+//         await Auction.findOneAndUpdate(
+//           { _id: auction._id },
+//           {
+//             auctionWinner: user._id,
+//             bidAmount: latestBid,
+//             nftClaim,
+//             cancelled,
+//             ownerclaim,
+//           }
+//         );
 
-  return sales;
-};
+//   return sales;
+//     }
+//   }
+// }
+// };
 
 const getSaleDetails = async (saleId) => {
   const sales = await BuySell.findOne({ _id: saleId })
@@ -72,7 +75,7 @@ const getAuctionDetails = async (aucId) => {
     .populate({
       path: 'artwork',
       populate: {
-        path: 'creater'
+        path: 'creater',
       }
     })
     .populate({
@@ -203,7 +206,7 @@ module.exports = {
   getClosedAuctions,
   getSoldAuctions,
   getTimeoutAuctions,
-  getOpenSales,
+  // getOpenSales,
   getSaleDetails,
   getAuctionDetails
 };

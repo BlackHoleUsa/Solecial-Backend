@@ -11,7 +11,7 @@ const {
   auctionService,
   historyService,
   buysellService,
-  settingService
+  settingService,
 } = require('../services');
 const EVENT = require('../triggers/custom-events').customEvent;
 const { addFilesToIPFS, pinMetaDataToIPFS } = require('../utils/helpers');
@@ -68,6 +68,7 @@ const getUserArtworks = catchAsync(async (req, res) => {
   } else {
     res.status(httpStatus.OK).send({ status: true, message: 'successfull', data: artworks });
   }
+  user;
 });
 const getArtworkType = catchAsync(async (req, res) => {
   const { page, perPage, artwork_type } = req.query;
@@ -208,11 +209,13 @@ const updateTokenId = catchAsync(async (req, res) => {
 
   EVENT.emit('stats-artwork-mint', {
     userId: artwork.owner,
-    type: STATS_UPDATE_TYPE.ownedArts
+    type: STATS_UPDATE_TYPE.ownedArts,
   });
 
   res.status(httpStatus.OK).send({
-    status: true, message: 'token id updated successfully', data: artwork
+    status: true,
+    message: 'token id updated successfully',
+    data: artwork,
   });
 });
 
@@ -268,12 +271,13 @@ const getTimeoutItems = catchAsync(async (req, res) => {
 });
 
 const getAllArtworks = catchAsync(async (req, res) => {
-  const { artwork_type, page, perPage } = req.query;
+  const { artwork_type, page, perPage, isAuctionOpen, openForSale } = req.query;
+  const { user } = req;
   if (!artwork_type) {
-    const artWorks = await artworkService.getAllArtworks(page, perPage);
+    const artWorks = await artworkService.getAllArtworks(page, perPage, user._id, isAuctionOpen, openForSale);
     res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: artWorks });
   } else {
-    const artWorks = await artworkService.getAllArtworks(page, perPage, artwork_type);
+    const artWorks = await artworkService.getAllArtworks(page, perPage, user._id, artwork_type);
     res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: artWorks });
   }
 });

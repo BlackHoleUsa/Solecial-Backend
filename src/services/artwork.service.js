@@ -59,11 +59,11 @@ const updateArtworkTokenId = async (artworkId, tokenId) => {
 };
 
 const updateArtworkcollectionId = async (collectionId, tokenId) => {
-  return await Artwork.findOneAndUpdate({ collectionId: collectionId }, { tokenId: tokenId }, { new: true }).lean();
+  return await Artwork.findOneAndUpdate({ collectionId }, { tokenId }, { new: true }).lean();
 };
 
 const getArtworksByCollection = async (collectionId) => {
-  const result = await Artwork.find({ collectionId: collectionId }).lean();
+  const result = await Artwork.find({ collectionId }).lean();
   return result;
 };
 
@@ -83,22 +83,22 @@ const deleteArtworkById = async (artworkId) => {
 };
 
 const searchArtworkByName = async (keyword, page, perPage, artist, min, max) => {
-  let query = {};
+  const query = {};
   if (keyword) {
-    query['name'] = { $regex: keyword, $options: 'i' };
+    query.name = { $regex: keyword, $options: 'i' };
   }
   if (artist) {
-    query['owner'] = artist;
+    query.owner = artist;
   }
   if (min && max) {
-    query['$and'] = [
+    query.$and = [
       {
-        price: { $gte: parseInt(min) }
+        price: { $gte: parseInt(min) },
       },
       {
-        price: { $lte: parseInt(max) }
-      }
-    ]
+        price: { $lte: parseInt(max) },
+      },
+    ];
   }
 
   return await Artwork.find(query)
@@ -106,13 +106,30 @@ const searchArtworkByName = async (keyword, page, perPage, artist, min, max) => 
     .skip(page * perPage);
 };
 
-const getAllArtworks = async (page, perPage, artwork_type = undefined) => {
+const getAllArtworks = async (
+  page,
+  perPage,
+  _id,
+  isAuctionOpen = undefined,
+  openForSale = undefined,
+  artwork_type = undefined
+) => {
   if (artwork_type != undefined) {
-    return await Artwork.find({ artwork_type })
+    return await Artwork.find({ artwork_type, creater: _id })
       .limit(parseInt(perPage))
       .skip(page * perPage);
   }
-  return await Artwork.find()
+  else if (isAuctionOpen != undefined) {
+    return await Artwork.find({ isAuctionOpen:true, creater: _id })
+    .limit(parseInt(perPage))
+    .skip(page * perPage);
+  }
+  else if (openForSale != undefined) {
+    return await Artwork.find({ openForSale:true, creater: _id })
+    .limit(parseInt(perPage))
+    .skip(page * perPage);
+  }
+  return await Artwork.find({ creater: _id })
     .limit(parseInt(perPage))
     .skip(page * perPage);
 };
