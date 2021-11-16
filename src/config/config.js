@@ -83,14 +83,19 @@ module.exports = {
   },
   ETH_CONTRACTS: {
     SINGLE_NFT_CONTRACT_ADDRESS: '0xe161f93c3B5a9D03E4D641f9ae0A94c88CA97c14',
-    MULTIPLE_NFT_CONTRACT_ADDRESS: '0x8612c04A6Eada1DF53B90ec7dAE1ca72a9f768a1',
-    MULTIPLE_NFT_ABI:[
+    MULTIPLE_NFT_CONTRACT_ADDRESS: '0x462AF7fa2513472fEdF807F88d52A517dfaE276C',
+    MULTIPLE_NFT_ABI: [
       {
         "inputs": [
           {
             "internalType": "string",
             "name": "uri_",
             "type": "string"
+          },
+          {
+            "internalType": "address",
+            "name": "auctionContract_",
+            "type": "address"
           }
         ],
         "stateMutability": "nonpayable",
@@ -242,11 +247,6 @@ module.exports = {
           },
           {
             "internalType": "uint256",
-            "name": "id",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
             "name": "amount",
             "type": "uint256"
           },
@@ -259,6 +259,19 @@ module.exports = {
         "name": "Mint",
         "outputs": [],
         "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "auctionContract",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
         "type": "function"
       },
       {
@@ -304,6 +317,19 @@ module.exports = {
             "internalType": "uint256[]",
             "name": "",
             "type": "uint256[]"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "idCounter",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
           }
         ],
         "stateMutability": "view",
@@ -487,9 +513,25 @@ module.exports = {
         ],
         "stateMutability": "view",
         "type": "function"
-      }
+      },
     ],
-    SINGLE_NFT_ABI:[
+    SINGLE_NFT_ABI: [
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_proxyRegistryAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "string",
+            "name": "_baseuri",
+            "type": "string"
+          }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+      },
       {
         "anonymous": false,
         "inputs": [
@@ -610,6 +652,19 @@ module.exports = {
         "type": "event"
       },
       {
+        "inputs": [],
+        "name": "ERC712_VERSION",
+        "outputs": [
+          {
+            "internalType": "string",
+            "name": "",
+            "type": "string"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
         "inputs": [
           {
             "internalType": "address",
@@ -639,212 +694,6 @@ module.exports = {
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "internalType": "address",
-            "name": "userAddress",
-            "type": "address"
-          },
-          {
-            "internalType": "bytes",
-            "name": "functionSignature",
-            "type": "bytes"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "sigR",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "sigS",
-            "type": "bytes32"
-          },
-          {
-            "internalType": "uint8",
-            "name": "sigV",
-            "type": "uint8"
-          }
-        ],
-        "name": "executeMetaTransaction",
-        "outputs": [
-          {
-            "internalType": "bytes",
-            "name": "",
-            "type": "bytes"
-          }
-        ],
-        "stateMutability": "payable",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "internalType": "address",
-            "name": "_to",
-            "type": "address"
-          }
-        ],
-        "name": "mintTo",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "internalType": "address",
-            "name": "minter",
-            "type": "address"
-          }
-        ],
-        "name": "removeMinter",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [],
-        "name": "renounceOwnership",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "internalType": "address",
-            "name": "from",
-            "type": "address"
-          },
-          {
-            "internalType": "address",
-            "name": "to",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "tokenId",
-            "type": "uint256"
-          }
-        ],
-        "name": "safeTransferFrom",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "internalType": "address",
-            "name": "from",
-            "type": "address"
-          },
-          {
-            "internalType": "address",
-            "name": "to",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "tokenId",
-            "type": "uint256"
-          },
-          {
-            "internalType": "bytes",
-            "name": "_data",
-            "type": "bytes"
-          }
-        ],
-        "name": "safeTransferFrom",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "internalType": "address",
-            "name": "operator",
-            "type": "address"
-          },
-          {
-            "internalType": "bool",
-            "name": "approved",
-            "type": "bool"
-          }
-        ],
-        "name": "setApprovalForAll",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "internalType": "address",
-            "name": "from",
-            "type": "address"
-          },
-          {
-            "internalType": "address",
-            "name": "to",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "tokenId",
-            "type": "uint256"
-          }
-        ],
-        "name": "transferFrom",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "internalType": "address",
-            "name": "newOwner",
-            "type": "address"
-          }
-        ],
-        "name": "transferOwnership",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "internalType": "string",
-            "name": "_uri",
-            "type": "string"
-          }
-        ],
-        "name": "updateUri",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "internalType": "address",
-            "name": "_proxyRegistryAddress",
-            "type": "address"
-          },
-          {
-            "internalType": "string",
-            "name": "_baseuri",
-            "type": "string"
-          }
-        ],
-        "stateMutability": "nonpayable",
-        "type": "constructor"
       },
       {
         "inputs": [
@@ -892,16 +741,42 @@ module.exports = {
         "type": "function"
       },
       {
-        "inputs": [],
-        "name": "ERC712_VERSION",
-        "outputs": [
+        "inputs": [
           {
-            "internalType": "string",
-            "name": "",
-            "type": "string"
+            "internalType": "address",
+            "name": "userAddress",
+            "type": "address"
+          },
+          {
+            "internalType": "bytes",
+            "name": "functionSignature",
+            "type": "bytes"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "sigR",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "sigS",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "uint8",
+            "name": "sigV",
+            "type": "uint8"
           }
         ],
-        "stateMutability": "view",
+        "name": "executeMetaTransaction",
+        "outputs": [
+          {
+            "internalType": "bytes",
+            "name": "",
+            "type": "bytes"
+          }
+        ],
+        "stateMutability": "payable",
         "type": "function"
       },
       {
@@ -1036,6 +911,19 @@ module.exports = {
         "type": "function"
       },
       {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "_to",
+            "type": "address"
+          }
+        ],
+        "name": "mintTo",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
         "inputs": [],
         "name": "name",
         "outputs": [
@@ -1078,6 +966,95 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "minter",
+            "type": "address"
+          }
+        ],
+        "name": "removeMinter",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "renounceOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "from",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          }
+        ],
+        "name": "safeTransferFrom",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "from",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes",
+            "name": "_data",
+            "type": "bytes"
+          }
+        ],
+        "name": "safeTransferFrom",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "operator",
+            "type": "address"
+          },
+          {
+            "internalType": "bool",
+            "name": "approved",
+            "type": "bool"
+          }
+        ],
+        "name": "setApprovalForAll",
+        "outputs": [],
+        "stateMutability": "nonpayable",
         "type": "function"
       },
       {
@@ -1186,8 +1163,57 @@ module.exports = {
         ],
         "stateMutability": "view",
         "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "from",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "tokenId",
+            "type": "uint256"
+          }
+        ],
+        "name": "transferFrom",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "newOwner",
+            "type": "address"
+          }
+        ],
+        "name": "transferOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "string",
+            "name": "_uri",
+            "type": "string"
+          }
+        ],
+        "name": "updateUri",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
       }
-    ],    
+    ],
     WEB_SOCKET_INFURA_URL: 'wss://rinkeby.infura.io/ws/v3/c944b72ce9b74c77aac906c6a59f4e99',
   },
 };
