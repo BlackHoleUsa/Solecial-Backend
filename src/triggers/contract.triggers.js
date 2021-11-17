@@ -1,4 +1,4 @@
-const { MINT_MULTIPLE_CONTRACT_INSTANCE, MINT_SINGLE_CONTRACT_INSTANCE } = require('../config/contract.config');
+const { AUCTION_CONTRACT_INSTANCE, MINT_SINGLE_CONTRACT_INSTANCE } = require('../config/contract.config');
 const { contractController } = require('../controllers');
 const { MINT_CONTRACT_EVENTS, AUC_CONTRACT_EVENTS } = require('../utils/enums');
 // var contractInfo = require('./contractInfo');
@@ -28,7 +28,7 @@ MINT_SINGLE_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
   }
 });
 
-MINT_SINGLE_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
+AUCTION_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
   if (err) {
     console.error('Error', err);
     return;

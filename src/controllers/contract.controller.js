@@ -1,6 +1,6 @@
 const { User, Collection, Artwork, Auction, BuySell } = require('../models');
 const { getUserByAddress } = require('../services/user.service');
-const { MINT_SINGLE_CONTRACT_INSTANCE } = require('../config/contract.config');
+const { AUCTION_CONTRACT_INSTANCE } = require('../config/contract.config');
 const LISTENERS = require('./listeners.controller');
 const { auctionService, bidService } = require('../services');
 const EVENT = require('../triggers/custom-events').customEvent;
@@ -46,7 +46,7 @@ const handleNewAuction = async (colAddress, tokenId, aucId) => {
       console.log('Artwork is already on auction');
       return;
     }
-    const auctionData = await MINT_SINGLE_CONTRACT_INSTANCE.methods.AuctionList(aucId).call();
+    const auctionData = await AUCTION_CONTRACT_INSTANCE.methods.AuctionList(aucId).call();
     const { endTime, startPrice } = auctionData;
     const { owner, creater } = artwork;
     const params = {
@@ -188,7 +188,7 @@ const handleSaleComplete = async (saleFromContract) => {
 const handleNewBid = async (par) => {
   const { bid, bidder, aucId } = par;
 
-  const auctionData = await MINT_SINGLE_CONTRACT_INSTANCE.methods.AuctionList(aucId).call();
+  const auctionData = await AUCTION_CONTRACT_INSTANCE.methods.AuctionList(aucId).call();
   const { colAddress, owner, tokenId } = auctionData;
   const dbBidder = await User.findOne({ address: bidder });
   const dbOwner = await User.findOne({ address: owner });
@@ -232,7 +232,7 @@ const handleNewBid = async (par) => {
 
 const handleNFTClaim = async (values) => {
   const { aucId, newOwner, collection } = values;
-  const { latestBid } = await MINT_SINGLE_CONTRACT_INSTANCE.methods.AuctionList(aucId).call();
+  const { latestBid } = await AUCTION_CONTRACT_INSTANCE.methods.AuctionList(aucId).call();
   const auction = await Auction.findOneAndUpdate({ contractAucId: aucId }, { nftClaim: true }).populate('artwork');
   const { artwork } = auction;
   const usr = await User.findOneAndUpdate({ _id: artwork.owner }, { $pull: artwork._id });

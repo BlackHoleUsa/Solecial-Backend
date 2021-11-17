@@ -1,7 +1,7 @@
 const { Bid, Auction, User, BuySell } = require('../models');
 const { AUCTION_STATUS, HISTORY_TYPE, NOTIFICATION_TYPE } = require('../utils/enums');
 const artworkService = require('./artwork.service');
-const { MINT_SINGLE_CONTRACT_INSTANCE } = require('../config/contract.config');
+const { AUCTION_CONTRACT_INSTANCE } = require('../config/contract.config');
 const EVENT = require('../triggers/custom-events').customEvent;
 
 const saveAuction = async (params) => {
