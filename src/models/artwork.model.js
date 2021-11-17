@@ -95,6 +95,10 @@ const artworkSchema = mongoose.Schema(
       type: String,
       default: 'closed',
     },
+    endTime: {
+      type: Date,
+      required: false,
+    },
   },
   {
     timestamps: true,
