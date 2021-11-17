@@ -38,8 +38,9 @@ MINT_SINGLE_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
 
   switch (ev.event) {
     case AUC_CONTRACT_EVENTS.NEW_AUCTION:
-      console.log('Event', ev);
+      console.log('Auction Event', ev);
       const { colAddress, tokenId, aucId } = ev.returnValues;
+      console.log("colAddress, tokenId, aucId", colAddress, tokenId, aucId);
       contractController.handleNewAuction(colAddress, tokenId, aucId);
       break;
     case AUC_CONTRACT_EVENTS.NEW_BID:
