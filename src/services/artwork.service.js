@@ -138,7 +138,7 @@ const getOpenArtWorks = async (page, perPage) => {
   const artworks = await Artwork.find()
     .limit(parseInt(perPage))
     .skip(page * perPage);
-  const count = await Artwork.find().count();
+  const count = await Artwork.find().countDocuments();
   return { artworks, count };
 };
 module.exports = {
