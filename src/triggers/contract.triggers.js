@@ -34,11 +34,11 @@ MINT_SINGLE_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
     return;
   }
 
-  console.log('Event', ev);
+  console.log('Event', ev.event);
 
   switch (ev.event) {
     case AUC_CONTRACT_EVENTS.NEW_AUCTION:
-      console.log('Auction Event', ev);
+      console.log('Auction Event', ev.event);
       const { colAddress, tokenId, aucId } = ev.returnValues;
       console.log("colAddress, tokenId, aucId", colAddress, tokenId, aucId);
       contractController.handleNewAuction(colAddress, tokenId, aucId);
