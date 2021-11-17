@@ -41,7 +41,7 @@ const handleNewAuction = async (colAddress, tokenId, aucId) => {
   try {
     // const collection = await Collection.findOne({ collectionAddress: colAddress });
     const artwork = await Artwork.findOne({ tokenId });
-
+    console.log("artwork in auction ",artwork);
     if (await auctionService.artworkExistsInAuction(artwork._id)) {
       console.log('Artwork is already on auction');
       return;
@@ -60,7 +60,8 @@ const handleNewAuction = async (colAddress, tokenId, aucId) => {
 
     const auction = await Auction.create(params);
     await User.findOneAndUpdate({ _id: owner }, { $pull: { artworks: artwork._id } });
-    await Artwork.findOneAndUpdate({ _id: artwork._id }, { owner, isAuctionOpen: true });
+    const res = await Artwork.findOneAndUpdate({ _id: artwork._id }, { owner, isAuctionOpen: true });
+    console.log("res in auction ",res);
     // await Artwork.findOneAndUpdate({ _id: artwork._id }, { owner: null });
     LISTENERS.openArtworkAuction({ artworkId: artwork._id, auction: auction._id });
   } catch (err) {
