@@ -13,7 +13,7 @@ const router = express.Router();
  */
 router.get('/getAllUsers', userController.getAllUsers);
 router.route('/').post(auth('manageUsers'), validate(userValidation.createUser), userController.createUser);
-router.get('/getUsers', auth('manageUsers'), validate(userValidation.getUsers), userController.getUsers);
+router.get('/getUsers', validate(userValidation.getUsers), userController.getUsers);
 
 // router.route('/:userId').delete(auth('manageUsers'), validate(userValidation.deleteUser), userController.getUser);
 router.get('/:userId', validate(userValidation.getUser), userController.getUser);
