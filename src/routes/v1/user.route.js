@@ -101,7 +101,7 @@ router.put('/:userId', [auth('manageUsers'), validate(userValidation.updateUser)
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  */
-// router.post('/followUser', [auth('manageUsers'), validate(userValidation.followUser)], userController.followUser);
+router.post('/followUser', [auth('manageUsers'), validate(userValidation.followUser)], userController.followUser);
 /**
  * @swagger
  * /users/unfollowUser:
@@ -138,7 +138,7 @@ router.put('/:userId', [auth('manageUsers'), validate(userValidation.updateUser)
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  */
-// router.post('/unfollowUser', [auth('manageUsers'), validate(userValidation.unfollowUser)], userController.unfollowUser);
+router.post('/unfollowUser', [auth('manageUsers'), validate(userValidation.unfollowUser)], userController.unfollowUser);
 /**
  * @swagger
  * /users/getUserFollowers?page={page}&perPage={perPage}&userId={userId}&:
