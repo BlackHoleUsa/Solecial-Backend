@@ -37,7 +37,7 @@ const updateCollectionAddress = async (CollectionAddress, owner, colName) => {
   console.log('collection address and artwork token id updated successfully');
 };
 
-const handleNewAuction = async (colAddress, tokenId, aucId) => {
+const handleNewAuction = async (colAddress, tokenId, aucId, amount = undefined) => {
   try {
     // const collection = await Collection.findOne({ collectionAddress: colAddress });
     const artwork = await Artwork.findOne({ tokenId });
@@ -60,10 +60,18 @@ const handleNewAuction = async (colAddress, tokenId, aucId) => {
 
     const auction = await Auction.create(params);
     await User.findOneAndUpdate({ _id: owner }, { $pull: { artworks: artwork._id } });
-    const res = await Artwork.findOneAndUpdate(
-      { _id: artwork._id },
-      { owner, isAuctionOpen: true, endTime: new Date(endTime * 1000) }
-    );
+    let res = null;
+    if (amount !== undefined) {
+      res = await Artwork.findOneAndUpdate(
+        { _id: artwork._id },
+        { owner, isAuctionOpen: true, endTime: new Date(endTime * 1000) }
+      );
+    } else {
+      res = await Artwork.findOneAndUpdate(
+        { _id: artwork._id },
+        { owner, isAuctionOpen: true, endTime: new Date(endTime * 1000), amount }
+      );
+    }
     console.log('res in auction ', res);
     // await Artwork.findOneAndUpdate({ _id: artwork._id }, { owner: null });
     LISTENERS.openArtworkAuction({ artworkId: artwork._id, auction: auction._id });
@@ -75,8 +83,8 @@ const handleNewAuction = async (colAddress, tokenId, aucId) => {
 const handleNewSale = async (saleFromContract) => {
   const { colAddress, tokenId, saleId, price } = saleFromContract;
   try {
-    const collection = await Collection.findOne({ collectionAddress: colAddress });
-    const artwork = await Artwork.findOne({ collectionId: collection._id, tokenId });
+    // const collection = await Collection.findOne({ collectionAddress: colAddress });
+    const artwork = await Artwork.findOne({ tokenId });
     if (!artwork.openForSale) {
       const { owner } = artwork;
       const params = {

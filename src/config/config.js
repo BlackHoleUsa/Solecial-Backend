@@ -82,8 +82,485 @@ module.exports = {
     bucket: envVars.AWS_BUCKET,
   },
   ETH_CONTRACTS: {
-    SINGLE_NFT_CONTRACT_ADDRESS: '0x2305F6ad58f93eeB7883C33a7C4ab78E2c73A31d',
-    AUCTION_CONTRACT_ADDRESS: '0xc1E66468D09093FFa4F5cB5005136b1D3BafA90B',
+    SINGLE_NFT_CONTRACT_ADDRESS: '0x7092B985Abba4B86170346804d76Fbf1ae01D16b',
+    MULTIPLE_NFT_CONTRACT_ADDRESS: '0xa43F07648a866A8398B0D84144f078E2CBAB09b4',
+    AUCTION_CONTRACT_ADDRESS: '0x3a14735fA681dc47b7e6B0aa19F08d34831a79C7',
+    MULTIPLE_NFT_ABI: [
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "account",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "operator",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "bool",
+            "name": "approved",
+            "type": "bool"
+          }
+        ],
+        "name": "ApprovalForAll",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "previousOwner",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "newOwner",
+            "type": "address"
+          }
+        ],
+        "name": "OwnershipTransferred",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "operator",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "from",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256[]",
+            "name": "ids",
+            "type": "uint256[]"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256[]",
+            "name": "values",
+            "type": "uint256[]"
+          }
+        ],
+        "name": "TransferBatch",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "operator",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "from",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "id",
+            "type": "uint256"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "value",
+            "type": "uint256"
+          }
+        ],
+        "name": "TransferSingle",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": false,
+            "internalType": "string",
+            "name": "value",
+            "type": "string"
+          },
+          {
+            "indexed": true,
+            "internalType": "uint256",
+            "name": "id",
+            "type": "uint256"
+          }
+        ],
+        "name": "URI",
+        "type": "event"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "newMinter",
+            "type": "address"
+          }
+        ],
+        "name": "addMinter",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes",
+            "name": "data",
+            "type": "bytes"
+          }
+        ],
+        "name": "Mint",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "minter",
+            "type": "address"
+          }
+        ],
+        "name": "removeMinter",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "renounceOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "from",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "ids",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "amounts",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "bytes",
+            "name": "data",
+            "type": "bytes"
+          }
+        ],
+        "name": "safeBatchTransferFrom",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "from",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "id",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes",
+            "name": "data",
+            "type": "bytes"
+          }
+        ],
+        "name": "safeTransferFrom",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "operator",
+            "type": "address"
+          },
+          {
+            "internalType": "bool",
+            "name": "approved",
+            "type": "bool"
+          }
+        ],
+        "name": "setApprovalForAll",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "newOwner",
+            "type": "address"
+          }
+        ],
+        "name": "transferOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "string",
+            "name": "uri_",
+            "type": "string"
+          },
+          {
+            "internalType": "address",
+            "name": "auctionContract_",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+      },
+      {
+        "inputs": [],
+        "name": "auctionContract",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "account",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "id",
+            "type": "uint256"
+          }
+        ],
+        "name": "balanceOf",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address[]",
+            "name": "accounts",
+            "type": "address[]"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "ids",
+            "type": "uint256[]"
+          }
+        ],
+        "name": "balanceOfBatch",
+        "outputs": [
+          {
+            "internalType": "uint256[]",
+            "name": "",
+            "type": "uint256[]"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "idCounter",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "account",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "operator",
+            "type": "address"
+          }
+        ],
+        "name": "isApprovedForAll",
+        "outputs": [
+          {
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "name": "MinterList",
+        "outputs": [
+          {
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "owner",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "bytes4",
+            "name": "interfaceId",
+            "type": "bytes4"
+          }
+        ],
+        "name": "supportsInterface",
+        "outputs": [
+          {
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "name": "uri",
+        "outputs": [
+          {
+            "internalType": "string",
+            "name": "",
+            "type": "string"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      }
+    ],
     AUC_ABI: [
       {
         "inputs": [
