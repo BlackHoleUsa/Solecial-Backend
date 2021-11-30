@@ -64,12 +64,12 @@ const handleNewAuction = async (colAddress, tokenId, aucId, amount = undefined) 
     if (amount !== undefined) {
       res = await Artwork.findOneAndUpdate(
         { _id: artwork._id },
-        { owner, isAuctionOpen: true, endTime: new Date(endTime * 1000) }
+        { owner, isAuctionOpen: true, endTime: new Date(endTime * 1000), amount }
       );
     } else {
       res = await Artwork.findOneAndUpdate(
         { _id: artwork._id },
-        { owner, isAuctionOpen: true, endTime: new Date(endTime * 1000), amount }
+        { owner, isAuctionOpen: true, endTime: new Date(endTime * 1000) }
       );
     }
     console.log('res in auction ', res);
@@ -81,7 +81,7 @@ const handleNewAuction = async (colAddress, tokenId, aucId, amount = undefined) 
 };
 
 const handleNewSale = async (saleFromContract) => {
-  const { colAddress, tokenId, saleId, price } = saleFromContract;
+  const { colAddress, tokenId, saleId, price, amount } = saleFromContract;
   try {
     // const collection = await Collection.findOne({ collectionAddress: colAddress });
     const artwork = await Artwork.findOne({ tokenId });
@@ -96,7 +96,12 @@ const handleNewSale = async (saleFromContract) => {
 
       const sale = await BuySell.create(params);
       await User.findOneAndUpdate({ _id: owner }, { $pull: { artworks: artwork._id } });
-      await Artwork.findOneAndUpdate({ _id: artwork._id }, { owner, sale: sale._id, openForSale: true });
+      if (amount !== undefined) {
+        await Artwork.findOneAndUpdate({ _id: artwork._id }, { owner, sale: sale._id, openForSale: true, amount });
+      } else {
+        await Artwork.findOneAndUpdate({ _id: artwork._id }, { owner, sale: sale._id, openForSale: true });
+      }
+
       // await Artwork.findOneAndUpdate({ _id: artwork._id }, { owner: null, sale: sale._id, openForSale: true });
     } else {
       console.log('Artwork is already on sale');
@@ -107,31 +112,46 @@ const handleNewSale = async (saleFromContract) => {
 };
 
 const handleCancelSale = async (saleFromContract) => {
-  const { saleId } = saleFromContract;
+  const { saleId, amount } = saleFromContract;
   try {
     const sale = await BuySell.findOneAndUpdate({ contractSaleId: saleId }, { status: SALE_STATUS.CANCELLED }).populate(
       'artwork'
     );
     const { artwork } = sale;
     const usr = await User.findOneAndUpdate({ _id: sale.owner }, { $push: { artworks: artwork._id } });
-    await Artwork.findOneAndUpdate(
-      { _id: artwork._id },
-      {
-        owner: sale.owner,
-        isAuctionOpen: false,
-        openForSale: false,
-        auction: null,
-        sale: null,
-        auctionMintStatus: null,
-      }
-    );
+    if (amount !== undefined) {
+      await Artwork.findOneAndUpdate(
+        { _id: artwork._id },
+        {
+          owner: sale.owner,
+          isAuctionOpen: false,
+          openForSale: false,
+          auction: null,
+          sale: null,
+          auctionMintStatus: null,
+          amount,
+        }
+      );
+    } else {
+      await Artwork.findOneAndUpdate(
+        { _id: artwork._id },
+        {
+          owner: sale.owner,
+          isAuctionOpen: false,
+          openForSale: false,
+          auction: null,
+          sale: null,
+          auctionMintStatus: null,
+        }
+      );
+    }
   } catch (err) {
     console.log(err);
   }
 };
 
 const handleSaleComplete = async (saleFromContract) => {
-  const { saleId, newOwner_ } = saleFromContract;
+  const { saleId, newOwner_, amount } = saleFromContract;
   try {
     console.log('new owner address', newOwner_);
     const sale = await BuySell.findOneAndUpdate({ contractSaleId: saleId }, { status: SALE_STATUS.COMPLETED }).populate(
@@ -141,19 +161,37 @@ const handleSaleComplete = async (saleFromContract) => {
     const usr = await User.findOneAndUpdate({ _id: sale.owner }, { $pull: { artworks: artwork._id } });
     const newArtworkOwner = await User.findOneAndUpdate({ address: newOwner_ }, { $push: { artworks: artwork._id } });
     console.log('newArtworkOWner', newArtworkOwner);
-    await Artwork.findOneAndUpdate(
-      { _id: artwork._id },
-      {
-        owner: newArtworkOwner._id,
-        basePrice: artwork.price,
-        price: sale.price,
-        isAuctionOpen: false,
-        openForSale: false,
-        auction: null,
-        sale: null,
-        auctionMintStatus: null,
-      }
-    );
+    if (amount !== undefined) {
+      await Artwork.findOneAndUpdate(
+        { _id: artwork._id },
+        {
+          owner: newArtworkOwner._id,
+          basePrice: artwork.price,
+          price: sale.price,
+          isAuctionOpen: false,
+          openForSale: false,
+          auction: null,
+          sale: null,
+          auctionMintStatus: null,
+          amount,
+        }
+      );
+    } else {
+      await Artwork.findOneAndUpdate(
+        { _id: artwork._id },
+        {
+          owner: newArtworkOwner._id,
+          basePrice: artwork.price,
+          price: sale.price,
+          isAuctionOpen: false,
+          openForSale: false,
+          auction: null,
+          sale: null,
+          auctionMintStatus: null,
+        }
+      );
+    }
+
     await BuySell.findOneAndUpdate({ _id: sale._id }, { buyer: newArtworkOwner._id });
     console.log('NFT Sale complete');
     EVENT.emit('record-transaction', {
@@ -242,26 +280,45 @@ const handleNewBid = async (par) => {
 };
 
 const handleNFTClaim = async (values) => {
-  const { aucId, newOwner, collection } = values;
+  const { aucId, newOwner, collection, amount } = values;
   const { latestBid } = await AUCTION_CONTRACT_INSTANCE.methods.AuctionList(aucId).call();
   const auction = await Auction.findOneAndUpdate({ contractAucId: aucId }, { nftClaim: true }).populate('artwork');
   const { artwork } = auction;
   const usr = await User.findOneAndUpdate({ _id: artwork.owner }, { $pull: artwork._id });
   const newArtworkOwner = await User.findOneAndUpdate({ address: newOwner }, { $push: artwork._id });
-  await Artwork.findOneAndUpdate(
-    { _id: artwork._id },
-    {
-      owner: newArtworkOwner._id,
-      basePrice: artwork.price,
-      price: latestBid,
-      isAuctionOpen: false,
-      auction: null,
-      auctionMintStatus: null,
-      sale: null,
-      openForSale: false,
-      endTime: null,
-    }
-  );
+  if (amount !== undefined) {
+    await Artwork.findOneAndUpdate(
+      { _id: artwork._id },
+      {
+        owner: newArtworkOwner._id,
+        basePrice: artwork.price,
+        price: latestBid,
+        isAuctionOpen: false,
+        auction: null,
+        auctionMintStatus: null,
+        sale: null,
+        openForSale: false,
+        endTime: null,
+        amount,
+      }
+    );
+  } else {
+    await Artwork.findOneAndUpdate(
+      { _id: artwork._id },
+      {
+        owner: newArtworkOwner._id,
+        basePrice: artwork.price,
+        price: latestBid,
+        isAuctionOpen: false,
+        auction: null,
+        auctionMintStatus: null,
+        sale: null,
+        openForSale: false,
+        endTime: null,
+      }
+    );
+  }
+
   console.log('NFT claimed successfully');
 
   EVENT.emit('record-transaction', {
@@ -314,25 +371,42 @@ const handleNFTSale = async (values) => {
 };
 
 const handleClaimBack = async (values) => {
-  const { aucId } = values;
+  const { aucId, amount } = values;
   const auction = await Auction.findOneAndUpdate(
     { contractAucId: aucId },
     { cancelled: true, status: AUCTION_STATUS.CLOSED }
   ).populate('artwork');
   const { artwork } = auction;
   const usr = await User.findOneAndUpdate({ _id: auction.owner }, { $push: artwork._id });
-  await Artwork.findOneAndUpdate(
-    { _id: artwork._id },
-    {
-      owner: auction.owner,
-      isAuctionOpen: false,
-      auction: null,
-      auctionMintStatus: null,
-      sale: null,
-      openForSale: false,
-      endTime: null,
-    }
-  );
+  if (amount !== undefined) {
+    await Artwork.findOneAndUpdate(
+      { _id: artwork._id },
+      {
+        owner: auction.owner,
+        isAuctionOpen: false,
+        auction: null,
+        auctionMintStatus: null,
+        sale: null,
+        openForSale: false,
+        endTime: null,
+        amount,
+      }
+    );
+  } else {
+    await Artwork.findOneAndUpdate(
+      { _id: artwork._id },
+      {
+        owner: auction.owner,
+        isAuctionOpen: false,
+        auction: null,
+        auctionMintStatus: null,
+        sale: null,
+        openForSale: false,
+        endTime: null,
+      }
+    );
+  }
+
   console.log('NFT claimed back successfully');
 };
 
