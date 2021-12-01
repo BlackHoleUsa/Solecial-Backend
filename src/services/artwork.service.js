@@ -158,9 +158,17 @@ const getArtWorksCount = async () => {
   const count = await Artwork.find().countDocuments();
   return count;
 };
+
+const getUserArtworksCount = async (userId) => {
+  const count = await Artwork.find({ owner: userId }).countDocuments();
+  return count;
+};
+
+
 module.exports = {
   saveArtwork,
   getUserArtworks,
+  getUserArtworksCount,
   getArtworkType,
   increaseArtworkViews,
   updateArtwork,

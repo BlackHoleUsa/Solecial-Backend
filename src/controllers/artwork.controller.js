@@ -64,9 +64,11 @@ const getUserArtworks = catchAsync(async (req, res) => {
   const artworks = await artworkService.getUserArtworks(userId, page, perPage);
   if (artwork_type !== undefined) {
     const filteredarr = artworks.filter((result) => result.artwork_type == artwork_type);
-    res.status(httpStatus.OK).send({ status: true, message: 'successfull', data: filteredarr });
+    const count = filteredarr.length;
+    res.status(httpStatus.OK).send({ status: true, message: 'successfull', data: filteredarr, count });
   } else {
-    res.status(httpStatus.OK).send({ status: true, message: 'successfull', data: artworks });
+    const count= await artworkService.getUserArtworksCount(userId);
+    res.status(httpStatus.OK).send({ status: true, message: 'successfull', data: artworks, count });
   }
 });
 const getArtworkType = catchAsync(async (req, res) => {
