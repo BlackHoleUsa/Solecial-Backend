@@ -63,29 +63,35 @@ AUCTION_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
     case AUC_CONTRACT_EVENTS.NEW_AUCTION:
       console.log('Auction Event', ev.event);
       const { colAddress, tokenId, aucId, amount } = ev.returnValues;
-      console.log('colAddress, tokenId, aucId', colAddress, tokenId, aucId);
+      console.log('colAddress, tokenId, aucId', colAddress, tokenId, aucId, amount);
       contractController.handleNewAuction(colAddress, tokenId, aucId, amount);
       break;
     case AUC_CONTRACT_EVENTS.NEW_BID:
+      console.log('New Bid', ev.returnValues);
       contractController.handleNewBid(ev.returnValues);
       break;
     case AUC_CONTRACT_EVENTS.CLAIM_SALE:
-      console.log('Event', ev);
+      console.log('Sale Claim', ev.returnValues);
       contractController.handleNFTSale(ev.returnValues);
       break;
     case AUC_CONTRACT_EVENTS.NFT_CLAIM:
+      console.log('NFT Claim', ev.returnValues);
       contractController.handleNFTClaim(ev.returnValues);
       break;
     case AUC_CONTRACT_EVENTS.CLAIM_BACK:
+      console.log('NFT Claim Back', ev.returnValues);
       contractController.handleClaimBack(ev.returnValues);
       break;
     case AUC_CONTRACT_EVENTS.NEW_SALE:
+      console.log('NFT New Sale', ev.returnValues);
       contractController.handleNewSale(ev.returnValues);
       break;
     case AUC_CONTRACT_EVENTS.SALE_CANCELLED:
+      console.log('NFT Sale cancelled',ev.returnValues);
       contractController.handleCancelSale(ev.returnValues);
       break;
     case AUC_CONTRACT_EVENTS.SALE_COMPLETED:
+      console.log('NFT Sale Completed',ev.returnValues);
       contractController.handleSaleComplete(ev.returnValues);
       break;
     default:
