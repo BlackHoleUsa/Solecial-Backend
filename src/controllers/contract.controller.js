@@ -48,6 +48,7 @@ const handleNewAuction = async (colAddress, tokenId, aucId, amount = undefined) 
     }
     const auctionData = await AUCTION_CONTRACT_INSTANCE.methods.AuctionList(aucId).call();
     const { endTime, startPrice } = auctionData;
+    console.log('Price in auction', startPrice);
     const { owner, creater } = artwork;
     const params = {
       initialPrice: startPrice,
@@ -84,6 +85,7 @@ const handleNewSale = async (saleFromContract) => {
   const { colAddress, tokenId, saleId, price, amount } = saleFromContract;
   try {
     // const collection = await Collection.findOne({ collectionAddress: colAddress });
+    console.log('Price in Newsale', price);
     const artwork = await Artwork.findOne({ tokenId });
     if (!artwork.openForSale) {
       const { owner } = artwork;
@@ -158,6 +160,7 @@ const handleSaleComplete = async (saleFromContract) => {
       'artwork'
     );
     const { artwork } = sale;
+    console.log('Price in SaleComplete', sale.price);
     const usr = await User.findOneAndUpdate({ _id: sale.owner }, { $pull: { artworks: artwork._id } });
     const newArtworkOwner = await User.findOneAndUpdate({ address: newOwner_ }, { $push: { artworks: artwork._id } });
     console.log('newArtworkOWner', newArtworkOwner);

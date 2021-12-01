@@ -333,7 +333,7 @@ router.post(
   artworkController.updateTokenId
 );
 
-// router.post('/placeBid', [auth('manageUsers'), validate(artworkValidation.placeBidVS)], artworkController.placeBid);
+router.post('/placeBid', [auth('manageUsers'), validate(artworkValidation.placeBidVS)], artworkController.placeBid);
 // router.post(
 //   '/openArtworkAuction',
 //   [auth('manageUsers'), validate(artworkValidation.openAuctionVS)],
