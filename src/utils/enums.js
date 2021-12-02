@@ -72,7 +72,7 @@ const NOTIFICATION_TYPE = {
   NFT_BUY: 'NFT_BUY',
 };
 
-TRANSACTION_ACTIVITY_TYPE = {
+const TRANSACTION_ACTIVITY_TYPE = {
   NFT_CLAIM: 'nftClaim',
   NFT_SALE: 'nftSale',
   SELL_OP: 'sale_nft',

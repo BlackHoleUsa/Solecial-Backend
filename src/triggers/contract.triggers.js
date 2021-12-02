@@ -24,8 +24,8 @@ MINT_SINGLE_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
   switch (ev.event) {
     case MINT_CONTRACT_EVENTS.NEW_COLLECTION:
       console.log('ev.returnValues', ev.returnValues);
-      const { CollectionAddress, owner, colName } = ev.returnValues;
-      contractController.updateCollectionAddress(CollectionAddress, owner, colName);
+      const {tokenId ,owner, colName } = ev.returnValues;
+      contractController.updateCollectionAddress(tokenId, owner, colName);
       break;
     default:
       console.log('happy');
@@ -94,11 +94,11 @@ AUCTION_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
       console.log('NFT Sale Completed', ev.returnValues);
       contractController.handleSaleComplete(ev.returnValues);
       break;
-    case AUCTION_CONTRACT_INSTANCE.NEW_SALE_1155:
+    case AUC_CONTRACT_EVENTS.NEW_SALE_1155:
       console.log('NFT New Sale 1155', ev.returnValues);
       contractController.handleNewSale(ev.returnValues);
       break;
-    case AUCTION_CONTRACT_INSTANCE.NEW_AUCTION_1155:
+    case AUC_CONTRACT_EVENTS.NEW_AUCTION_1155:
       console.log('Auction Event 1155', ev.event);
       contractController.handleNewAuction(ev.returnValues);
       break;

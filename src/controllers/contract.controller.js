@@ -14,19 +14,12 @@ const {
   STATS_UPDATE_TYPE,
 } = require('../utils/enums');
 
-const updateCollectionAddress = async (CollectionAddress, owner, colName) => {
+const updateCollectionAddress = async (tokenId, owner, colName) => {
   const user = await User.findOne({ address: owner });
-  const collection = await Collection.findOneAndUpdate(
-    { owner: user._id, name: colName },
-    {
-      collectionAddress: CollectionAddress,
-    }
-  );
-  console.log(collection._id);
   const artwork = await Artwork.findOneAndUpdate(
-    { collectionId: collection._id },
+    { owner },
     {
-      tokenId: 1,
+      tokenId,
     }
   );
   console.log(artwork);
@@ -34,14 +27,14 @@ const updateCollectionAddress = async (CollectionAddress, owner, colName) => {
     userId: user._id,
     type: STATS_UPDATE_TYPE.ownedArts,
   });
-  console.log('collection address and artwork token id updated successfully');
+  console.log('artwork token id updated successfully');
 };
 
 const handleNewAuction = async (saleFromContract) => {
-  const { colAddress, tokenId, aucId, amount } = saleFromContract;
+  const { tokenId, aucId, amount } = saleFromContract;
   try {
     // const collection = await Collection.findOne({ collectionAddress: colAddress });
-    const artwork = await Artwork.findOne({ tokenId });
+    const artwork = await Artwork.findOne({ tokenId: tokenId });
     console.log('artwork in auction ', artwork);
     if (await auctionService.artworkExistsInAuction(artwork._id)) {
       console.log('Artwork is already on auction');
@@ -87,7 +80,7 @@ const handleNewSale = async (saleFromContract) => {
   try {
     // const collection = await Collection.findOne({ collectionAddress: colAddress });
     console.log('Price in Newsale', price);
-    const artwork = await Artwork.findOne({ tokenId });
+    const artwork = await Artwork.findOne({ tokenId: tokenId });
     if (!artwork.openForSale) {
       const { owner } = artwork;
       const params = {
@@ -247,7 +240,8 @@ const handleNewBid = async (par) => {
   const dbOwner = await User.findOne({ address: owner });
   // const collection = await Collection.findOne({ collectionAddress: colAddress });
   // const artwork = await Artwork.findOne({ collectionId: collection._id, tokenId });
-  const artwork = await Artwork.findOne({ tokenId });
+  // eslint-disable-next-line object-shorthand
+  const artwork = await Artwork.findOne({ tokenId: tokenId });
   const auction = await Auction.findOne({ artwork: artwork._id, contractAucId: aucId });
 
   const params = {
