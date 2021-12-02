@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const app = require('./app');
 const config = require('./config/config');
 const logger = require('./config/logger');
+const settings = require('./models/setting.model');
+const settingsService = require('./services/setting.service');
 
 let server;
 mongoose.set('useFindAndModify', false);
@@ -37,3 +39,11 @@ process.on('SIGTERM', () => {
     server.close();
   }
 });
+
+async function updateSettings() {
+  const response = await settingsService.getSettings();
+  if (response.length === 0) {
+    await settingsService.createSettings({ minimum_bid: 0, notifications: true, bid_notifications: true, royalty: 0 });
+  }
+}
+updateSettings();

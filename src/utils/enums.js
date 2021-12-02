@@ -16,8 +16,10 @@ const AUC_CONTRACT_EVENTS = {
   NFT_CLAIM: 'NFTclaim',
   CLAIM_BACK: 'auctionCancelled',
   NEW_SALE: 'newSale',
-  SALE_CANCELLED: "saleCancelled",
-  SALE_COMPLETED: "saleCompleted"
+  SALE_CANCELLED: 'saleCancelled',
+  SALE_COMPLETED: 'saleCompleted',
+  NEW_AUCTION_1155: 'newAuction1155',
+  NEW_SALE_1155: 'newSale1155',
 };
 
 const AUCTION_STATUS = {
@@ -67,21 +69,21 @@ const NOTIFICATION_TYPE = {
   AUCTION_TIMEOUT: 'auctionTimeout',
   AUCTION_END: 'auctionEnd',
   AUCTION_WIN: 'auctionWin',
-  NFT_BUY: 'NFT_BUY'
+  NFT_BUY: 'NFT_BUY',
 };
 
 TRANSACTION_ACTIVITY_TYPE = {
   NFT_CLAIM: 'nftClaim',
   NFT_SALE: 'nftSale',
   SELL_OP: 'sale_nft',
-  BUY_OP: 'buy_nft'
+  BUY_OP: 'buy_nft',
 };
 
 const STATS_UPDATE_TYPE = {
   ownedArts: 'artwork_minted',
   purchasedArts: 'artwork_purchased',
-  soldArts: 'artworks_sold'
-}
+  soldArts: 'artworks_sold',
+};
 
 module.exports = {
   ARTWORK_TYPE,
@@ -96,5 +98,5 @@ module.exports = {
   NOTIFICATION_TYPE,
   TRANSACTION_ACTIVITY_TYPE,
   SALE_STATUS,
-  STATS_UPDATE_TYPE
+  STATS_UPDATE_TYPE,
 };

@@ -37,7 +37,8 @@ const updateCollectionAddress = async (CollectionAddress, owner, colName) => {
   console.log('collection address and artwork token id updated successfully');
 };
 
-const handleNewAuction = async (colAddress, tokenId, aucId, amount = undefined) => {
+const handleNewAuction = async (saleFromContract) => {
+  const { colAddress, tokenId, aucId, amount } = saleFromContract;
   try {
     // const collection = await Collection.findOne({ collectionAddress: colAddress });
     const artwork = await Artwork.findOne({ tokenId });
