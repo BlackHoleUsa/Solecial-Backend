@@ -33,6 +33,7 @@ const updateCollectionAddress = async (tokenId, owner, colName) => {
 
 const handleNewAuction = async (saleFromContract) => {
   let { tokenId, aucId, amount } = saleFromContract;
+  console.log(tokenId);
   tokenId = tokenId.toString();
   try {
     // const collection = await Collection.findOne({ collectionAddress: colAddress });
