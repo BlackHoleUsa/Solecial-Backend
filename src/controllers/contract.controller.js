@@ -15,6 +15,7 @@ const {
 } = require('../utils/enums');
 
 const updateCollectionAddress = async (tokenId, owner, colName) => {
+  tokenId = tokenId.toString();
   const user = await User.findOne({ address: owner });
   const artwork = await Artwork.findOneAndUpdate(
     { owner },
@@ -31,7 +32,8 @@ const updateCollectionAddress = async (tokenId, owner, colName) => {
 };
 
 const handleNewAuction = async (saleFromContract) => {
-  const { tokenId, aucId, amount } = saleFromContract;
+  let { tokenId, aucId, amount } = saleFromContract;
+  tokenId = tokenId.toString();
   try {
     // const collection = await Collection.findOne({ collectionAddress: colAddress });
     const artwork = await Artwork.findOne({ tokenId: tokenId });
@@ -76,7 +78,8 @@ const handleNewAuction = async (saleFromContract) => {
 };
 
 const handleNewSale = async (saleFromContract) => {
-  const { colAddress, tokenId, saleId, price, amount } = saleFromContract;
+  let { colAddress, tokenId, saleId, price, amount } = saleFromContract;
+  tokenId = tokenId.toString();
   try {
     // const collection = await Collection.findOne({ collectionAddress: colAddress });
     console.log('Price in Newsale', price);
@@ -235,7 +238,8 @@ const handleNewBid = async (par) => {
   const { bid, bidder, aucId } = par;
 
   const auctionData = await AUCTION_CONTRACT_INSTANCE.methods.AuctionList(aucId).call();
-  const { colAddress, owner, tokenId } = auctionData;
+  let { colAddress, owner, tokenId } = auctionData;
+  tokenId = tokenId.toString();
   const dbBidder = await User.findOne({ address: bidder });
   const dbOwner = await User.findOne({ address: owner });
   // const collection = await Collection.findOne({ collectionAddress: colAddress });
