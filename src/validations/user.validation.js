@@ -34,6 +34,7 @@ const updateUser = {
     bio: Joi.string().optional(),
     profilePic: Joi.string().optional(),
     email: Joi.string().optional(),
+    address: Joi.string().optional(),
   }),
 };
 
