@@ -67,7 +67,7 @@ const getUserArtworks = catchAsync(async (req, res) => {
     const count = filteredarr.length;
     res.status(httpStatus.OK).send({ status: true, message: 'successfull', data: filteredarr, count });
   } else {
-    const count= await artworkService.getUserArtworksCount(userId);
+    const count = await artworkService.getUserArtworksCount(userId);
     res.status(httpStatus.OK).send({ status: true, message: 'successfull', data: artworks, count });
   }
 });
@@ -160,7 +160,7 @@ const placeBid = catchAsync(async (req, res) => {
       bid: bid._id,
       type: HISTORY_TYPE.BID_PLACED,
     });
-    if (bidNotification === false) {
+    if (bidNotification === true) {
       EVENT.emit('send-and-save-notification', {
         receiver: user._id,
         type: NOTIFICATION_TYPE.NEW_BID,
