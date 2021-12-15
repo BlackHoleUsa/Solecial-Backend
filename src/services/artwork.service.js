@@ -115,24 +115,24 @@ const getAllArtworks = async (
   artwork_type = undefined
 ) => {
   if (artwork_type != undefined) {
-    return await Artwork.find({ artwork_type, creater: _id })
+    return await Artwork.find({ artwork_type, owner: _id })
       .populate('owner')
       .limit(parseInt(perPage))
       .skip(page * perPage);
   }
   if (isAuctionOpen != undefined) {
-    return await Artwork.find({ isAuctionOpen: true, creater: _id })
+    return await Artwork.find({ isAuctionOpen: true, owner: _id })
       .populate('owner')
       .limit(parseInt(perPage))
       .skip(page * perPage);
   }
   if (openForSale != undefined) {
-    return await Artwork.find({ openForSale: true, creater: _id })
+    return await Artwork.find({ openForSale: true, owner: _id })
       .populate('owner')
       .limit(parseInt(perPage))
       .skip(page * perPage);
   }
-  return await Artwork.find({ creater: _id })
+  return await Artwork.find({ owner: _id })
     .populate('owner')
     .limit(parseInt(perPage))
     .skip(page * perPage);
