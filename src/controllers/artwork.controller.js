@@ -276,11 +276,11 @@ const getAllArtworks = catchAsync(async (req, res) => {
   const { user } = req;
   if (!artwork_type) {
     const artWorks = await artworkService.getAllArtworks(page, perPage, user._id, isAuctionOpen, openForSale);
-    const count = await artworkService.getArtWorksCount();
+    const count = artWorks.length;
     res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: artWorks, count });
   } else {
     const artWorks = await artworkService.getAllArtworks(page, perPage, user._id, undefined, undefined, artwork_type);
-    const count = await artworkService.getArtWorksCount();
+    const count = artWorks.length;
     res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: artWorks, count });
   }
 });
