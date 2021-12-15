@@ -74,7 +74,7 @@ const updateArtworkHistory = async (params) => {
 const createNotification = async (params) => {
   const setting =await settingService.getSettings()
   const notificationPermissioninSetting = setting[0].notifications
-  if(notificationPermissioninSetting === false){
+  if(notificationPermissioninSetting === true){
     await Notification.create(params);
     console.log('notification sent')
   }
