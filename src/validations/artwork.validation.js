@@ -138,8 +138,11 @@ const getAllArtworks = {
 };
 const getOpenArtWorks = {
   query: Joi.object().keys({
-    page: Joi.string().required(),
-    perPage: Joi.string().required(),
+    artwork_type: Joi.string().valid('GIF', 'VIDEO', 'IMAGE', 'AUDIO').optional(),
+    isAuctionOpen: Joi.string().valid('True', 'TRUE').optional(),
+    openForSale: Joi.string().valid('True', 'TRUE').optional(),
+    page: Joi.string().optional(),
+    perPage: Joi.string().optional(),
   }),
 }
 module.exports = {

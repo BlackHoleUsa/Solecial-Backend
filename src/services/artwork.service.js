@@ -34,6 +34,14 @@ const increaseArtworkViews = async (artworkId) => {
   return await Artwork.findOneAndUpdate({ _id: artworkId }, { $inc: { views: 1 } }, { new: true }).lean();
 };
 
+const increaseArtworkLikes = async (artworkId) => {
+  return await Artwork.findOneAndUpdate({ _id: artworkId }, { $inc: { numberOfLikes: 1 } }, { new: true }).lean();
+};
+
+const decreaseArtworkLikes = async (artworkId) => {
+  return await Artwork.findOneAndUpdate({ _id: artworkId }, { $dec: { numberOfLikes: 1 } }, { new: true }).lean();
+};
+
 const updateArtwork = async (id, fieldToUpdate, value) => {
   return await Artwork.findOneAndUpdate({ _id: id }, { fieldToUpdate: value }, { new: true }).lean();
 };
@@ -138,12 +146,72 @@ const getAllArtworks = async (
     .skip(page * perPage);
 };
 
-const getOpenArtWorks = async (page, perPage) => {
-  const artworks = await Artwork.find()
+const getAllArtworksCount = async (
+  _id,
+  isAuctionOpen = undefined,
+  openForSale = undefined,
+  artwork_type = undefined
+) => {
+  if (artwork_type != undefined) {
+    return await Artwork.find({ artwork_type, owner: _id })
+      .populate('owner').countDocuments();
+  }
+  if (isAuctionOpen != undefined) {
+    return await Artwork.find({ isAuctionOpen: true, owner: _id })
+      .populate('owner').countDocuments();
+  }
+  if (openForSale != undefined) {
+    return await Artwork.find({ openForSale: true, owner: _id })
+      .populate('owner').countDocuments();
+  }
+  return await Artwork.find({ owner: _id })
+    .populate('owner').countDocuments();
+};
+
+const getOpenArtWorks = async (page, perPage, isAuctionOpen = undefined,
+  openForSale = undefined,
+  artwork_type = undefined) => {
+  if (artwork_type != undefined) {
+    return await Artwork.find({ artwork_type })
+      .populate('owner')
+      .limit(parseInt(perPage))
+      .skip(page * perPage);
+  }
+  if (isAuctionOpen != undefined) {
+    return await Artwork.find({ isAuctionOpen: true })
+      .populate('owner')
+      .limit(parseInt(perPage))
+      .skip(page * perPage);
+  }
+  if (openForSale != undefined) {
+    return await Artwork.find({ openForSale: true })
+      .populate('owner')
+      .limit(parseInt(perPage))
+      .skip(page * perPage);
+  }
+  return await Artwork.find()
+    .populate('owner')
     .limit(parseInt(perPage))
     .skip(page * perPage);
-  const count = await Artwork.find().countDocuments();
-  return { artworks, count };
+};
+
+const getOpenArtWorksCount = async (isAuctionOpen = undefined,
+  openForSale = undefined,
+  artwork_type = undefined) => {
+  if (artwork_type != undefined) {
+    return await Artwork.find({ artwork_type })
+      .populate('owner').countDocuments();
+  }
+  if (isAuctionOpen != undefined) {
+    return await Artwork.find({ isAuctionOpen: true })
+      .populate('owner').countDocuments();
+  }
+  if (openForSale != undefined) {
+    return await Artwork.find({ openForSale: true })
+      .populate('owner').countDocuments();
+  }
+  return await Artwork.find()
+    .populate('owner').countDocuments();
 };
 
 const getAllArtworksPaginated = async (page, perPage) => {
@@ -175,6 +243,8 @@ module.exports = {
   getUserArtworksCount,
   getArtworkType,
   increaseArtworkViews,
+  increaseArtworkLikes,
+  decreaseArtworkLikes,
   updateArtwork,
   updateArtworkMetaUrl,
   getPopulatedArtwork,
@@ -187,6 +257,8 @@ module.exports = {
   deleteArtworkById,
   searchArtworkByName,
   getAllArtworks,
+  getAllArtworksCount,
+  getOpenArtWorksCount,
   getOpenArtWorks,
   getAllArtworksPaginated,
   getArtWorksCount,

@@ -6,6 +6,7 @@ const saveNotification = async (params) => {
 
 const getUserNotifications = async (userId, page, perPage) => {
   return await Notification.find({ receiver: userId })
+    .populate('receiver')
     .populate('extraData.follower')
     .populate('extraData.Auction')
     .populate('extraData.Bid')

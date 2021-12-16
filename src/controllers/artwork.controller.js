@@ -85,6 +85,7 @@ const addToFavourite = catchAsync(async (req, res) => {
   const { favouriteArtworks } = userObject;
   if (!favouriteArtworks.includes(artworkId)) {
     await userService.addArtworkToFavourites(user._id, artworkId);
+    await artworkService.increaseArtworkLikes(artworkId);
   }
   res.status(httpStatus.OK).send({ status: true, message: 'artwork added in favourites successfully' });
 });
@@ -94,6 +95,7 @@ const removeFromFavourites = catchAsync(async (req, res) => {
   const { user } = req;
 
   const updatedUser = await userService.removeArtworkFromFavourite(user._id, artworkId);
+  await artworkService.decreaseArtworkLikes(artworkId);
   res.status(httpStatus.OK).send({ status: true, message: 'artwork removed from favourites successfully' });
 });
 
@@ -276,19 +278,26 @@ const getAllArtworks = catchAsync(async (req, res) => {
   const { user } = req;
   if (!artwork_type) {
     const artWorks = await artworkService.getAllArtworks(page, perPage, user._id, isAuctionOpen, openForSale);
-    const count = artWorks.length;
+    const count = await artworkService.getAllArtworksCount(user._id, isAuctionOpen, openForSale);
     res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: artWorks, count });
   } else {
     const artWorks = await artworkService.getAllArtworks(page, perPage, user._id, undefined, undefined, artwork_type);
-    const count = artWorks.length;
+    const count = await artworkService.getAllArtworksCount(user._id, undefined, undefined, artwork_type);
     res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: artWorks, count });
   }
 });
 
 const getOpenArtWorks = catchAsync(async (req, res) => {
-  const { page, perPage } = req.query;
-  const artWorks = await artworkService.getOpenArtWorks(page, perPage);
-  res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: artWorks });
+  const { artwork_type, page, perPage, isAuctionOpen, openForSale } = req.query;
+  if (!artwork_type) {
+    const artWorks = await artworkService.getOpenArtWorks(page, perPage, isAuctionOpen, openForSale);
+    const count = await artworkService.getOpenArtWorksCount(isAuctionOpen, openForSale);
+    res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: artWorks, count });
+  } else {
+    const artWorks = await artworkService.getOpenArtWorks(page, perPage, undefined, undefined, artwork_type);
+    const count = await artworkService.getOpenArtWorksCount(isAuctionOpen, openForSale);
+    res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: artWorks, count });
+  }
 });
 
 module.exports = {
