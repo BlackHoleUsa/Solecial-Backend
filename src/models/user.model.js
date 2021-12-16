@@ -10,6 +10,7 @@ const userSchema = mongoose.Schema(
     userName: {
       type: String,
       required: false,
+      default: 'solecial',
       trim: true,
     },
     email: {
@@ -66,7 +67,7 @@ const userSchema = mongoose.Schema(
         ref: 'Collection',
       },
     ],
-    
+
     artworks: [
       {
         type: mongoose.Schema.Types.ObjectId,
