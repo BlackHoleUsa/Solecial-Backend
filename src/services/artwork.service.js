@@ -39,7 +39,7 @@ const increaseArtworkLikes = async (artworkId) => {
 };
 
 const decreaseArtworkLikes = async (artworkId) => {
-  return await Artwork.findOneAndUpdate({ _id: artworkId }, { $dec: { numberOfLikes: 1 } }, { new: true }).lean();
+  return await Artwork.findOneAndUpdate({ _id: artworkId }, { $inc: { numberOfLikes: -1 } }, { new: true }).lean();
 };
 
 const updateArtwork = async (id, fieldToUpdate, value) => {
