@@ -217,7 +217,7 @@ const saveForgotPasswordCode = async (email, code) => {
 
 const getAllUsers = async () => {
   // eslint-disable-next-line prettier/prettier
-  const allUsers = await User.find().sort({_id:1});
+  const allUsers = await User.find().sort({ _id: 1 });
   return allUsers;
 };
 const deleteCollectionByIdFromUser = async (userId, collectionId) => {
@@ -229,7 +229,7 @@ const deleteCollectionByIdFromUser = async (userId, collectionId) => {
   );
   return response;
 };
-const deleteArtWorksOfCollections = async (userId, artworks) =>{
+const deleteArtWorksOfCollections = async (userId, artworks) => {
   const response = await User.findOneAndUpdate(
     { _id: userId },
     {
@@ -238,6 +238,17 @@ const deleteArtWorksOfCollections = async (userId, artworks) =>{
   );
   return response;
 };
+const getUserGroups = async (id) => {
+  const result = await User.findOne({ _id: id }).populate('groups');
+  return result;
+};
+const getUserGroup = async (userId, groupId) => {
+  const result = await User.findOne({ _id: userId }).populate('groups');
+  let { groups } = result;
+  groups = groups.filter((group) => group.id === groupId);
+  return groups;
+};
+
 module.exports = {
   createUser,
   queryUsers,
@@ -262,5 +273,7 @@ module.exports = {
   getSingleFavouriteArtWork,
   deleteCollectionByIdFromUser,
   deleteArtWorksOfCollections,
-  saveForgotPasswordCode
+  saveForgotPasswordCode,
+  getUserGroups,
+  getUserGroup,
 };

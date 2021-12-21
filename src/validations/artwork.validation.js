@@ -14,6 +14,9 @@ const createArtworkVS = {
     creater: Joi.string().required(),
     multipleNFT: Joi.boolean().required(),
     amount: Joi.string().optional(),
+    groupname: Joi.string().optional(),
+    totalCount: Joi.number().optional(),
+    groupId: Joi.string().optional(),
   }),
 };
 
@@ -144,7 +147,18 @@ const getOpenArtWorks = {
     page: Joi.string().optional(),
     perPage: Joi.string().optional(),
   }),
-}
+};
+const getGroupArtworks = {
+  query: Joi.object().keys({
+    groupId: Joi.string().required(),
+  }),
+};
+const getGroupArtworksWithEdition = {
+  query: Joi.object().keys({
+    groupId: Joi.string().required(),
+    editionNumber: Joi.string().required(),
+  }),
+};
 module.exports = {
   createArtworkVS,
   getArtworksVS,
@@ -165,4 +179,6 @@ module.exports = {
   nftClaimListVS,
   getAllArtworks,
   getOpenArtWorks,
+  getGroupArtworks,
+  getGroupArtworksWithEdition,
 };

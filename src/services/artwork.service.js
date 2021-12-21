@@ -12,6 +12,8 @@ const saveArtwork = async (params) => {
 
 const getUserArtworks = async (userId, page, perPage) => {
   return await Artwork.find({ owner: userId })
+    .populate('owner')
+    .populate('creater')
     .limit(parseInt(perPage))
     .skip(page * perPage)
     .lean();
@@ -146,31 +148,26 @@ const getAllArtworks = async (
     .skip(page * perPage);
 };
 
-const getAllArtworksCount = async (
-  _id,
+const getAllArtworksCount = async (_id, isAuctionOpen = undefined, openForSale = undefined, artwork_type = undefined) => {
+  if (artwork_type != undefined) {
+    return await Artwork.find({ artwork_type, owner: _id }).populate('owner').countDocuments();
+  }
+  if (isAuctionOpen != undefined) {
+    return await Artwork.find({ isAuctionOpen: true, owner: _id }).populate('owner').countDocuments();
+  }
+  if (openForSale != undefined) {
+    return await Artwork.find({ openForSale: true, owner: _id }).populate('owner').countDocuments();
+  }
+  return await Artwork.find({ owner: _id }).populate('owner').countDocuments();
+};
+
+const getOpenArtWorks = async (
+  page,
+  perPage,
   isAuctionOpen = undefined,
   openForSale = undefined,
   artwork_type = undefined
 ) => {
-  if (artwork_type != undefined) {
-    return await Artwork.find({ artwork_type, owner: _id })
-      .populate('owner').countDocuments();
-  }
-  if (isAuctionOpen != undefined) {
-    return await Artwork.find({ isAuctionOpen: true, owner: _id })
-      .populate('owner').countDocuments();
-  }
-  if (openForSale != undefined) {
-    return await Artwork.find({ openForSale: true, owner: _id })
-      .populate('owner').countDocuments();
-  }
-  return await Artwork.find({ owner: _id })
-    .populate('owner').countDocuments();
-};
-
-const getOpenArtWorks = async (page, perPage, isAuctionOpen = undefined,
-  openForSale = undefined,
-  artwork_type = undefined) => {
   if (artwork_type != undefined) {
     return await Artwork.find({ artwork_type })
       .populate('owner')
@@ -195,23 +192,17 @@ const getOpenArtWorks = async (page, perPage, isAuctionOpen = undefined,
     .skip(page * perPage);
 };
 
-const getOpenArtWorksCount = async (isAuctionOpen = undefined,
-  openForSale = undefined,
-  artwork_type = undefined) => {
+const getOpenArtWorksCount = async (isAuctionOpen = undefined, openForSale = undefined, artwork_type = undefined) => {
   if (artwork_type != undefined) {
-    return await Artwork.find({ artwork_type })
-      .populate('owner').countDocuments();
+    return await Artwork.find({ artwork_type }).populate('owner').countDocuments();
   }
   if (isAuctionOpen != undefined) {
-    return await Artwork.find({ isAuctionOpen: true })
-      .populate('owner').countDocuments();
+    return await Artwork.find({ isAuctionOpen: true }).populate('owner').countDocuments();
   }
   if (openForSale != undefined) {
-    return await Artwork.find({ openForSale: true })
-      .populate('owner').countDocuments();
+    return await Artwork.find({ openForSale: true }).populate('owner').countDocuments();
   }
-  return await Artwork.find()
-    .populate('owner').countDocuments();
+  return await Artwork.find().populate('owner').countDocuments();
 };
 
 const getAllArtworksPaginated = async (page, perPage) => {
@@ -236,6 +227,22 @@ const getUserArtworksCount = async (userId) => {
   return count;
 };
 
+const updateArtworkGroup = async (id, groupId) => {
+  await Artwork.findOneAndUpdate({ _id: id }, { group: groupId });
+};
+
+const addEditionNumber = async (id, edition) => {
+  await Artwork.findOneAndUpdate({ _id: id }, { edition });
+};
+
+const getGroupArtworks = async (userId, groupId) => {
+  const result = await Artwork.find({ creater: userId, group: groupId }).populate('group');
+  return result;
+};
+const getGroupArtworksWithEditionNumber = async (userId, groupId, editionNumber) => {
+  const result = await Artwork.find({ creater: userId, group: groupId, edition: editionNumber }).populate('group');
+  return result;
+};
 
 module.exports = {
   saveArtwork,
@@ -262,4 +269,8 @@ module.exports = {
   getOpenArtWorks,
   getAllArtworksPaginated,
   getArtWorksCount,
+  updateArtworkGroup,
+  addEditionNumber,
+  getGroupArtworks,
+  getGroupArtworksWithEditionNumber,
 };

@@ -8,3 +8,4 @@ module.exports.History = require('./history.model');
 module.exports.Notification = require('./notification.model');
 module.exports.Transaction = require('./transaction.model');
 module.exports.Stats = require('./stats.model');
+module.exports.Group = require('./group.model');

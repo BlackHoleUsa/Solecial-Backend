@@ -389,4 +389,15 @@ router.get('/getArtworkHistory', [validate(artworkValidation.getHistoryVS)], art
 
 router.get('/getOpenArtWorks', [validate(artworkValidation.getOpenArtWorks)], artworkController.getOpenArtWorks);
 
+router.get(
+  '/getGroupArtworks',
+  [auth('manageUsers'), validate(artworkValidation.getGroupArtworks)],
+  artworkController.getGroupArtworks
+);
+router.get(
+  '/getGroupArtworksWithEdition',
+  [auth('manageUsers'), validate(artworkValidation.getGroupArtworksWithEdition)],
+  artworkController.getGroupArtworksWithEdition
+);
+
 module.exports = router;

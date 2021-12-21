@@ -88,6 +88,15 @@ const artworkSchema = mongoose.Schema(
       default: 0,
       required: false,
     },
+    group: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'Group',
+    },
+    edition: {
+      type: Number,
+      default: 0,
+      required: false,
+    },
     sale: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'BuySell',

@@ -9,3 +9,4 @@ module.exports.historyService = require('./history.service');
 module.exports.notificationService = require('./notification.service');
 module.exports.buysellService = require('./buysell.service');
 module.exports.settingService = require('./setting.service');
+module.exports.groupService = require('./group.service');

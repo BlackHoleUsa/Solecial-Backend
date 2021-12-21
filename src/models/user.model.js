@@ -98,6 +98,12 @@ const userSchema = mongoose.Schema(
         ref: 'Artwork',
       },
     ],
+    groups: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Group',
+      },
+    ],
     isblock: { type: Boolean, default: false },
     code: { type: String },
   },

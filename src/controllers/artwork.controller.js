@@ -12,6 +12,7 @@ const {
   historyService,
   buysellService,
   settingService,
+  groupService,
 } = require('../services');
 const EVENT = require('../triggers/custom-events').customEvent;
 const { addFilesToIPFS, pinMetaDataToIPFS } = require('../utils/helpers');
@@ -21,7 +22,7 @@ const saveArtwork = catchAsync(async (req, res) => {
   // mutipleNFT, //amount
   const { body } = req;
   const { files } = req;
-  const { name, description, creater, artist_name, artist_description } = body;
+  const { name, description, creater, artist_name, artist_description, multipleNFT, groupId } = body;
   let imgData;
   let artistimgData;
   if (files.length > 0) {
@@ -34,14 +35,34 @@ const saveArtwork = catchAsync(async (req, res) => {
   body.basePrice = body.price;
   const artwork = await artworkService.saveArtwork(body);
   const user = await userService.getUserById(creater);
-  const metaUrl = await pinMetaDataToIPFS({
-    name,
-    description,
-    artist_name,
-    artist_description,
-    artist_url: artistimgData,
-    artwork_url: imgData,
-  });
+  let metaUrl;
+  if (multipleNFT) {
+    EVENT.emit('increase-group-count', {
+      groupId,
+    });
+    await artworkService.updateArtworkGroup(artwork._id, groupId);
+    const currentCount = await groupService.getUserGroup(user._id, groupId);
+    metaUrl = await pinMetaDataToIPFS({
+      name,
+      description,
+      artist_name,
+      artist_description,
+      artist_url: artistimgData,
+      artwork_url: imgData,
+      edition: `${currentCount[0].currentCount} of ${currentCount[0].totalCount}`,
+    });
+    await artworkService.addEditionNumber(artwork._id, currentCount[0].currentCount);
+  } else {
+    metaUrl = await pinMetaDataToIPFS({
+      name,
+      description,
+      artist_name,
+      artist_description,
+      artist_url: artistimgData,
+      artwork_url: imgData,
+    });
+  }
+
   const updatedArtwork = await artworkService.updateArtworkMetaUrl(artwork._id, metaUrl);
   EVENT.emit('add-artwork-in-user', {
     artworkId: artwork._id,
@@ -300,6 +321,19 @@ const getOpenArtWorks = catchAsync(async (req, res) => {
   }
 });
 
+const getGroupArtworks = catchAsync(async (req, res) => {
+  const { groupId } = req.query;
+  const { user } = req;
+  const result = await artworkService.getGroupArtworks(user._id, groupId);
+  res.status(httpStatus.OK).send({ data: result });
+});
+
+const getGroupArtworksWithEdition = catchAsync(async (req, res) => {
+  const { groupId, editionNumber } = req.query;
+  const { user } = req;
+  const result = await artworkService.getGroupArtworksWithEditionNumber(user._id, groupId, editionNumber);
+  res.status(httpStatus.OK).send({ data: result });
+});
 module.exports = {
   saveArtwork,
   getUserArtworks,
@@ -321,4 +355,6 @@ module.exports = {
   getTimeoutItems,
   getAllArtworks,
   getOpenArtWorks,
+  getGroupArtworks,
+  getGroupArtworksWithEdition,
 };

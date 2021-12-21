@@ -1,6 +1,7 @@
 const { User, Collection, Artwork, Auction, History, Notification, Transaction, Stats } = require('../models');
 const { MINT_STATUS, STATS_UPDATE_TYPE } = require('../utils/enums');
 const { settingService } = require('../services');
+const Group = require('../models/group.model');
 
 const addCollectionInUser = async (params) => {
   const { collectionId, userId } = params;
@@ -72,9 +73,9 @@ const updateArtworkHistory = async (params) => {
 };
 
 const createNotification = async (params) => {
-  const setting =await settingService.getSettings()
+  const setting = await settingService.getSettings()
   const notificationPermissioninSetting = setting[0].notifications
-  if(notificationPermissioninSetting === true){
+  if (notificationPermissioninSetting === true) {
     await Notification.create(params);
     console.log('notification sent')
   }
@@ -142,8 +143,24 @@ const userStatsUpdate = async (params) => {
   }
 
   console.log('STATS done');
-}
+};
+const addGroupInUser = async (params) => {
+  const { userId, groupId } = params;
+  await User.updateOne({ _id: userId }, { $push: { groups: groupId } });
+  console.log('Group added in user successfully');
+};
 
+const increaseGroupCount = async (params) => {
+  const { groupId } = params;
+  await Group.findOneAndUpdate({
+      _id: groupId,
+    },
+    {
+      $inc: { currentCount: 1 },
+    }
+  );
+  console.log("GroupCount increased");
+};
 module.exports = {
   addCollectionInUser,
   addArtworkInUser,
@@ -154,5 +171,7 @@ module.exports = {
   createNotification,
   createTransaction,
   createStats,
-  userStatsUpdate
+  userStatsUpdate,
+  addGroupInUser,
+  increaseGroupCount,
 };

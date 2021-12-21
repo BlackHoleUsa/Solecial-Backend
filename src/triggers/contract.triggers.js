@@ -1,8 +1,4 @@
-const {
-  AUCTION_CONTRACT_INSTANCE,
-  MINT_SINGLE_CONTRACT_INSTANCE,
-  MINT_MULTIPLE_CONTRACT_INSTANCE,
-} = require('../config/contract.config');
+const { AUCTION_CONTRACT_INSTANCE, MINT_SINGLE_CONTRACT_INSTANCE } = require('../config/contract.config');
 const { contractController } = require('../controllers');
 const { MINT_CONTRACT_EVENTS, AUC_CONTRACT_EVENTS } = require('../utils/enums');
 // var contractInfo = require('./contractInfo');
@@ -24,27 +20,8 @@ MINT_SINGLE_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
   switch (ev.event) {
     case MINT_CONTRACT_EVENTS.NEW_COLLECTION:
       console.log('ev.returnValues', ev.returnValues);
-      const {tokenId ,owner, colName } = ev.returnValues;
+      const { tokenId, owner, colName } = ev.returnValues;
       contractController.updateCollectionAddress(tokenId, owner, colName);
-      break;
-    default:
-      console.log('happy');
-  }
-});
-
-MINT_MULTIPLE_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
-  if (err) {
-    console.error('Error', err);
-    return;
-  }
-
-  console.log('Event', ev);
-
-  switch (ev.event) {
-    case MINT_CONTRACT_EVENTS.NEW_COLLECTION:
-      console.log('ev.returnValues', ev.returnValues);
-      const { CollectionAddress, owner, colName } = ev.returnValues;
-      contractController.updateCollectionAddress(CollectionAddress, owner, colName);
       break;
     default:
       console.log('happy');
