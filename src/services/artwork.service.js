@@ -252,7 +252,7 @@ const getGroupArtworks = async (groupId, page, perPage) => {
 };
 
 const getGroupArtworksCount = async (groupId) => {
-  const result = await Artwork.find({ _id: groupId }).countDocuments();
+  const result = await Artwork.find({ id: groupId }).countDocuments();
   return result;
 };
 const getGroupArtworksWithEditionNumber = async (userId, groupId, editionNumber) => {
