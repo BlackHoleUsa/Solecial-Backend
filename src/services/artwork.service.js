@@ -14,6 +14,7 @@ const getUserArtworks = async (userId, page, perPage) => {
   return await Artwork.find({ owner: userId })
     .populate('owner')
     .populate('creater')
+    .populate('group')
     .limit(parseInt(perPage))
     .skip(page * perPage)
     .lean();
