@@ -251,8 +251,8 @@ const getGroupArtworks = async (groupId, page, perPage) => {
   return result;
 };
 
-const getGroupArtworksCount = async () => {
-  const result = await Artwork.find().countDocuments();
+const getGroupArtworksCount = async (groupId) => {
+  const result = await Artwork.find({ _id: groupId }).countDocuments();
   return result;
 };
 const getGroupArtworksWithEditionNumber = async (userId, groupId, editionNumber) => {
