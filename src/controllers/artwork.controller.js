@@ -203,7 +203,7 @@ const placeBid = catchAsync(async (req, res) => {
 
 const getSingleArtwork = catchAsync(async (req, res) => {
   const { artworkId } = req.query;
-  const artwork = await artworkService.getPopulatedArtwork(artworkId, 'auction creater owner collectionId bids sale');
+  const artwork = await artworkService.getPopulatedArtwork(artworkId, 'auction creater owner collectionId bids sale group');
   const response = await buysellService.getBuySellSaleId(artworkId);
   if (response) {
     res
