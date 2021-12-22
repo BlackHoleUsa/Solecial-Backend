@@ -175,23 +175,27 @@ const getOpenArtWorks = async (
   if (artwork_type != undefined) {
     return await Artwork.find({ artwork_type })
       .populate('owner')
+      .populate('group')
       .limit(parseInt(perPage))
       .skip(page * perPage);
   }
   if (isAuctionOpen != undefined) {
     return await Artwork.find({ isAuctionOpen: true })
       .populate('owner')
+      .populate('group')
       .limit(parseInt(perPage))
       .skip(page * perPage);
   }
   if (openForSale != undefined) {
     return await Artwork.find({ openForSale: true })
       .populate('owner')
+      .populate('group')
       .limit(parseInt(perPage))
       .skip(page * perPage);
   }
   return await Artwork.find()
     .populate('owner')
+    .populate('group')
     .limit(parseInt(perPage))
     .skip(page * perPage);
 };
