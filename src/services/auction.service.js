@@ -5,19 +5,23 @@ const { AUCTION_CONTRACT_INSTANCE } = require('../config/contract.config');
 const EVENT = require('../triggers/custom-events').customEvent;
 
 const saveAuction = async (params) => {
-  let res = await Auction.create(params);
+  const res = await Auction.create(params);
   return res.toObject();
 };
 
 const artworkExistsInAuction = async (artworkId) => {
-  let auction = await Auction.find({ artwork: artworkId, status: AUCTION_STATUS.OPEN });
+  const auction = await Auction.find({ artwork: artworkId, status: AUCTION_STATUS.OPEN });
   return auction.length > 0;
 };
 
 const getOpenAuctions = async (page, perPage, sort, whereQuery) => {
   const auctions = await Auction.find(whereQuery)
     .sort(sort)
-    .populate('artwork owner creater bids')
+    .populate('owner creater bids')
+    .populate({
+      path: 'artwork',
+      populate: { path: 'group' },
+    })
     .limit(parseInt(perPage))
     .skip(page * perPage)
     .lean();
@@ -61,8 +65,8 @@ const getSaleDetails = async (saleId) => {
     .populate({
       path: 'artwork',
       populate: {
-        path: 'creater'
-      }
+        path: 'creater',
+      },
     })
     .populate('owner')
     .lean();
@@ -76,14 +80,14 @@ const getAuctionDetails = async (aucId) => {
       path: 'artwork',
       populate: {
         path: 'creater',
-      }
+      },
     })
     .populate({
       path: 'bids',
       populate: {
-        path: 'bidder'
+        path: 'bidder',
       },
-      options: { sort: { 'bid_amount': -1 } }
+      options: { sort: { bid_amount: -1 } },
     })
     .populate('owner')
     .lean();
@@ -101,9 +105,9 @@ const checkAndCompleteAuctionStatus = async () => {
         if (currentDate > closingDate) {
           await Auction.findOneAndUpdate({ _id: auction._id }, { status: AUCTION_STATUS.CLOSED });
           await artworkService.closeArtworkAuction(auction.artwork);
-          let aucData = await AUCTION_CONTRACT_INSTANCE.methods.AuctionList(auction.contractAucId).call();
+          const aucData = await AUCTION_CONTRACT_INSTANCE.methods.AuctionList(auction.contractAucId).call();
           const { bidderAdd, latestBid, nftClaim, cancelled, ownerclaim } = aucData;
-          let user = await User.findOne({ address: bidderAdd });
+          const user = await User.findOne({ address: bidderAdd });
 
           if (auction.bids.length > 0) {
             await Auction.findOneAndUpdate(
@@ -133,7 +137,10 @@ const checkAndCompleteAuctionStatus = async () => {
               },
             });
           } else {
-            await Auction.findOneAndUpdate({ _id: auction._id }, { status: AUCTION_STATUS.TIMEOUT, nftClaim: false, cancelled: false, });
+            await Auction.findOneAndUpdate(
+              { _id: auction._id },
+              { status: AUCTION_STATUS.TIMEOUT, nftClaim: false, cancelled: false }
+            );
 
             EVENT.emit('send-and-save-notification', {
               receiver: auction.owner,
@@ -208,5 +215,5 @@ module.exports = {
   getTimeoutAuctions,
   // getOpenSales,
   getSaleDetails,
-  getAuctionDetails
+  getAuctionDetails,
 };

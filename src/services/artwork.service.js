@@ -127,23 +127,27 @@ const getAllArtworks = async (
   if (artwork_type != undefined) {
     return await Artwork.find({ artwork_type, owner: _id })
       .populate('owner')
+      .populate('group')
       .limit(parseInt(perPage))
       .skip(page * perPage);
   }
   if (isAuctionOpen != undefined) {
     return await Artwork.find({ isAuctionOpen: true, owner: _id })
       .populate('owner')
+      .populate('group')
       .limit(parseInt(perPage))
       .skip(page * perPage);
   }
   if (openForSale != undefined) {
     return await Artwork.find({ openForSale: true, owner: _id })
       .populate('owner')
+      .populate('group')
       .limit(parseInt(perPage))
       .skip(page * perPage);
   }
   return await Artwork.find({ owner: _id })
     .populate('owner')
+    .populate('group')
     .limit(parseInt(perPage))
     .skip(page * perPage);
 };
@@ -209,6 +213,7 @@ const getAllArtworksPaginated = async (page, perPage) => {
   const artworks = await Artwork.find()
     .populate('creater')
     .populate('owner')
+    .populate('group')
     .limit(parseInt(perPage))
     .skip(page * perPage)
     .lean();
@@ -235,8 +240,16 @@ const addEditionNumber = async (id, edition) => {
   await Artwork.findOneAndUpdate({ _id: id }, { edition });
 };
 
-const getGroupArtworks = async (userId, groupId) => {
-  const result = await Artwork.find({ creater: userId, group: groupId }).populate('group');
+const getGroupArtworks = async (groupId, page, perPage) => {
+  const result = await Artwork.find({ group: groupId })
+    .populate('group')
+    .limit(parseInt(perPage))
+    .skip(page * perPage);
+  return result;
+};
+
+const getGroupArtworksCount = async () => {
+  const result = await Artwork.find().countDocuments();
   return result;
 };
 const getGroupArtworksWithEditionNumber = async (userId, groupId, editionNumber) => {
@@ -273,4 +286,5 @@ module.exports = {
   addEditionNumber,
   getGroupArtworks,
   getGroupArtworksWithEditionNumber,
+  getGroupArtworksCount,
 };

@@ -322,10 +322,10 @@ const getOpenArtWorks = catchAsync(async (req, res) => {
 });
 
 const getGroupArtworks = catchAsync(async (req, res) => {
-  const { groupId } = req.query;
-  const { user } = req;
-  const result = await artworkService.getGroupArtworks(user._id, groupId);
-  res.status(httpStatus.OK).send({ data: result });
+  const { groupId, page, perPage } = req.query;
+  const result = await artworkService.getGroupArtworks(groupId, page, perPage);
+  const count = await artworkService.getGroupArtworksCount(groupId);
+  res.status(httpStatus.OK).send({ data: result, count });
 });
 
 const getGroupArtworksWithEdition = catchAsync(async (req, res) => {

@@ -151,6 +151,8 @@ const getOpenArtWorks = {
 const getGroupArtworks = {
   query: Joi.object().keys({
     groupId: Joi.string().required(),
+    page: Joi.string().required(),
+    perPage: Joi.string().required(),
   }),
 };
 const getGroupArtworksWithEdition = {
