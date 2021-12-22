@@ -17,6 +17,7 @@ const {
 const EVENT = require('../triggers/custom-events').customEvent;
 const { addFilesToIPFS, pinMetaDataToIPFS } = require('../utils/helpers');
 const { HISTORY_TYPE, NOTIFICATION_TYPE, STATS_UPDATE_TYPE } = require('../utils/enums');
+const { set } = require('../app');
 
 const saveArtwork = catchAsync(async (req, res) => {
   // mutipleNFT, //amount
@@ -308,16 +309,34 @@ const getAllArtworks = catchAsync(async (req, res) => {
   }
 });
 
+const helper = (artWorks) => {
+  const singleArtWorks = artWorks.filter((artwork) => !artwork.multipleNFT);
+  const multipleArtWorks = artWorks.filter((artwork) => artwork.multipleNFT);
+  const multipleArtworkGroupId = multipleArtWorks.map((artwork) => artwork.group.id);
+  uniq = [...new Set(multipleArtworkGroupId)];
+  console.log(uniq);
+  const multipleStacks = uniq.map((unique) => {
+    const result = multipleArtWorks.filter((art) => art.group.id === unique)[0];
+    return result;
+  });
+  return singleArtWorks.concat(multipleStacks);
+};
+
 const getOpenArtWorks = catchAsync(async (req, res) => {
   const { artwork_type, page, perPage, isAuctionOpen, openForSale } = req.query;
   if (!artwork_type) {
     const artWorks = await artworkService.getOpenArtWorks(page, perPage, isAuctionOpen, openForSale);
     const count = await artworkService.getOpenArtWorksCount(isAuctionOpen, openForSale);
-    res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: artWorks, count });
+    res.status(httpStatus.OK).send({
+      status: true,
+      message: 'Successfull',
+      data: helper(artWorks),
+      count: helper(artWorks)?.length,
+    });
   } else {
     const artWorks = await artworkService.getOpenArtWorks(page, perPage, undefined, undefined, artwork_type);
     const count = await artworkService.getOpenArtWorksCount(isAuctionOpen, openForSale);
-    res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: artWorks, count });
+    res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: helper(artWorks), count: helper(artWorks)?.length, });
   }
 });
 
