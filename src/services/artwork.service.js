@@ -1,4 +1,4 @@
-const { Artwork } = require('../models');
+const { Artwork, Group } = require('../models');
 const { MINT_STATUS } = require('../utils/enums');
 
 const getPopulatedArtwork = async (artworkId, fieldsToPopulate) => {
@@ -252,8 +252,9 @@ const getGroupArtworks = async (groupId, page, perPage) => {
 };
 
 const getGroupArtworksCount = async (groupId) => {
-  const result = await Artwork.find({ id: groupId }).countDocuments();
-  return result;
+  const result = await Artwork.find({ group: groupId });
+  console.log(result.length);
+  return result.length;
 };
 const getGroupArtworksWithEditionNumber = async (userId, groupId, editionNumber) => {
   const result = await Artwork.find({ creater: userId, group: groupId, edition: editionNumber }).populate('group');

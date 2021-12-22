@@ -344,6 +344,7 @@ const getGroupArtworks = catchAsync(async (req, res) => {
   const { groupId, page, perPage } = req.query;
   const result = await artworkService.getGroupArtworks(groupId, page, perPage);
   const count = await artworkService.getGroupArtworksCount(groupId);
+  console.log("sdas");
   res.status(httpStatus.OK).send({ data: result, count });
 });
 
