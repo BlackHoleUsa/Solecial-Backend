@@ -222,8 +222,7 @@ const getAllArtworksPaginated = async (page, perPage) => {
     .skip(page * perPage)
     .lean();
 
-  const count = await Artwork.find().countDocuments();
-  return { artworks, count };
+  return artworks;
 };
 
 const getArtWorksCount = async () => {

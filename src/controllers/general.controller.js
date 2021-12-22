@@ -72,16 +72,29 @@ const handleSearch = catchAsync(async (req, res) => {
   }
 });
 
+const helper = (artWorks) => {
+  const singleArtWorks = artWorks.filter((artwork) => !artwork.multipleNFT);
+  const multipleArtWorks = artWorks.filter((artwork) => artwork.multipleNFT);
+  const multipleArtworkGroupId = multipleArtWorks.map((artwork) => artwork.group.id);
+  uniq = [...new Set(multipleArtworkGroupId)];
+  console.log(uniq);
+  const multipleStacks = uniq.map((unique) => {
+    const result = multipleArtWorks.filter((art) => art.group.id === unique)[0];
+    return result;
+  });
+  return singleArtWorks.concat(multipleStacks);
+};
+
 const getAppActivity = catchAsync(async (req, res) => {
   const { page, perPage } = req.query;
 
-  const histories = await artworkService.getAllArtworksPaginated(page, perPage);
+  const artWorks = await artworkService.getAllArtworksPaginated(page, perPage);
 
   res.status(httpStatus.OK).send({
     status: true,
     message: 'Successfull',
-    data: histories.artworks,
-    count: histories.count,
+    data: helper(artWorks),
+    count: helper(artWorks)?.length,
   });
 });
 
