@@ -322,7 +322,7 @@ const handleNFTClaim = async (values) => {
     );
   }
 
-  console.log('NFT claimed successfully');
+
 
   EVENT.emit('record-transaction', {
     user: newArtworkOwner._id,
@@ -347,6 +347,10 @@ const handleNFTClaim = async (values) => {
       auction: auction._id,
     },
   });
+
+  await Auction.findOneAndDelete({ contractAucId: aucId });
+  console.log('Auction delete successfully');
+  console.log('NFT claimed successfully');
 };
 
 const handleNFTSale = async (values) => {
