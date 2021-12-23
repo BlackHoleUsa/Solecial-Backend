@@ -363,7 +363,7 @@ const getGroupArtworksWithEdition = catchAsync(async (req, res) => {
 const convertMultipleToSingleArtwork = catchAsync(async (req, res) => {
   const { artworkId } = req.query;
   const result = await artworkService.convertMultipleToSingleArtwork(artworkId);
-  return result;
+  res.status(httpStatus.OK).send({ data: result });
 });
 
 module.exports = {
