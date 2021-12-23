@@ -262,6 +262,15 @@ const getGroupArtworksWithEditionNumber = async (userId, groupId, editionNumber)
   return result;
 };
 
+const convertMultipleToSingleArtwork = async (artworkId) => {
+  const result1 = await Artwork.findById({ _id: artworkId }).populate('group');
+  const result = await Artwork.findOneAndUpdate(
+    { _id: artworkId },
+    { multipleNFT: false, group: null, totalEdition: result1.group.totalCount },
+    { new: true }
+  );
+  return result;
+};
 module.exports = {
   saveArtwork,
   getUserArtworks,
@@ -292,4 +301,5 @@ module.exports = {
   getGroupArtworks,
   getGroupArtworksWithEditionNumber,
   getGroupArtworksCount,
+  convertMultipleToSingleArtwork,
 };

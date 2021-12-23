@@ -161,6 +161,11 @@ const getGroupArtworksWithEdition = {
     editionNumber: Joi.string().required(),
   }),
 };
+const convertMultipleToSingleArtwork = {
+  query: Joi.object().keys({
+    artworkId: Joi.string().required(),
+  }),
+};
 module.exports = {
   createArtworkVS,
   getArtworksVS,
@@ -183,4 +188,5 @@ module.exports = {
   getOpenArtWorks,
   getGroupArtworks,
   getGroupArtworksWithEdition,
+  convertMultipleToSingleArtwork,
 };

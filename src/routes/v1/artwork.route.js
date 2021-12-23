@@ -396,4 +396,9 @@ router.get(
   artworkController.getGroupArtworksWithEdition
 );
 
+router.post(
+  '/convertMultipleToSingleArtwork',
+  validate(artworkValidation.convertMultipleToSingleArtwork),
+  artworkController.convertMultipleToSingleArtwork
+);
 module.exports = router;
