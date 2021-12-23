@@ -76,18 +76,18 @@ const helper = (artWorks) => {
   const singleArtWorks = artWorks.filter((artwork) => artwork.multipleNFT === false);
   const multipleArtWorks = artWorks.filter((artwork) => artwork.multipleNFT === true);
   const multipleArtworkGroupId = multipleArtWorks.map((artwork) => artwork.group._id);
-  uniq = [...new Set(multipleArtworkGroupId)];
-  let multipleStacks = [];
+  const uniq = [...new Set(multipleArtworkGroupId)];
+  const multipleStacks = [];
   for (let i = 0; i < multipleArtWorks.length; i++) {
     for (let k = 0; k < uniq.length; k++) {
-      if ((multipleArtWorks[i].group._id).toString() == uniq[k].toString() && multipleArtWorks[i].edition === 1) {
-        multipleStacks.push(multipleArtWorks);
+      if (multipleArtWorks[i].group._id.toString() === uniq[k].toString() && multipleArtWorks[i].edition === 1) {
+        multipleStacks.push(multipleArtWorks[i]);
       }
     }
   }
   console.log(singleArtWorks.length);
   console.log(multipleStacks.length);
-  return singleArtWorks.concat(multipleStacks);
+  return [...singleArtWorks, ...multipleStacks];
 };
 
 const getAppActivity = catchAsync(async (req, res) => {
