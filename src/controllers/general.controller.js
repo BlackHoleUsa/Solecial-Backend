@@ -75,13 +75,14 @@ const handleSearch = catchAsync(async (req, res) => {
 const helper = (artWorks) => {
   const singleArtWorks = artWorks.filter((artwork) => !artwork.multipleNFT);
   const multipleArtWorks = artWorks.filter((artwork) => artwork.multipleNFT);
-  const multipleArtworkGroupId = multipleArtWorks.map((artwork) => artwork.group.id);
+  const multipleArtworkGroupId = multipleArtWorks.map((artwork) => artwork.group._id);
   uniq = [...new Set(multipleArtworkGroupId)];
-  console.log(uniq);
   const multipleStacks = uniq.map((unique) => {
-    const result = multipleArtWorks.filter((art) => art.group.id === unique)[0];
+    const result = multipleArtWorks.find((art) => art.group.id === unique);
     return result;
   });
+  console.log(singleArtWorks.length);
+  console.log(multipleStacks.length);
   return singleArtWorks.concat(multipleStacks);
 };
 
@@ -89,12 +90,13 @@ const getAppActivity = catchAsync(async (req, res) => {
   const { page, perPage } = req.query;
 
   const artWorks = await artworkService.getAllArtworksPaginated(page, perPage);
+  const result = helper(artWorks);
 
   res.status(httpStatus.OK).send({
     status: true,
     message: 'Successfull',
-    data: helper(artWorks),
-    count: helper(artWorks)?.length,
+    data: result,
+    count: result.length,
   });
 });
 
