@@ -269,18 +269,17 @@ const getGroupArtworksWithEditionNumber = async (userId, groupId, editionNumber)
 
 const convertMultipleToSingleArtwork = async (artworkId) => {
   const result1 = await Artwork.findById({ _id: artworkId }).populate('group');
-  // const result2 = await Artwork.findAll({ group: result1.group._id });
-  // if (result2.length === 1) {
-  //   const result11 = {
-  //     ...result1,
-  //     multipleNFT: true,
-  //     auction: null,
-  //     totalEdition: null,
-  //     sale: null,
-  //     _id: (Math.random() + 1).toString(36).substring(14),
-  //   };
-  //   await Artwork.create(result11);
-  // }
+  const result2 = await Artwork.find({ group: result1.group._id });
+  if (result2.length === 1) {
+    const result11 = { result1 };
+    delete result11._id;
+    result11.multipleNFT = true;
+    result11.auction = null;
+    result11.totalEdition = null;
+    result11.sale = null;
+    const newArtwork = await Artwork.create(result11);
+    console.log("copy newArtwork ", newArtwork);
+  }
   const result = await Artwork.findOneAndUpdate(
     { _id: artworkId },
     { multipleNFT: false, group: null, totalEdition: result1.group.totalCount },
