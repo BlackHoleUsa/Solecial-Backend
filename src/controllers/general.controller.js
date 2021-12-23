@@ -80,8 +80,9 @@ const helper = (artWorks) => {
   const multipleStacks = [];
   for (let i = 0; i < multipleArtWorks.length; i++) {
     for (let k = 0; k < uniq.length; k++) {
-      if (multipleArtWorks[i].group._id.toString() === uniq[k].toString() && multipleArtWorks[i].edition === 1) {
+      if (multipleArtWorks[i].group._id.toString() === uniq[k].toString()) {
         multipleStacks.push(multipleArtWorks[i]);
+        k = uniq.length + 1;
       }
     }
   }

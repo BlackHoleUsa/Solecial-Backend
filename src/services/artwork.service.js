@@ -272,7 +272,7 @@ const convertMultipleToSingleArtwork = async (artworkId) => {
   const result2 = await Artwork.find({ group: result1.group._id });
   console.log(result2);
   // if (result2.length === 1) {
-  //   const result11 = { ...result1 };
+  //   const result11 = { ...result1[0] };
   //   delete result11._id;
   //   result11.multipleNFT = true;
   //   result11.auction = null;
