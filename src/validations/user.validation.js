@@ -31,6 +31,7 @@ const updateUser = {
     userId: Joi.required().custom(objectId),
   }),
   body: Joi.object().keys({
+    userName: Joi.string().optional(),
     bio: Joi.string().optional(),
     profilePic: Joi.string().optional(),
     email: Joi.string().optional(),
