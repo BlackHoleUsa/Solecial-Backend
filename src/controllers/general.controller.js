@@ -94,13 +94,14 @@ const getAppActivity = catchAsync(async (req, res) => {
   const { page, perPage } = req.query;
 
   const artWorks = await artworkService.getAllArtworksPaginated(page, perPage);
+  const newArtWorks = await artworkService.getAllArtworksWithOutPaginated();
   const result = helper(artWorks);
 
   res.status(httpStatus.OK).send({
     status: true,
     message: 'Successfull',
     data: result,
-    count: result.length,
+    count: helper(newArtWorks)?.length,
   });
 });
 

@@ -201,17 +201,21 @@ const getOpenArtWorks = async (
     .skip(page * perPage);
 };
 
-const getOpenArtWorksCount = async (isAuctionOpen = undefined, openForSale = undefined, artwork_type = undefined) => {
+const getOpenArtWorksWithOutPages = async (isAuctionOpen = undefined, openForSale = undefined, artwork_type = undefined) => {
   if (artwork_type != undefined) {
-    return await Artwork.find({ artwork_type }).populate('owner').countDocuments();
+    return await Artwork.find({ artwork_type }).populate('owner');
   }
   if (isAuctionOpen != undefined) {
-    return await Artwork.find({ isAuctionOpen: true }).populate('owner').countDocuments();
+    return await Artwork.find({ isAuctionOpen: true }).populate('owner');
   }
   if (openForSale != undefined) {
-    return await Artwork.find({ openForSale: true }).populate('owner').countDocuments();
+    return await Artwork.find({ openForSale: true }).populate('owner');
   }
-  return await Artwork.find().populate('owner').countDocuments();
+  return await Artwork.find().populate('owner');
+};
+
+const getAllArtworksWithOutPaginated = async () => {
+  return await Artwork.find().populate('owner');
 };
 
 const getAllArtworksPaginated = async (page, perPage) => {
@@ -292,7 +296,7 @@ module.exports = {
   searchArtworkByName,
   getAllArtworks,
   getAllArtworksCount,
-  getOpenArtWorksCount,
+  getOpenArtWorksWithOutPages,
   getOpenArtWorks,
   getAllArtworksPaginated,
   getArtWorksCount,
@@ -302,4 +306,5 @@ module.exports = {
   getGroupArtworksWithEditionNumber,
   getGroupArtworksCount,
   convertMultipleToSingleArtwork,
+  getAllArtworksWithOutPaginated,
 };

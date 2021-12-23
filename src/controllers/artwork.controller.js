@@ -331,17 +331,17 @@ const getOpenArtWorks = catchAsync(async (req, res) => {
   const { artwork_type, page, perPage, isAuctionOpen, openForSale } = req.query;
   if (!artwork_type) {
     const artWorks = await artworkService.getOpenArtWorks(page, perPage, isAuctionOpen, openForSale);
-    const count = await artworkService.getOpenArtWorksCount(isAuctionOpen, openForSale);
+    const artWorksNew = await artworkService.getOpenArtWorksWithOutPages(isAuctionOpen, openForSale);
     res.status(httpStatus.OK).send({
       status: true,
       message: 'Successfull',
       data: helper(artWorks),
-      count: helper(artWorks)?.length,
+      count: helper(artWorksNew)?.length,
     });
   } else {
     const artWorks = await artworkService.getOpenArtWorks(page, perPage, undefined, undefined, artwork_type);
-    const count = await artworkService.getOpenArtWorksCount(isAuctionOpen, openForSale);
-    res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: helper(artWorks), count: helper(artWorks)?.length, });
+    const artWorksNew = await artworkService.getOpenArtWorksWithOutPages(isAuctionOpen, openForSale);
+    res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: helper(artWorks), count: helper(artWorksNew)?.length, });
   }
 });
 
