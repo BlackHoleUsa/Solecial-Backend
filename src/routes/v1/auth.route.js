@@ -104,7 +104,7 @@ router.post('/register', validate(authValidation.register), authController.regis
  *               code: 401
  *               message: Invalid email or password
  */
-router.post('/login', authController.login);
+router.post('/login', validate(authValidation.login), authController.login);
 /**
  * @swagger
  * /auth/logout:
