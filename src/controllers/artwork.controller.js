@@ -315,15 +315,23 @@ const helper = (artWorks) => {
   const multipleArtworkGroupId = multipleArtWorks.map((artwork) => artwork.group._id);
   const uniq = [...new Set(multipleArtworkGroupId)];
   const multipleStacks = [];
-  for (let i = 0; i < multipleArtWorks.length; i++) {
-    for (let k = 0; k < uniq.length; k++) {
-      if (multipleArtWorks[i].group._id.toString() === uniq[k].toString()) {
-        multipleStacks.push(multipleArtWorks[i]);
-        k = uniq.length + 1;
+  for (let i = 0; i < uniq.length; i++) {
+    for (let k = 0; k < multipleArtWorks.length; k++) {
+      if (multipleArtWorks[k].group._id.toString() === uniq[i].toString()) {
+        multipleStacks.push(multipleArtWorks[k]);
+        k = multipleArtWorks.length + 1;
       }
     }
   }
-  console.log(singleArtWorks.length);
+  // for (let i = 0; i < multipleArtWorks.length; i++) {
+  //   for (let k = 0; k < uniq.length; k++) {
+  //     if (multipleArtWorks[i].group._id.toString() === uniq[k].toString()) {
+  //       multipleStacks.push(multipleArtWorks[i]);
+  //       k = uniq.length + 1;
+  //     }
+  //   }
+  // }
+  // console.log(singleArtWorks.length);
   console.log(multipleStacks.length);
   return [...singleArtWorks, ...multipleStacks];
 };
