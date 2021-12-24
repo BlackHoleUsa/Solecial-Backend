@@ -14,6 +14,10 @@ const {
   STATS_UPDATE_TYPE,
 } = require('../utils/enums');
 
+const convertToWei = (amount) => {
+  return Web3.utils.toWei(`${amount}`, "ether");
+};
+
 const updateCollectionAddress = async (tokenId, owner, colName) => {
   tokenId = tokenId.toString();
   const user = await User.findOne({ address: owner });
@@ -45,6 +49,7 @@ const handleNewAuction = async (saleFromContract) => {
     }
     const auctionData = await AUCTION_CONTRACT_INSTANCE.methods.AuctionList(aucId).call();
     const { endTime, startPrice } = auctionData;
+    startPrice = convertToWei(parseInt(startPrice));
     console.log('Price in auction', startPrice);
     const { owner, creater } = artwork;
     const params = {
@@ -80,6 +85,7 @@ const handleNewAuction = async (saleFromContract) => {
 
 const handleNewSale = async (saleFromContract) => {
   let { colAddress, tokenId, saleId, price, amount } = saleFromContract;
+  price = convertToWei(parseInt(price));
   tokenId = tokenId.toString();
   try {
     // const collection = await Collection.findOne({ collectionAddress: colAddress });
@@ -243,6 +249,7 @@ const handleSaleComplete = async (saleFromContract) => {
 const handleNewBid = async (par) => {
   const { bid, bidder, aucId } = par;
 
+  bid = convertToWei(parseInt(bid));
   const auctionData = await AUCTION_CONTRACT_INSTANCE.methods.AuctionList(aucId).call();
   let { colAddress, owner, tokenId } = auctionData;
   tokenId = tokenId.toString();
