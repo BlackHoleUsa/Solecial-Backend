@@ -3,19 +3,19 @@ const { password, objectId } = require('./custom.validation');
 
 const register = {
   body: Joi.object().keys({
-    userName: Joi.string(),
-    email: Joi.string().email(),
-    address: Joi.string(),
-    password: Joi.string(),
-    role: Joi.string(),
+    userName: Joi.string().optional(),
+    email: Joi.string().email().optional(),
+    address: Joi.string().optional(),
+    password: Joi.string().optional(),
+    role: Joi.string().optional(),
   }),
 };
 
 const login = {
   body: Joi.object().keys({
-    address: Joi.string(),
-    password: Joi.string(),
-    email: Joi.string().email(),
+    address: Joi.string().optional(),
+    password: Joi.string().optional(),
+    email: Joi.string().email().optional(),
   }),
 };
 
