@@ -16,6 +16,8 @@ const getUserArtworks = async (userId, page, perPage) => {
     .populate('owner')
     .populate('creater')
     .populate('group')
+    .populate('sale')
+    .populate('auction')
     .limit(parseInt(perPage))
     .skip(page * perPage)
     .lean();
@@ -178,6 +180,8 @@ const getOpenArtWorks = async (
     return await Artwork.find({ artwork_type })
       .populate('owner')
       .populate('group')
+      .populate('sale')
+      .populate('auction')
       .limit(parseInt(perPage))
       .skip(page * perPage);
   }
@@ -185,6 +189,8 @@ const getOpenArtWorks = async (
     return await Artwork.find({ isAuctionOpen: true })
       .populate('owner')
       .populate('group')
+      .populate('sale')
+      .populate('auction')
       .limit(parseInt(perPage))
       .skip(page * perPage);
   }
@@ -192,12 +198,16 @@ const getOpenArtWorks = async (
     return await Artwork.find({ openForSale: true })
       .populate('owner')
       .populate('group')
+      .populate('sale')
+      .populate('auction')
       .limit(parseInt(perPage))
       .skip(page * perPage);
   }
   return await Artwork.find()
     .populate('owner')
     .populate('group')
+    .populate('sale')
+    .populate('auction')
     .limit(parseInt(perPage))
     .skip(page * perPage);
 };
@@ -224,6 +234,8 @@ const getAllArtworksPaginated = async (page, perPage) => {
     .populate('creater')
     .populate('owner')
     .populate('group')
+    .populate('sale')
+    .populate('auction')
     .limit(parseInt(perPage))
     .skip(page * perPage)
     .lean();
