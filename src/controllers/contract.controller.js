@@ -1,3 +1,4 @@
+const Web3 = require('web3');
 const { User, Collection, Artwork, Auction, BuySell } = require('../models');
 const { getUserByAddress } = require('../services/user.service');
 const { AUCTION_CONTRACT_INSTANCE } = require('../config/contract.config');
@@ -15,7 +16,7 @@ const {
 } = require('../utils/enums');
 
 const convertToWei = (amount) => {
-  return Web3.utils.toWei(`${amount}`, "ether");
+  return Web3.utils.toWei(`${amount}`, 'ether');
 };
 
 const updateCollectionAddress = async (tokenId, owner, colName) => {
@@ -41,7 +42,7 @@ const handleNewAuction = async (saleFromContract) => {
   tokenId = tokenId.toString();
   try {
     // const collection = await Collection.findOne({ collectionAddress: colAddress });
-    const artwork = await Artwork.findOne({ tokenId: tokenId });
+    const artwork = await Artwork.findOne({ tokenId });
     console.log('artwork in auction ', artwork);
     if (await auctionService.artworkExistsInAuction(artwork._id)) {
       console.log('Artwork is already on auction');
@@ -90,7 +91,7 @@ const handleNewSale = async (saleFromContract) => {
   try {
     // const collection = await Collection.findOne({ collectionAddress: colAddress });
     console.log('Price in Newsale', price);
-    const artwork = await Artwork.findOne({ tokenId: tokenId });
+    const artwork = await Artwork.findOne({ tokenId });
     if (!artwork.openForSale) {
       const { owner } = artwork;
       const params = {
@@ -333,8 +334,6 @@ const handleNFTClaim = async (values) => {
       }
     );
   }
-
-
 
   EVENT.emit('record-transaction', {
     user: newArtworkOwner._id,
