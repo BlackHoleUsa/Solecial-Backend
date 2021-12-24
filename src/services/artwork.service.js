@@ -156,6 +156,12 @@ const getAllArtworks = async (
     .skip(page * perPage);
 };
 
+const getAllArtwork = async () => {
+  return await Artwork.find()
+    .populate('owner')
+    .populate('group')
+};
+
 const getAllArtworksCount = async (_id, isAuctionOpen = undefined, openForSale = undefined, artwork_type = undefined) => {
   if (artwork_type != undefined) {
     return await Artwork.find({ artwork_type, owner: _id }).populate('owner').countDocuments();
@@ -332,4 +338,5 @@ module.exports = {
   getGroupArtworksCount,
   convertMultipleToSingleArtwork,
   getAllArtworksWithOutPaginated,
+  getAllArtwork,
 };
