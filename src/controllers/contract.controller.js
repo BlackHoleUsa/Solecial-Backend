@@ -160,7 +160,11 @@ const handleSaleComplete = async (saleFromContract) => {
     const { artwork } = sale;
     console.log('Price in SaleComplete', sale.price);
     const usr = await User.findOneAndUpdate({ _id: sale.owner }, { $pull: { artworks: artwork._id } });
-    const newArtworkOwner = await User.findOneAndUpdate({ address: newOwner_ }, { $push: { artworks: artwork._id } });
+    const artworks1 = await User.findOne({ address: newOwner_ }, { artworks: 1 });
+    let newArtworkOwner;
+    if (!artworks1.includes(artwork._id)) {
+      newArtworkOwner = await User.findOneAndUpdate({ address: newOwner_ }, { $push: { artworks: artwork._id } });
+    }
     console.log('newArtworkOWner', newArtworkOwner);
     if (amount !== undefined) {
       await Artwork.findOneAndUpdate(
