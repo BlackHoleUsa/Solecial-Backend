@@ -49,7 +49,7 @@ const handleNewAuction = async (saleFromContract) => {
       return;
     }
     const auctionData = await AUCTION_CONTRACT_INSTANCE.methods.AuctionList(aucId).call();
-    const { endTime, startPrice } = auctionData;
+    let { endTime, startPrice } = auctionData;
     startPrice = convertToWei(parseInt(startPrice));
     console.log('Price in auction', startPrice);
     const { owner, creater } = artwork;
@@ -248,7 +248,7 @@ const handleSaleComplete = async (saleFromContract) => {
 };
 
 const handleNewBid = async (par) => {
-  const { bid, bidder, aucId } = par;
+  let { bid, bidder, aucId } = par;
 
   bid = convertToWei(parseInt(bid));
   const auctionData = await AUCTION_CONTRACT_INSTANCE.methods.AuctionList(aucId).call();

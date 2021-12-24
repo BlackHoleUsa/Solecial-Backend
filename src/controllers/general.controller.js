@@ -48,7 +48,7 @@ const handleSearch = catchAsync(async (req, res) => {
         break;
 
       case SEARCH_FILTERS.ARTWORKS:
-        artworks = await artworkService.getAllArtWork();
+        artworks = await artworkService.getAllArtwork();
         data.artworks = artworks;
         break;
 
