@@ -2,7 +2,7 @@ const express = require('express');
 const validate = require('../../middlewares/validate');
 const authValidation = require('../../validations/auth.validation');
 const authController = require('../../controllers/auth.controller');
-const {auth} = require('../../middlewares/auth');
+const { auth } = require('../../middlewares/auth');
 
 const router = express.Router();
 /**
@@ -104,7 +104,7 @@ router.post('/register', validate(authValidation.register), authController.regis
  *               code: 401
  *               message: Invalid email or password
  */
-router.post('/login', validate(authValidation.login), authController.login);
+router.post('/login', authController.login);
 /**
  * @swagger
  * /auth/logout:
@@ -159,83 +159,83 @@ router.post('/logout', auth('manageUsers'), authController.logout);
 //   *               code: 401
 //   *               message: block function failed
 //   */
-router.put('/blockUser/:userId',[validate(authValidation.blockUser)],authController.blockUser)
+router.put('/blockUser/:userId', [validate(authValidation.blockUser)], authController.blockUser)
 
- /**
-  * @swagger
-  * /auth/forgot-password:
-  *   post:
-  *     summary: Forgot password
-  *     description: An email will be sent to reset password.
-  *     tags: [Auth]
-  *     requestBody:
-  *       required: true
-  *       content:
-  *         application/json:
-  *           schema:
-  *             type: object
-  *             required:
-  *               - email
-  *               - code
-  *             properties:
-  *               email:
-  *                 type: string
-  *                 format: email
-  *               code:
-  *                 type: string
-  *             example:
-  *               email: fake@example.com
-  *               code: '2350'
-  *     responses:
-  *       "204":
-  *         description: No content
-  *       "404":
-  *         $ref: '#/components/responses/NotFound'
-  */
-  router.post('/forgot-password', validate(authValidation.forgotPassword), authController.forgotPassword);
+/**
+ * @swagger
+ * /auth/forgot-password:
+ *   post:
+ *     summary: Forgot password
+ *     description: An email will be sent to reset password.
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - code
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               code:
+ *                 type: string
+ *             example:
+ *               email: fake@example.com
+ *               code: '2350'
+ *     responses:
+ *       "204":
+ *         description: No content
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
+ */
+router.post('/forgot-password', validate(authValidation.forgotPassword), authController.forgotPassword);
 
- /**
-  * @swagger
-  * /auth/reset-password:
-  *   post:
-  *     summary: Reset password
-  *     tags: [Auth]
-  *     requestBody:
-  *       required: true
-  *       content:
-  *         application/json:
-  *           schema:
-  *             type: object
-  *             required:
-  *               - email
-  *               - password
-  *             properties:
-  *               email:
-  *                 type: string
-  *                 format: email
-  *               password:
-  *                 type: string
-  *                 format: password
-  *                 minLength: 8
-  *                 description: At least one number and one letter
-  *             example:
-  *               email: fake@email.com
-  *               password: password1
-  *     responses:
-  *       "204":
-  *         description: No content
-  *       "401":
-  *         description: Password reset failed
-  *         content:
-  *           application/json:
-  *             schema:
-  *               $ref: '#/components/schemas/Error'
-  *             example:
-  *               code: 401
-  *               message: Password reset failed
-  */
+/**
+ * @swagger
+ * /auth/reset-password:
+ *   post:
+ *     summary: Reset password
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 minLength: 8
+ *                 description: At least one number and one letter
+ *             example:
+ *               email: fake@email.com
+ *               password: password1
+ *     responses:
+ *       "204":
+ *         description: No content
+ *       "401":
+ *         description: Password reset failed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               code: 401
+ *               message: Password reset failed
+ */
 
- router.post('/reset-password', validate(authValidation.resetPassword), authController.resetPassword);
+router.post('/reset-password', validate(authValidation.resetPassword), authController.resetPassword);
 
 // /**
 //  * @swagger
@@ -265,8 +265,7 @@ router.put('/blockUser/:userId',[validate(authValidation.blockUser)],authControl
 //  */
 
 // router.post('/verify-email', validate(authValidation.verifyEmail), authController.verifyEmail);
+router.post('/verify-code', validate(authValidation.verifyCode), authController.verifyCode);
 
-    router.post('/verify-code', validate(authValidation.verifyCode), authController.verifyCode);
 
- 
 module.exports = router;
