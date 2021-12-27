@@ -11,4 +11,6 @@ router.post('/createGroup', [auth('manageUsers'), validate(groupValidation.creat
 
 router.get('/getUserGroup', [auth('manageUsers')], groupController.getUserGroups);
 
+router.get('/CheckGroupArtWork', validate(groupValidation.CheckGroupArtWork), groupController.CheckGroupArtWork);
+
 module.exports = router;

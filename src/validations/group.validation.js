@@ -7,6 +7,12 @@ const creategroup = {
   }),
 };
 
+const CheckGroupArtWork = {
+  query: Joi.object().keys({
+    groupId: Joi.string().required(),
+  }),
+};
 module.exports = {
   creategroup,
+  CheckGroupArtWork,
 };

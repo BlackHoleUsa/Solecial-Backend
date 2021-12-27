@@ -157,9 +157,7 @@ const getAllArtworks = async (
 };
 
 const getAllArtwork = async () => {
-  return await Artwork.find()
-    .populate('owner')
-    .populate('group')
+  return await Artwork.find().populate('owner').populate('group');
 };
 
 const getAllArtworksCount = async (_id, isAuctionOpen = undefined, openForSale = undefined, artwork_type = undefined) => {
@@ -276,7 +274,7 @@ const getGroupArtworks = async (groupId, page, perPage) => {
 };
 
 const getGroupArtworksCount = async (groupId) => {
-  const result = await Artwork.find({ group: groupId });
+  const result = await Artwork.find({ group: groupId }).populate('group');
   console.log(result.length);
   return result.length;
 };
@@ -305,6 +303,9 @@ const convertMultipleToSingleArtwork = async (artworkId) => {
     { new: true }
   );
   return result;
+};
+const getArtworkBygroupId = async (groupId) => {
+  return await Artwork.findOne({ group: groupId });
 };
 module.exports = {
   saveArtwork,
@@ -339,4 +340,5 @@ module.exports = {
   convertMultipleToSingleArtwork,
   getAllArtworksWithOutPaginated,
   getAllArtwork,
+  getArtworkBygroupId,
 };

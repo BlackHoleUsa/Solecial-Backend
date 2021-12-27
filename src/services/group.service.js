@@ -1,3 +1,4 @@
+const { artworkService } = require('.');
 const { Group } = require('../models');
 const userService = require('./user.service');
 
@@ -14,8 +15,13 @@ const getUserGroup = async (userId, groupId) => {
   const result = await userService.getUserGroup(userId, groupId);
   return result;
 };
+const CheckGroupArtWork = async (groupId) => {
+  const result = await artworkService.getGroupArtworksCount(groupId);
+  return result;
+};
 module.exports = {
   creategroup,
   getUserGroups,
   getUserGroup,
+  CheckGroupArtWork,
 };
