@@ -9,9 +9,7 @@ const ApiError = require('../utils/ApiError');
  * @returns {Promise<User>}
  */
 const createUser = async (userBody) => {
-  if (await User.isEmailTaken(userBody.email)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
-  } else if (userBody.role === 'user') {
+  if (userBody.role === 'user') {
     if (!(await web3.utils.isAddress(userBody.address))) {
       throw new ApiError(httpStatus.BAD_REQUEST, 'address is not valid');
     } else if (await User.isAddressTaken(userBody.address)) {
