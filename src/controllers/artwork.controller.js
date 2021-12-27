@@ -271,7 +271,7 @@ const deleteArtwork = catchAsync(async (req, res) => {
 
 const getArtworkHistory = catchAsync(async (req, res) => {
   const { artworkId, page, perPage } = req.query;
-  const history = await historyService.getArtworkHistory(artworkId, page, perPage, 'artwork owner');
+  const history = await historyService.getArtworkHistory(artworkId, page, perPage, 'artwork owner bid');
   res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: history });
 });
 
