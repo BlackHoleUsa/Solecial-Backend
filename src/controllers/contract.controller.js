@@ -32,18 +32,18 @@ const updateCollectionAddress = async (tokenId, owner, colName) => {
   console.log('artwork token id updated successfully');
 };
 const transfer = async (transferContract) => {
-  const { from, to, tokenId } = transferContract;
-  try {
-    const artwork = await Artwork.findOne({ tokenId: tokenId });
-    await User.findOneAndUpdate({ _id: artwork._id }, { $pull: { artworks: artwork._id } });
-    await Auction.findOneAndDelete({ artwork: artwork._id });
-    await BuySell.findOneAndDelete({ artwork: artwork._id });
-    await Artwork.findOneAndDelete({ _id: artwork._id });
-    console.log('transfer event called');
-  }
-  catch (error) {
-    console.log(error);
-  }
+  // const { from, to, tokenId } = transferContract;
+  // try {
+  //   const artwork = await Artwork.findOne({ tokenId: tokenId });
+  //   await User.findOneAndUpdate({ _id: artwork._id }, { $pull: { artworks: artwork._id } });
+  //   await Auction.findOneAndDelete({ artwork: artwork._id });
+  //   await BuySell.findOneAndDelete({ artwork: artwork._id });
+  //   await Artwork.findOneAndDelete({ _id: artwork._id });
+  //   console.log('transfer event called');
+  // }
+  // catch (error) {
+  //   console.log(error);
+  // }
 
 };
 const handleNewAuction = async (saleFromContract) => {
