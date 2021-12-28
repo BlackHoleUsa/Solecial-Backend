@@ -32,19 +32,21 @@ const updateCollectionAddress = async (tokenId, owner, colName) => {
   console.log('artwork token id updated successfully');
 };
 const transfer = async (transferContract) => {
-  // const { from, to, tokenId } = transferContract;
-  // try {
-  //   const artwork = await Artwork.findOne({ tokenId: tokenId });
-  //   await User.findOneAndUpdate({ _id: artwork._id }, { $pull: { artworks: artwork._id } });
-  //   await Auction.findOneAndDelete({ artwork: artwork._id });
-  //   await BuySell.findOneAndDelete({ artwork: artwork._id });
-  //   await Artwork.findOneAndDelete({ _id: artwork._id });
-  //   console.log('transfer event called');
-  // }
-  // catch (error) {
-  //   console.log(error);
-  // }
-
+  const { from, to, tokenId } = transferContract;
+  try {
+    if (from.toString() !== '0x000') {
+      const artwork = await Artwork.findOne({ tokenId });
+      await User.findOneAndUpdate({ _id: artwork._id }, { $pull: { artworks: artwork._id } });
+      await Auction.findOneAndDelete({ artwork: artwork._id });
+      await BuySell.findOneAndDelete({ artwork: artwork._id });
+      await Artwork.findOneAndDelete({ _id: artwork._id });
+      console.log('transfer event called');
+    } else {
+      console.log('mint');
+    }
+  } catch (error) {
+    console.log(error);
+  }
 };
 const handleNewAuction = async (saleFromContract) => {
   let { tokenId, aucId, amount } = saleFromContract;
@@ -59,7 +61,7 @@ const handleNewAuction = async (saleFromContract) => {
       return;
     }
     const auctionData = await AUCTION_CONTRACT_INSTANCE.methods.AuctionList(aucId).call();
-    let { endTime, startPrice } = auctionData;
+    const { endTime, startPrice } = auctionData;
     console.log('Price in auction', startPrice);
     const { owner, creater } = artwork;
     const params = {
@@ -256,7 +258,7 @@ const handleSaleComplete = async (saleFromContract) => {
 };
 
 const handleNewBid = async (par) => {
-  let { bid, bidder, aucId } = par;
+  const { bid, bidder, aucId } = par;
 
   const auctionData = await AUCTION_CONTRACT_INSTANCE.methods.AuctionList(aucId).call();
   let { colAddress, owner, tokenId } = auctionData;
