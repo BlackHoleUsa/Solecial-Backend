@@ -42,7 +42,7 @@ const transfer = async (transferContract) => {
     console.log('transfer event called');
   }
   catch (error) {
-    console.log(err);
+    console.log(error);
   }
 
 };
