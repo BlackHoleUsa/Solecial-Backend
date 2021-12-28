@@ -15,7 +15,6 @@ const {
   STATS_UPDATE_TYPE,
 } = require('../utils/enums');
 
-
 const updateCollectionAddress = async (tokenId, owner, colName) => {
   tokenId = tokenId.toString();
   const user = await User.findOne({ address: owner });
@@ -32,7 +31,19 @@ const updateCollectionAddress = async (tokenId, owner, colName) => {
   });
   console.log('artwork token id updated successfully');
 };
+const transfer = async (tokenId) => {
+  try {
+    const artwork = await Artwork.findOne({ tokenId: tokenId });
+    await User.findOneAndUpdate({ _id: artwork._id }, { $pull: { artworks: artwork._id } });
+    await Auction.findOneAndDelete({ artwork: artwork._id });
+    await BuySell.findOneAndDelete({ artwork: artwork._id });
+    console.log('transfer event called');
+  }
+  catch (error) {
+    console.log(err);
+  }
 
+};
 const handleNewAuction = async (saleFromContract) => {
   let { tokenId, aucId, amount } = saleFromContract;
   console.log(tokenId);
@@ -432,4 +443,5 @@ module.exports = {
   handleNewSale,
   handleCancelSale,
   handleSaleComplete,
+  transfer,
 };
