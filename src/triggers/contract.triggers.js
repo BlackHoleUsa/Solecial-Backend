@@ -24,8 +24,8 @@ MINT_SINGLE_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
       contractController.updateCollectionAddress(tokenId, owner, colName);
       break;
     case MINT_CONTRACT_EVENTS.TRANSFER:
-      const { from, to, tokenId } = ev.returnValues;
-      contractController.transfer(tokenId);
+      console.log(ev.returnValues);
+      contractController.transfer(ev.returnValues);
       break;
 
     default:

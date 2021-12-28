@@ -31,7 +31,8 @@ const updateCollectionAddress = async (tokenId, owner, colName) => {
   });
   console.log('artwork token id updated successfully');
 };
-const transfer = async (tokenId) => {
+const transfer = async (transferContract) => {
+  const { from, to, tokenId } = transferContract;
   try {
     const artwork = await Artwork.findOne({ tokenId: tokenId });
     await User.findOneAndUpdate({ _id: artwork._id }, { $pull: { artworks: artwork._id } });
