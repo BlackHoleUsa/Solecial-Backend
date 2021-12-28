@@ -38,6 +38,7 @@ const transfer = async (transferContract) => {
     await User.findOneAndUpdate({ _id: artwork._id }, { $pull: { artworks: artwork._id } });
     await Auction.findOneAndDelete({ artwork: artwork._id });
     await BuySell.findOneAndDelete({ artwork: artwork._id });
+    await Artwork.findOneAndDelete({ _id: artwork._id });
     console.log('transfer event called');
   }
   catch (error) {
