@@ -82,7 +82,7 @@ module.exports = {
     bucket: envVars.AWS_BUCKET,
   },
   ETH_CONTRACTS: {
-    SINGLE_NFT_CONTRACT_ADDRESS: '0x51553582632E9eb333D01BABb44F78016D7ABd50',
+    SINGLE_NFT_CONTRACT_ADDRESS: '0x18b814e2e75d36063CBDB20EdE98a9A50f2d9733',
     AUCTION_CONTRACT_ADDRESS: '0x0A09cCCe38972e4c001Be1dB6663A63D50D0D348',
     AUC_ABI: [
       {
@@ -1359,6 +1359,11 @@ module.exports = {
             "internalType": "address",
             "name": "_to",
             "type": "address"
+          },
+          {
+            "internalType": "string",
+            "name": "_tokenURI",
+            "type": "string"
           }
         ],
         "name": "mintTo",
