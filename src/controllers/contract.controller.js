@@ -287,9 +287,10 @@ const handleNewBid = async (par) => {
     auctionId: auction._id,
   });
   const bidder1 = await bidService.getBidder(dbBidder._id);
+  console.log(bidder1);
   EVENT.emit('update-artwork-history', {
     artwork: artwork._id,
-    message: `${bidder1.userName} placed bid on the artwork`,
+    message: `${dbBidder.userName} placed bid on the artwork`,
     auction: auction._id,
     bid: dbBid._id,
     type: HISTORY_TYPE.BID_PLACED,
