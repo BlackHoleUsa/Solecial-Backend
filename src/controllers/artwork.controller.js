@@ -44,19 +44,21 @@ const saveArtwork = catchAsync(async (req, res) => {
     await artworkService.updateArtworkGroup(artwork._id, groupId);
     const currentCount = await groupService.getUserGroup(user._id, groupId);
     metaUrl = await pinMetaDataToIPFS({
-      name,
-      description,
+      name: name,
+      description: description,
+      image: imgData,
       artist_name,
       artist_description,
       artist_url: artistimgData,
       artwork_url: imgData,
-      edition: `${currentCount[0].currentCount} of ${currentCount[0].totalCount}`,
+      attributes: [{ "trait_type": "Edition Number", "value": `${currentCount[0].currentCount}/${currentCount[0].totalCount}` }]
     });
     await artworkService.addEditionNumber(artwork._id, currentCount[0].currentCount);
   } else {
     metaUrl = await pinMetaDataToIPFS({
-      name,
-      description,
+      name: name,
+      description: description,
+      image: imgData,
       artist_name,
       artist_description,
       artist_url: artistimgData,
@@ -176,10 +178,11 @@ const placeBid = catchAsync(async (req, res) => {
       bidId: bid._id,
       auctionId,
     });
-    const bidder = await bidService.getBidder(bid_id);
+    const bid1 = await bidService.getBidder(bid._id);
+    console.log("bid", bid1)
     EVENT.emit('update-artwork-history', {
       artwork,
-      message: `${bidder.userName} placed bid on the artwork`,
+      message: `${bid1.bidder.userName} placed bid on the artwork`,
       auction: auctionId,
       bid: bid._id,
       type: HISTORY_TYPE.BID_PLACED,

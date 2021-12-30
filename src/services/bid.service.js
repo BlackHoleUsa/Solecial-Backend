@@ -9,7 +9,7 @@ const getAuctionBidsPopulated = async (auctionId, fieldsToPopulate) => {
   return await Bid.find({ auction: auctionId }).populate(fieldsToPopulate).lean();
 };
 const getBidder = async (bidId) => {
-  return Bid.findOne({ bidder: bidId }).populate('bid');
+  return Bid.findOne({ _id: bidId }).populate('bidder');
 };
 module.exports = {
   saveBid,
