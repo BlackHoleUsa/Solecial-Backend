@@ -132,6 +132,8 @@ const getAllArtworks = async (
     return await Artwork.find({ artwork_type, owner: _id })
       .populate('owner')
       .populate('group')
+      .populate('sale')
+      .populate('auction')
       .limit(parseInt(perPage))
       .skip(page * perPage);
   }
@@ -139,6 +141,8 @@ const getAllArtworks = async (
     return await Artwork.find({ isAuctionOpen: true, owner: _id })
       .populate('owner')
       .populate('group')
+      .populate('sale')
+      .populate('auction')
       .limit(parseInt(perPage))
       .skip(page * perPage);
   }
@@ -146,12 +150,16 @@ const getAllArtworks = async (
     return await Artwork.find({ openForSale: true, owner: _id })
       .populate('owner')
       .populate('group')
+      .populate('sale')
+      .populate('auction')
       .limit(parseInt(perPage))
       .skip(page * perPage);
   }
   return await Artwork.find({ owner: _id })
     .populate('owner')
     .populate('group')
+    .populate('sale')
+    .populate('auction')
     .limit(parseInt(perPage))
     .skip(page * perPage);
 };
