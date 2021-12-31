@@ -297,7 +297,7 @@ const handleNewBid = async (par) => {
   console.log(bidder1);
   EVENT.emit('update-artwork-history', {
     artwork: artwork._id,
-    message: `${dbBidder.userName} placed bid on the artwork`,
+    message: `${dbBidder.userName} has placed the bid`,
     auction: auction._id,
     bid: dbBid._id,
     type: HISTORY_TYPE.BID_PLACED,
