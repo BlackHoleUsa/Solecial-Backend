@@ -8,13 +8,13 @@ const getActivityVS = {
   }),
 };
 const getSettingsVS = {
-  body:Joi.object().keys({
-    notifications: Joi.boolean(),
-    bid_notifications: Joi.boolean(),
-    royalty:Joi.number(),
-    minimum_bid:Joi.number()
-  })
-}
+  body: Joi.object().keys({
+    notifications: Joi.boolean().optional(),
+    bid_notifications: Joi.boolean().optional(),
+    royalty: Joi.number().optional(),
+    minimum_bid: Joi.number().optional(),
+  }),
+};
 
 module.exports = {
   getActivityVS,

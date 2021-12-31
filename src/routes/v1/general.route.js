@@ -23,10 +23,6 @@ router.get('/tempUdateUser', [], generalController.tempUdateUser);
 
 router.get('/getSettings', [auth('manageUsers')], generalController.getSettings);
 
-router.post(
-  '/updateSettings',
-  [auth('manageUsers'), validate(generalValidation.getSettingsVS)],
-  generalController.updateSettings
-);
+router.post('/updateSettings', auth('manageUsers'), generalController.updateSettings);
 
 module.exports = router;
