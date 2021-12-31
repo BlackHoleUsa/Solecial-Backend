@@ -33,8 +33,9 @@ const updateCollectionAddress = async (tokenId, owner, colName) => {
 };
 const transfer = async (transferContract) => {
   const { from, to, tokenId } = transferContract;
+  const result = await User.find({ address: to });
   try {
-    if (from.toString() !== '0x0000000000000000000000000000000000000000') {
+    if (from.toString() !== '0x0000000000000000000000000000000000000000' && result.length === 0) {
       const artwork = await Artwork.findOne({ tokenId });
       await User.findOneAndUpdate({ _id: artwork._id }, { $pull: { artworks: artwork._id } });
       await Auction.findOneAndDelete({ artwork: artwork._id });
