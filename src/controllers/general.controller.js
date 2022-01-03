@@ -112,7 +112,7 @@ const helper1 = (artWorks) => {
 const getAppActivity = catchAsync(async (req, res) => {
   const { page, perPage } = req.query;
 
-  const artWorks = await artworkService.getAllArtworksPaginated(page, perPage);
+  const artWorks = await artworkService.getAllArtworksPaginated();
   const newArtWorks = await artworkService.getAllArtworksWithOutPaginated();
   const result = helper(artWorks);
 
