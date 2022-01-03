@@ -86,16 +86,26 @@ const helper = (artWorks) => {
       }
     }
   }
-  // for (let i = 0; i < multipleArtWorks.length; i++) {
-  //   for (let k = 0; k < uniq.length; k++) {
-  //     if (multipleArtWorks[i].group._id.toString() === uniq[k].toString()) {
-  //       multipleStacks.push(multipleArtWorks[i]);
-  //       k = uniq.length + 1;
-  //     }
-  //   }
-  // }
-  // console.log(singleArtWorks.length);
   console.log(multipleStacks.length);
+  return [...singleArtWorks, ...multipleStacks];
+};
+const helper1 = (artWorks) => {
+  const singleArtWorks = artWorks.filter((artwork) => artwork.multipleNFT === false);
+  const multipleArtWorks = artWorks.filter((artwork) => artwork.multipleNFT === true);
+  const multipleArtworkGroupId = multipleArtWorks.map((artwork) => artwork.group._id);
+  const uniq = [...new Set(multipleArtworkGroupId)];
+  let multipleStacks = [];
+  for (let i = 0; i < uniq.length; i++) {
+    for (let k = 0; k < multipleArtWorks.length; k++) {
+      if (multipleArtWorks[k].group._id.toString() === uniq[i].toString()) {
+        multipleStacks.push(multipleArtWorks[k]);
+        k = multipleArtWorks.length + 1;
+      }
+    }
+  }
+  multipleStacks = [...new Set(multipleStacks)]
+  console.log("singleArtWorks", singleArtWorks.length);
+  console.log("multipleStacks", multipleStacks.length);
   return [...singleArtWorks, ...multipleStacks];
 };
 
@@ -110,7 +120,7 @@ const getAppActivity = catchAsync(async (req, res) => {
     status: true,
     message: 'Successfull',
     data: result,
-    count: helper(newArtWorks)?.length,
+    count: helper1(newArtWorks)?.length,
   });
 });
 
