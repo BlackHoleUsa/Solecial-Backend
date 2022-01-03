@@ -128,7 +128,7 @@ const getAppActivity = catchAsync(async (req, res) => {
     }
   }
   else if (page > 0 && perPage <= result.length) {
-    for (let i = page * perPage; i < perPage; i++) {
+    for (let i = page * perPage; i < (page * perPage) + perPage; i++) {
       result1.push(result[i]);
     }
   }
