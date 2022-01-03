@@ -110,16 +110,37 @@ const helper1 = (artWorks) => {
 };
 
 const getAppActivity = catchAsync(async (req, res) => {
-  const { page, perPage } = req.query;
-
+  let { page, perPage } = req.query;
+  page = parseInt(page);
+  perPage = parseInt(perPage);
   const artWorks = await artworkService.getAllArtworksPaginated();
   const newArtWorks = await artworkService.getAllArtworksWithOutPaginated();
   const result = helper(artWorks);
-
+  let result1 = [];
+  if (page === 0 && perPage <= result.length) {
+    for (let i = 0; i < perPage; i++) {
+      result1.push(result[i]);
+    }
+  }
+  else if (page === 0 && perPage >= result.length) {
+    for (let i = 0; i < result.length; i++) {
+      result1.push(result[i]);
+    }
+  }
+  else if (page > 0 && perPage <= result.length) {
+    for (let i = page * perPage; i < perPage; i++) {
+      result1.push(result[i]);
+    }
+  }
+  else if (page > 0 && perPage >= result.length) {
+    for (let i = page * perPage; i < result.length; i++) {
+      result1.push(result[i]);
+    }
+  }
   res.status(httpStatus.OK).send({
     status: true,
     message: 'Successfull',
-    data: result,
+    data: result1,
     count: helper1(newArtWorks)?.length,
   });
 });
