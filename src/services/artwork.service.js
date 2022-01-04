@@ -303,6 +303,9 @@ const convertMultipleToSingleArtwork = async (artworkId) => {
 const getArtworkBygroupId = async (groupId) => {
   return await Artwork.findOne({ group: groupId });
 };
+const updateArtworkUrl = async (id, url) => {
+  return await Artwork.findOneAndUpdate({ _id: id }, { artwork_url: url });
+};
 module.exports = {
   saveArtwork,
   getUserArtworks,
@@ -337,4 +340,5 @@ module.exports = {
   getAllArtworksWithOutPaginated,
   getAllArtwork,
   getArtworkBygroupId,
+  updateArtworkUrl,
 };

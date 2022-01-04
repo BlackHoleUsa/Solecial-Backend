@@ -15,7 +15,7 @@ const {
   groupService,
 } = require('../services');
 const EVENT = require('../triggers/custom-events').customEvent;
-const { addFilesToIPFS, pinMetaDataToIPFS } = require('../utils/helpers');
+const { addFilesToIPFS, pinMetaDataToIPFS, uploadToAws } = require('../utils/helpers');
 const { HISTORY_TYPE, NOTIFICATION_TYPE, STATS_UPDATE_TYPE } = require('../utils/enums');
 const { set } = require('../app');
 
@@ -35,6 +35,10 @@ const saveArtwork = catchAsync(async (req, res) => {
   body.owner = body.creater;
   body.basePrice = body.price;
   const artwork = await artworkService.saveArtwork(body);
+  if (files.length > 0) {
+    imgData = await uploadToAws(files[0].buffer, `/artworks/${artwork._id}`)
+    await artworkService.updateArtworkUrl(imgData)
+  }
   const user = await userService.getUserById(creater);
   let metaUrl;
   if (multipleNFT) {
