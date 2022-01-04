@@ -304,7 +304,7 @@ const getArtworkBygroupId = async (groupId) => {
   return await Artwork.findOne({ group: groupId });
 };
 const updateArtworkUrl = async (id, url) => {
-  return await Artwork.findOneAndUpdate({ _id: id }, { artwork_url: url });
+  return await Artwork.findOneAndUpdate({ _id: id }, { artwork_url: url }, { new: true }).lean();
 };
 module.exports = {
   saveArtwork,
