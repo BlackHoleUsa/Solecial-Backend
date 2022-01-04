@@ -137,6 +137,7 @@ const getAppActivity = catchAsync(async (req, res) => {
       result1.push(result[i]);
     }
   }
+  result1 = result1.filter((result) => result !== null);
   res.status(httpStatus.OK).send({
     status: true,
     message: 'Successfull',
