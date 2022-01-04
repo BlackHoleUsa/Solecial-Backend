@@ -116,6 +116,8 @@ const searchArtworkByName = async (keyword, page, perPage, artist, min, max) => 
   }
 
   return await Artwork.find(query)
+    .populate('sale')
+    .populate('auction')
     .limit(parseInt(perPage))
     .skip(page * perPage);
 };
@@ -165,7 +167,7 @@ const getAllArtworks = async (
 };
 
 const getAllArtwork = async () => {
-  return await Artwork.find().populate('owner').populate('group');
+  return await Artwork.find().populate('owner').populate('group').populate('sale').populate('auction');
 };
 
 const getAllArtworksCount = async (_id, isAuctionOpen = undefined, openForSale = undefined, artwork_type = undefined) => {
@@ -181,21 +183,13 @@ const getAllArtworksCount = async (_id, isAuctionOpen = undefined, openForSale =
   return await Artwork.find({ owner: _id }).populate('owner').countDocuments();
 };
 
-const getOpenArtWorks = async (
-  page,
-  perPage,
-  isAuctionOpen = undefined,
-  openForSale = undefined,
-  artwork_type = undefined
-) => {
+const getOpenArtWorks = async (isAuctionOpen = undefined, openForSale = undefined, artwork_type = undefined) => {
   if (artwork_type != undefined) {
     return await Artwork.find({ artwork_type })
       .populate('owner')
       .populate('group')
       .populate('sale')
       .populate('auction')
-      .limit(parseInt(perPage))
-      .skip(page * perPage);
   }
   if (isAuctionOpen != undefined) {
     return await Artwork.find({ isAuctionOpen: true })
@@ -203,8 +197,6 @@ const getOpenArtWorks = async (
       .populate('group')
       .populate('sale')
       .populate('auction')
-      .limit(parseInt(perPage))
-      .skip(page * perPage);
   }
   if (openForSale != undefined) {
     return await Artwork.find({ openForSale: true })
@@ -212,16 +204,12 @@ const getOpenArtWorks = async (
       .populate('group')
       .populate('sale')
       .populate('auction')
-      .limit(parseInt(perPage))
-      .skip(page * perPage);
   }
   return await Artwork.find()
     .populate('owner')
     .populate('group')
     .populate('sale')
     .populate('auction')
-    .limit(parseInt(perPage))
-    .skip(page * perPage);
 };
 
 const getOpenArtWorksWithOutPages = async (isAuctionOpen = undefined, openForSale = undefined, artwork_type = undefined) => {

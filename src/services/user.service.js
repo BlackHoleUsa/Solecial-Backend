@@ -205,6 +205,8 @@ const removeArtwork = async (userId, artworkId) => {
 
 const searchUsersByName = async (keyword, page, perPage) => {
   return await User.find({ userName: { $regex: keyword, $options: 'i' } })
+    .populate('sale')
+    .populate('auction')
     .limit(parseInt(perPage))
     .skip(page * perPage);
 };

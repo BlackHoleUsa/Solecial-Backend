@@ -339,21 +339,86 @@ const helper = (artWorks) => {
   return [...singleArtWorks, ...multipleStacks];
 };
 
+const helper1 = (artWorks) => {
+  const singleArtWorks = artWorks.filter((artwork) => artwork.multipleNFT === false);
+  const multipleArtWorks = artWorks.filter((artwork) => artwork.multipleNFT === true);
+  const multipleArtworkGroupId = multipleArtWorks.map((artwork) => artwork.group._id);
+  const uniq = [...new Set(multipleArtworkGroupId)];
+  let multipleStacks = [];
+  for (let i = 0; i < uniq.length; i++) {
+    for (let k = 0; k < multipleArtWorks.length; k++) {
+      if (multipleArtWorks[k].group._id.toString() === uniq[i].toString()) {
+        multipleStacks.push(multipleArtWorks[k]);
+        k = multipleArtWorks.length + 1;
+      }
+    }
+  }
+  multipleStacks = [...new Set(multipleStacks)]
+  console.log("singleArtWorks", singleArtWorks.length);
+  console.log("multipleStacks", multipleStacks.length);
+  return [...singleArtWorks, ...multipleStacks];
+};
+
 const getOpenArtWorks = catchAsync(async (req, res) => {
-  const { artwork_type, page, perPage, isAuctionOpen, openForSale } = req.query;
+  let { artwork_type, page, perPage, isAuctionOpen, openForSale } = req.query;
+  page = parseInt(page);
+  perPage = parseInt(perPage);
   if (!artwork_type) {
-    const artWorks = await artworkService.getOpenArtWorks(page, perPage, isAuctionOpen, openForSale);
-    const artWorksNew = await artworkService.getOpenArtWorksWithOutPages(isAuctionOpen, openForSale);
-    res.status(httpStatus.OK).send({
-      status: true,
-      message: 'Successfull',
-      data: helper(artWorks),
-      count: helper(artWorksNew)?.length,
-    });
+    const artWorks = await artworkService.getOpenArtWorks(isAuctionOpen, openForSale, undefined);
+    let result = helper(artWorks);
+    console.log("result.length before", result.length);
+    let result1 = [];
+    if (page === 0 && perPage <= result.length) {
+      for (let i = 0; i < perPage; i++) {
+        result1.push(result[i]);
+      }
+    }
+    else if (page === 0 && perPage >= result.length) {
+      for (let i = 0; i < result.length; i++) {
+        result1.push(result[i]);
+      }
+    }
+    else if (page > 0 && perPage <= result.length) {
+      for (let i = page * perPage; i < (page * perPage) + perPage; i++) {
+        result1.push(result[i]);
+      }
+    }
+    else if (page > 0 && perPage >= result.length) {
+      for (let i = page * perPage; i < result.length; i++) {
+        result1.push(result[i]);
+      }
+    }
+    result1 = result1.filter((result) => result !== null)
+    console.log("result1.length()", result1.length)
+    res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: result1, count: helper(artWorks)?.length, });
   } else {
-    const artWorks = await artworkService.getOpenArtWorks(page, perPage, undefined, undefined, artwork_type);
-    const artWorksNew = await artworkService.getOpenArtWorksWithOutPages(isAuctionOpen, openForSale);
-    res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: helper(artWorks), count: helper(artWorksNew)?.length, });
+    const artWorks = await artworkService.getOpenArtWorks(undefined, undefined, artwork_type);
+    let result = helper(artWorks);
+    console.log("result.length before", result.length);
+    let result1 = [];
+    if (page === 0 && perPage <= result.length) {
+      for (let i = 0; i < perPage; i++) {
+        result1.push(result[i]);
+      }
+    }
+    else if (page === 0 && perPage >= result.length) {
+      for (let i = 0; i < result.length; i++) {
+        result1.push(result[i]);
+      }
+    }
+    else if (page > 0 && perPage <= result.length) {
+      for (let i = page * perPage; i < (page * perPage) + perPage; i++) {
+        result1.push(result[i]);
+      }
+    }
+    else if (page > 0 && perPage >= result.length) {
+      for (let i = page * perPage; i < result.length; i++) {
+        result1.push(result[i]);
+      }
+    }
+    result1 = result1.filter((result) => result !== null)
+    console.log("result1.length()", result1.length)
+    res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: result1, count: helper(artWorks)?.length, });
   }
 });
 
