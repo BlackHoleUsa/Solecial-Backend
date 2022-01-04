@@ -137,11 +137,11 @@ const getAppActivity = catchAsync(async (req, res) => {
       result1.push(result[i]);
     }
   }
-  result1 = result1.filter((result) => result !== null);
+  let newarray = result1.filter((el) => { return el != null });
   res.status(httpStatus.OK).send({
     status: true,
     message: 'Successfull',
-    data: result1,
+    data: newarray,
     count: helper1(newArtWorks)?.length,
   });
 });

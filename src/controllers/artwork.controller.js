@@ -388,8 +388,7 @@ const getOpenArtWorks = catchAsync(async (req, res) => {
         result1.push(result[i]);
       }
     }
-    result1 = result1.filter((result) => result !== null)
-    console.log("result1.length()", result1.length)
+    result1 = result1.filter((el) => { return el != null });
     res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: result1, count: helper(artWorks)?.length, });
   } else {
     const artWorks = await artworkService.getOpenArtWorks(undefined, undefined, artwork_type);
@@ -416,7 +415,7 @@ const getOpenArtWorks = catchAsync(async (req, res) => {
         result1.push(result[i]);
       }
     }
-    result1 = result1.filter((result) => result !== null)
+    result1 = result1.filter((el) => { return el != null });
     console.log("result1.length()", result1.length)
     res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: result1, count: helper(artWorks)?.length, });
   }
