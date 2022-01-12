@@ -30,7 +30,6 @@ const getUserGroups = catchAsync(async (req, res) => {
     for (let j = 0; j < groupArtWorks.length; j++) {
       if (groupArtWorks[j].tokenId) {
         userGroups[i].mint = true;
-        console.log("true")
       }
     }
   }
@@ -46,8 +45,22 @@ const CheckGroupArtWork = catchAsync(async (req, res) => {
   }
   return res.status(httpStatus.OK).send({ status: false });
 });
+
+const editGroupArtWork = catchAsync(async (req, res) => {
+  const groupId = req.query.groupId;
+  const { groupName, totalCount } = req.body;
+  const result = await groupService.editGroupArtWork(groupId, groupName, totalCount);
+  return res.status(httpStatus.OK).send({ data: result });
+});
+const deleteGroupArtWork = catchAsync(async (req, res) => {
+  const groupId = req.query.groupId;
+  const result = await groupService.deleteGroupArtWork(groupId);
+  return res.status(httpStatus.CREATED).send({ data: result });
+});
 module.exports = {
   creategroup,
   getUserGroups,
   CheckGroupArtWork,
+  editGroupArtWork,
+  deleteGroupArtWork
 };

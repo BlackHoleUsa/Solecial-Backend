@@ -19,9 +19,24 @@ const CheckGroupArtWork = async (groupId) => {
   const result = await artworkService.getGroupArtworksCount(groupId);
   return result;
 };
+const editGroupArtWork = async (groupId, groupName = undefined, totalCount = undefined) => {
+  let result;
+  if (groupName !== undefined) {
+    result = await Group.findOneAndUpdate({ _id: groupId }, { groupName: groupName }, { new: true });
+  } else if (totalCount !== undefined) {
+    result = await Group.findOneAndUpdate({ _id: groupId }, { totalCount: totalCount }, { new: true });
+  }
+  return result;
+};
+const deleteGroupArtWork = async (groupId) => {
+  const result = await Group.findOneAndDelete({ _id: groupId });
+  return result;
+};
 module.exports = {
   creategroup,
   getUserGroups,
   getUserGroup,
   CheckGroupArtWork,
+  editGroupArtWork,
+  deleteGroupArtWork,
 };

@@ -13,4 +13,12 @@ router.get('/getUserGroup', [auth('manageUsers')], groupController.getUserGroups
 
 router.get('/CheckGroupArtWork', validate(groupValidation.CheckGroupArtWork), groupController.CheckGroupArtWork);
 
+router.post('/editGroup', [auth('manageUsers'), validate(groupValidation.editgroup)], groupController.editGroupArtWork);
+
+router.post(
+  '/deleteGroup',
+  [auth('manageUsers'), validate(groupValidation.deleteGroup)],
+  groupController.deleteGroupArtWork
+);
+
 module.exports = router;
