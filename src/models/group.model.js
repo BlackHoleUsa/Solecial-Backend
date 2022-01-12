@@ -16,6 +16,10 @@ const groupSchema = mongoose.Schema({
     required: true,
     default: 0,
   },
+  mint: {
+    type: Boolean,
+    required: false,
+  },
 });
 
 groupSchema.plugin(toJSON);
