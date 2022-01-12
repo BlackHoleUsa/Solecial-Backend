@@ -19,6 +19,7 @@ const groupSchema = mongoose.Schema({
   mint: {
     type: Boolean,
     required: false,
+    default: false,
   },
 });
 
