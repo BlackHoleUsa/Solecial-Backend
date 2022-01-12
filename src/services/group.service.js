@@ -23,7 +23,8 @@ const editGroupArtWork = async (groupId, groupName = undefined, totalCount = und
   let result;
   if (groupName !== undefined) {
     result = await Group.findOneAndUpdate({ _id: groupId }, { groupName: groupName }, { new: true });
-  } else if (totalCount !== undefined) {
+  }
+  if (totalCount !== undefined) {
     result = await Group.findOneAndUpdate({ _id: groupId }, { totalCount: totalCount }, { new: true });
   }
   return result;
