@@ -203,7 +203,9 @@ const getAuctionsWithBids = async (page, perPage) => {
     .skip(page * perPage)
     .lean();
 };
-
+const deleteArtworkById = async (artworkId) => {
+  return await Auction.findOneAndDelete({ artwork: artworkId });
+};
 module.exports = {
   saveAuction,
   artworkExistsInAuction,
@@ -215,5 +217,6 @@ module.exports = {
   getTimeoutAuctions,
   // getOpenSales,
   getSaleDetails,
+  deleteArtworkById,
   getAuctionDetails,
 };
