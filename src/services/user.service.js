@@ -211,13 +211,18 @@ const searchUsersByName = async (keyword, page, perPage) => {
     .skip(page * perPage);
 };
 
+const searchUsersByNameTotal = async (keyword, page, perPage) => {
+  return await User.find({ userName: { $regex: keyword, $options: 'i' } }).countDocuments();
+};
+
 const saveForgotPasswordCode = async (email, code) => {
   return await User.findOneAndUpdate({ email }, { $set: { code } });
 };
 
-const getAllUsers = async () => {
+const getAllUsers = async (page, perPage) => {
   // eslint-disable-next-line prettier/prettier
-  const allUsers = await User.find().sort({ _id: 1 });
+  const allUsers = await User.find().sort({ _id: 1 }).limit(parseInt(perPage))
+    .skip(page * perPage);
   return allUsers;
 };
 const deleteCollectionByIdFromUser = async (userId, collectionId) => {
@@ -249,6 +254,9 @@ const getUserGroup = async (userId, groupId) => {
   return groups;
 };
 
+const getAllUsersCount = async () => {
+  return await User.find().countDocuments();
+};
 module.exports = {
   createUser,
   queryUsers,
@@ -276,4 +284,6 @@ module.exports = {
   saveForgotPasswordCode,
   getUserGroups,
   getUserGroup,
+  searchUsersByNameTotal,
+  getAllUsersCount,
 };

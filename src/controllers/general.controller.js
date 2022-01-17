@@ -10,17 +10,22 @@ const handleSearch = catchAsync(async (req, res) => {
 
   if (keyword) {
     const users = await userService.searchUsersByName(keyword, page, perPage);
+    let usersCount = await userService.searchUsersByNameTotal(keyword);
     const artworks = await artworkService.searchArtworkByName(keyword, page, perPage);
+    let artworksCount = await artworkService.searchArtworkByNameTotal(keyword);
 
+    let count = 0;
     let data = {};
 
     switch (filter) {
       case SEARCH_FILTERS.USERS:
         data.users = users;
+        count = usersCount;
         break;
 
       case SEARCH_FILTERS.ARTWORKS:
         data.artworks = artworks;
+        count = artworksCount;
         break;
 
       default:
@@ -35,21 +40,25 @@ const handleSearch = catchAsync(async (req, res) => {
       message: 'Successfull',
       page,
       data,
+      count: count
     });
   } else {
     let users;
     let data = {};
     let artworks;
     let collections;
+    let count;
     switch (filter) {
       case SEARCH_FILTERS.USERS:
-        users = await userService.getAllUsers();
+        users = await userService.getAllUsers(page, perPage);
         data.users = users;
+        count = await userService.getAllUsersCount();
         break;
 
       case SEARCH_FILTERS.ARTWORKS:
-        artworks = await artworkService.getAllArtwork();
+        artworks = await artworkService.getAllArtwork(page, perPage);
         data.artworks = artworks;
+        count = await artworkService.getAllArtworksCount1();
         break;
 
       case SEARCH_FILTERS.COLLECTIONS:
@@ -68,6 +77,7 @@ const handleSearch = catchAsync(async (req, res) => {
       status: true,
       message: 'Successfull',
       data,
+      count: count
     });
   }
 });

@@ -121,6 +121,29 @@ const searchArtworkByName = async (keyword, page, perPage, artist, min, max) => 
     .limit(parseInt(perPage))
     .skip(page * perPage);
 };
+const searchArtworkByNameTotal = async (keyword, page, perPage, artist, min, max) => {
+  const query = {};
+  if (keyword) {
+    query.name = { $regex: keyword, $options: 'i' };
+  }
+  if (artist) {
+    query.owner = artist;
+  }
+  if (min && max) {
+    query.$and = [
+      {
+        price: { $gte: parseInt(min) },
+      },
+      {
+        price: { $lte: parseInt(max) },
+      },
+    ];
+  }
+
+  return await Artwork.find(query)
+    .populate('sale')
+    .populate('auction').countDocuments();
+};
 
 const getAllArtworks = async (
   page,
@@ -166,8 +189,9 @@ const getAllArtworks = async (
     .skip(page * perPage);
 };
 
-const getAllArtwork = async () => {
-  return await Artwork.find().populate('owner').populate('group').populate('sale').populate('auction');
+const getAllArtwork = async (page, perPage) => {
+  return await Artwork.find().populate('owner').populate('group').populate('sale').populate('auction').limit(parseInt(perPage))
+    .skip(page * perPage);
 };
 
 const getAllArtworksCount = async (_id, isAuctionOpen = undefined, openForSale = undefined, artwork_type = undefined) => {
@@ -309,6 +333,9 @@ const getArtworksBygroupId = async (groupId) => {
 const updateArtworkUrl = async (id, url) => {
   return await Artwork.findOneAndUpdate({ _id: id }, { artwork_url: url }, { new: true }).lean();
 };
+const getAllArtworksCount1 = async () => {
+  return await Artwork.find().countDocuments();
+};
 module.exports = {
   saveArtwork,
   getUserArtworks,
@@ -345,4 +372,6 @@ module.exports = {
   getArtworkBygroupId,
   updateArtworkUrl,
   getArtworksBygroupId,
+  searchArtworkByNameTotal,
+  getAllArtworksCount1,
 };
