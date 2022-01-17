@@ -11,6 +11,7 @@ const router = express.Router();
  *   name: Users
  *   description: Users
  */
+router.put('/:userId', [auth('manageUsers'), validate(userValidation.updateUser)], userController.updateUser);
 router.get('/getAllUsers', userController.getAllUsers);
 router.route('/').post(auth('manageUsers'), validate(userValidation.createUser), userController.createUser);
 router.get('/getUsers', validate(userValidation.getUsers), userController.getUsers);
@@ -64,7 +65,7 @@ router.get('/:userId', validate(userValidation.getUser), userController.getUser)
 //  *       "401":
 //  *         $ref: '#/components/responses/Unauthorized'
 //  */
-router.put('/:userId', [auth('manageUsers'), validate(userValidation.updateUser)], userController.updateUser);
+
 /**
  * @swagger
  * /users/followUser:
