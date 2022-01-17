@@ -11,13 +11,13 @@ const router = express.Router();
  *   name: Users
  *   description: Users
  */
-router.put('/:userId', [auth('manageUsers'), validate(userValidation.updateUser)], userController.updateUser);
 router.get('/getAllUsers', userController.getAllUsers);
 router.route('/').post(auth('manageUsers'), validate(userValidation.createUser), userController.createUser);
 router.get('/getUsers', validate(userValidation.getUsers), userController.getUsers);
 
 // router.route('/:userId').delete(auth('manageUsers'), validate(userValidation.deleteUser), userController.getUser);
 router.get('/:userId', validate(userValidation.getUser), userController.getUser);
+router.put('/:userId', [auth('manageUsers'), validate(userValidation.updateUser)], userController.updateUser);
 // router.get('/getUserStatistics/:userId', validate(userValidation.getUser), userController.getUserStatistics);
 
 // /**
