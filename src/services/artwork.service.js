@@ -18,6 +18,7 @@ const getUserArtworks = async (userId, page, perPage) => {
     .populate('group')
     .populate('sale')
     .populate('auction')
+    .sort({ _id: -1 })
     .limit(parseInt(perPage))
     .skip(page * perPage)
     .lean();
@@ -159,6 +160,7 @@ const getAllArtworks = async (
       .populate('group')
       .populate('sale')
       .populate('auction')
+      .sort({ _id: -1 })
       .limit(parseInt(perPage))
       .skip(page * perPage);
   }
@@ -168,6 +170,7 @@ const getAllArtworks = async (
       .populate('group')
       .populate('sale')
       .populate('auction')
+      .sort({ _id: -1 })
       .limit(parseInt(perPage))
       .skip(page * perPage);
   }
@@ -177,6 +180,7 @@ const getAllArtworks = async (
       .populate('group')
       .populate('sale')
       .populate('auction')
+      .sort({ _id: -1 })
       .limit(parseInt(perPage))
       .skip(page * perPage);
   }
@@ -185,12 +189,13 @@ const getAllArtworks = async (
     .populate('group')
     .populate('sale')
     .populate('auction')
+    .sort({ _id: -1 })
     .limit(parseInt(perPage))
     .skip(page * perPage);
 };
 
 const getAllArtwork = async (page, perPage) => {
-  return await Artwork.find().populate('owner').populate('group').populate('sale').populate('auction').limit(parseInt(perPage))
+  return await Artwork.find().populate('owner').populate('group').populate('sale').populate('auction').sort({ _id: -1 }).limit(parseInt(perPage))
     .skip(page * perPage);
 };
 
@@ -213,44 +218,44 @@ const getOpenArtWorks = async (isAuctionOpen = undefined, openForSale = undefine
       .populate('owner')
       .populate('group')
       .populate('sale')
-      .populate('auction')
+      .populate('auction').sort({ _id: -1 })
   }
   if (isAuctionOpen != undefined) {
     return await Artwork.find({ isAuctionOpen: true })
       .populate('owner')
       .populate('group')
       .populate('sale')
-      .populate('auction')
+      .populate('auction').sort({ _id: -1 })
   }
   if (openForSale != undefined) {
     return await Artwork.find({ openForSale: true })
       .populate('owner')
       .populate('group')
       .populate('sale')
-      .populate('auction')
+      .populate('auction').sort({ _id: -1 })
   }
   return await Artwork.find()
     .populate('owner')
     .populate('group')
     .populate('sale')
-    .populate('auction')
+    .populate('auction').sort({ _id: -1 })
 };
 
 const getOpenArtWorksWithOutPages = async (isAuctionOpen = undefined, openForSale = undefined, artwork_type = undefined) => {
   if (artwork_type != undefined) {
-    return await Artwork.find({ artwork_type }).populate('owner');
+    return await Artwork.find({ artwork_type }).populate('owner').sort({ _id: -1 });
   }
   if (isAuctionOpen != undefined) {
-    return await Artwork.find({ isAuctionOpen: true }).populate('owner');
+    return await Artwork.find({ isAuctionOpen: true }).populate('owner').sort({ _id: -1 });
   }
   if (openForSale != undefined) {
-    return await Artwork.find({ openForSale: true }).populate('owner');
+    return await Artwork.find({ openForSale: true }).populate('owner').sort({ _id: -1 });
   }
-  return await Artwork.find().populate('owner');
+  return await Artwork.find().populate('owner').sort({ _id: -1 });
 };
 
 const getAllArtworksWithOutPaginated = async () => {
-  return await Artwork.find().populate('owner');
+  return await Artwork.find().populate('owner').sort({ _id: -1 });
 };
 
 const getAllArtworksPaginated = async (page, perPage) => {
@@ -260,6 +265,7 @@ const getAllArtworksPaginated = async (page, perPage) => {
     .populate('group')
     .populate('sale')
     .populate('auction')
+    .sort({ _id: -1 })
     .limit(parseInt(perPage))
     .skip(page * perPage)
     .lean();
