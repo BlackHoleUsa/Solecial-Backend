@@ -43,7 +43,7 @@ const transfer = async (transferContract) => {
       from.toString() !== '0xe0d20730dD30C3295cC84f67f98a1899ca8525db'
     ) {
       const artwork = await Artwork.findOne({ tokenId });
-      await User.findOneAndUpdate({ address: result[0].address }, { $pull: { artworks: artwork._id } });
+      await User.findOneAndUpdate({ address: from }, { $pull: { artworks: artwork._id } });
       await Auction.findOneAndDelete({ artwork: artwork._id });
       await BuySell.findOneAndDelete({ artwork: artwork._id });
       await Artwork.findOneAndDelete({ _id: artwork._id });
