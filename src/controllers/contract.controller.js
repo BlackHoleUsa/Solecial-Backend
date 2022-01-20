@@ -33,7 +33,7 @@ const updateCollectionAddress = async (tokenId, owner, colName) => {
 };
 const transfer = async (transferContract) => {
   const { from, to, tokenId } = transferContract;
-  const result = await User.find({ address: to });
+  const result = await User.findOne({ address: to });
   console.log(result);
   try {
     if (
@@ -43,7 +43,7 @@ const transfer = async (transferContract) => {
       from.toString() !== '0xe0d20730dD30C3295cC84f67f98a1899ca8525db'
     ) {
       const artwork = await Artwork.findOne({ tokenId });
-      await User.findOneAndUpdate({ _id: artwork._id }, { $pull: { artworks: artwork._id } });
+      await User.findOneAndUpdate({ address: result.address }, { $pull: { artworks: artwork._id } });
       await Auction.findOneAndDelete({ artwork: artwork._id });
       await BuySell.findOneAndDelete({ artwork: artwork._id });
       await Artwork.findOneAndDelete({ _id: artwork._id });
