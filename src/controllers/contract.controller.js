@@ -32,28 +32,28 @@ const updateCollectionAddress = async (tokenId, owner, colName) => {
   console.log('artwork token id updated successfully');
 };
 const transfer = async (transferContract) => {
-  // const { from, to, tokenId } = transferContract;
-  // const result = await User.find({ address: to });
-  // console.log(result);
-  // try {
-  //   if (
-  //     from.toString() !== '0x0000000000000000000000000000000000000000' &&
-  //     result.length === 0 &&
-  //     to.toString() !== '0x0A09cCCe38972e4c001Be1dB6663A63D50D0D348' &&
-  //     from.toString() !== '0x0A09cCCe38972e4c001Be1dB6663A63D50D0D348'
-  //   ) {
-  //     const artwork = await Artwork.findOne({ tokenId });
-  //     await User.findOneAndUpdate({ _id: artwork._id }, { $pull: { artworks: artwork._id } });
-  //     await Auction.findOneAndDelete({ artwork: artwork._id });
-  //     await BuySell.findOneAndDelete({ artwork: artwork._id });
-  //     await Artwork.findOneAndDelete({ _id: artwork._id });
-  //     console.log('transfer event called');
-  //   } else {
-  //     console.log('mint');
-  //   }
-  // } catch (error) {
-  //   console.log(error);
-  // }
+  const { from, to, tokenId } = transferContract;
+  const result = await User.find({ address: to });
+  console.log(result);
+  try {
+    if (
+      from.toString() !== '0x0000000000000000000000000000000000000000' &&
+      result.length === 0 &&
+      to.toString() !== '0xe0d20730dD30C3295cC84f67f98a1899ca8525db' &&
+      from.toString() !== '0x53FcCF69E17a7B3F306801411C487dB88E71b447'
+    ) {
+      const artwork = await Artwork.findOne({ tokenId });
+      await User.findOneAndUpdate({ _id: artwork._id }, { $pull: { artworks: artwork._id } });
+      await Auction.findOneAndDelete({ artwork: artwork._id });
+      await BuySell.findOneAndDelete({ artwork: artwork._id });
+      await Artwork.findOneAndDelete({ _id: artwork._id });
+      console.log('transfer event called');
+    } else {
+      console.log('mint');
+    }
+  } catch (error) {
+    console.log(error);
+  }
 };
 const handleNewAuction = async (saleFromContract) => {
   let { tokenId, aucId, amount } = saleFromContract;
