@@ -33,6 +33,10 @@ const deleteGroupArtWork = async (groupId) => {
   const result = await Group.findOneAndDelete({ _id: groupId });
   return result;
 };
+const updateGroupMintStatus = async (groupId, mintStatus) => {
+  const result = await Group.findOneAndUpdate({ _id: groupId }, { mint: mintStatus }, { new: true });
+  return result;
+};
 module.exports = {
   creategroup,
   getUserGroups,
@@ -40,4 +44,5 @@ module.exports = {
   CheckGroupArtWork,
   editGroupArtWork,
   deleteGroupArtWork,
+  updateGroupMintStatus,
 };

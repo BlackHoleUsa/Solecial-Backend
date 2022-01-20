@@ -46,6 +46,7 @@ const saveArtwork = catchAsync(async (req, res) => {
       groupId,
     });
     await artworkService.updateArtworkGroup(artwork._id, groupId);
+    await groupService.updateGroupMintStatus(groupId, true);
     const currentCount = await groupService.getUserGroup(user._id, groupId);
     metaUrl = await pinMetaDataToIPFS({
       name: name,
