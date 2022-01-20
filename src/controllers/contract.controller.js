@@ -39,7 +39,7 @@ const transfer = async (transferContract) => {
   try {
     if (
       from.toString() !== '0x0000000000000000000000000000000000000000' &&
-      result == null &&
+      result != null &&
       to.toString() !== '0x53FcCF69E17a7B3F306801411C487dB88E71b447' &&
       from.toString() !== '0xe0d20730dD30C3295cC84f67f98a1899ca8525db'
     ) {
