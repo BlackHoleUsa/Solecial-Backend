@@ -41,6 +41,9 @@ const getGroupLatestArtwork = async (groupId) => {
   const result = await Group.find({ _id: groupId }).sort({ _id: -1 });
   return result ? result[0] : [];
 };
+const setGroupStatusFalse = async (groupId) => {
+  return await Group.findOneAndUpdate({ _id: groupId }, { mint: false });
+};
 module.exports = {
   creategroup,
   getUserGroups,
@@ -50,4 +53,5 @@ module.exports = {
   deleteGroupArtWork,
   updateGroupMintStatus,
   getGroupLatestArtwork,
+  setGroupStatusFalse,
 };

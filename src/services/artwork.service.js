@@ -342,6 +342,9 @@ const updateArtworkUrl = async (id, url) => {
 const getAllArtworksCount1 = async () => {
   return await Artwork.find().countDocuments();
 };
+const getGroupArtworks1 = async (groupId) => {
+  return await Artwork.find({ group: groupId }).lean();
+};
 module.exports = {
   saveArtwork,
   getUserArtworks,
@@ -380,4 +383,5 @@ module.exports = {
   getArtworksBygroupId,
   searchArtworkByNameTotal,
   getAllArtworksCount1,
+  getGroupArtworks1,
 };

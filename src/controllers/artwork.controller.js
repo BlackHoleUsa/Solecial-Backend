@@ -270,12 +270,18 @@ const deleteArtwork = catchAsync(async (req, res) => {
     message: `Artwork deleted`,
     type: HISTORY_TYPE.ARTWORK_DELETED,
   });
-
   await userService.removeArtwork(artwork.creater, artworkId);
   await artworkService.deleteArtworkById(artworkId);
   await auctionService.deleteArtworkById(artworkId);
   await buysellService.deleteArtworkById(artworkId);
 
+
+  const result = await artworkService.getGroupArtworks1(artwork.group);
+
+  if (result.length === 0) {
+    await groupService.setGroupStatusFalse(artwork.group);
+    console.log("artwork group status changed");
+  }
   res.status(httpStatus.OK).send({ status: true, message: 'artwork deleted successfully', data: artworkId });
 });
 
