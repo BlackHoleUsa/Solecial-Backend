@@ -15,6 +15,8 @@ router.get('/CheckGroupArtWork', validate(groupValidation.CheckGroupArtWork), gr
 
 router.post('/editGroup', [auth('manageUsers'), validate(groupValidation.editgroup)], groupController.editGroupArtWork);
 
+router.get('/getGroupLatestArtWork', validate(groupValidation.getGroupLatestArtwork), groupController.getGroupLatestArtwork);
+
 router.post(
   '/deleteGroup',
   [auth('manageUsers'), validate(groupValidation.deleteGroup)],

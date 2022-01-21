@@ -37,6 +37,10 @@ const updateGroupMintStatus = async (groupId, mintStatus) => {
   const result = await Group.findOneAndUpdate({ _id: groupId }, { mint: mintStatus }, { new: true });
   return result;
 };
+const getGroupLatestArtwork = async (groupId) => {
+  const result = await Group.find({ _id: groupId }).sort({ _id: -1 });
+  return result ? result[0] : [];
+};
 module.exports = {
   creategroup,
   getUserGroups,
@@ -45,4 +49,5 @@ module.exports = {
   editGroupArtWork,
   deleteGroupArtWork,
   updateGroupMintStatus,
+  getGroupLatestArtwork,
 };

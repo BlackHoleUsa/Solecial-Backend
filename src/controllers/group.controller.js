@@ -57,10 +57,16 @@ const deleteGroupArtWork = catchAsync(async (req, res) => {
   const result = await groupService.deleteGroupArtWork(groupId);
   return res.status(httpStatus.CREATED).send({ data: result });
 });
+const getGroupLatestArtwork = catchAsync(async (req, res) => {
+  const groupId = req.query.groupId;
+  const result = await groupService.getGroupLatestArtwork(groupId);
+  return res.status(httpStatus.OK).send({ data: result });
+});
 module.exports = {
   creategroup,
   getUserGroups,
   CheckGroupArtWork,
   editGroupArtWork,
-  deleteGroupArtWork
+  deleteGroupArtWork,
+  getGroupLatestArtwork,
 };

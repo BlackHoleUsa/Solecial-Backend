@@ -4,7 +4,7 @@ const { toJSON } = require('./plugins');
 const groupSchema = mongoose.Schema({
   groupName: {
     type: String,
-    require: true,
+    require: false,
   },
   currentCount: {
     type: Number,
@@ -13,7 +13,7 @@ const groupSchema = mongoose.Schema({
   },
   totalCount: {
     type: Number,
-    required: true,
+    required: false,
     default: 0,
   },
   mint: {

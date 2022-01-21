@@ -3,7 +3,7 @@ const Joi = require('joi');
 const creategroup = {
   body: Joi.object().keys({
     groupName: Joi.string().required(),
-    totalCount: Joi.number().required(),
+    totalCount: Joi.number().optional(),
   }),
 };
 
@@ -26,9 +26,15 @@ const deleteGroup = {
     groupId: Joi.string().required(),
   }),
 };
+const getGroupLatestArtwork = {
+  query: Joi.object().keys({
+    groupId: Joi.string().required(),
+  }),
+};
 module.exports = {
   creategroup,
   CheckGroupArtWork,
   editgroup,
   deleteGroup,
+  getGroupLatestArtwork,
 };
