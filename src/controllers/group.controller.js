@@ -17,25 +17,20 @@ const creategroup = catchAsync(async (req, res) => {
 const getUserGroups = catchAsync(async (req, res) => {
   const { user } = req;
   let userGroups = await groupService.getUserGroups(user._id);
-  // const newArr = userGroups.map((item) => {
-  //   return {
-  //     ...item,
-  //     newField: '12',
-  //   };
-  // });
-  // console.log(newArr);
   for (let i = 0; i < userGroups.length; i++) {
     // eslint-disable-next-line no-await-in-loop
-    let groupArtWorks = await artworkService.getArtworksBygroupId(userGroups[i].id);
+    let groupArtWorks = await artworkService.getArtworksBygroupId(userGroups[i]._id);
     for (let j = 0; j < groupArtWorks.length; j++) {
+      console.log(groupArtWorks[j].tokenId);
       if (groupArtWorks[j].tokenId) {
-        userGroups[i].mint = true;
         userGroups[i].artwork = groupArtWorks[j];
+        userGroups[i] = { ...userGroups[i], artwork: groupArtWorks[j] };
       } else {
-        userGroups[i].artwork = null;
+        userGroups[i] = { ...userGroups[i], artwork: null };
       }
     }
   }
+  // console.log(userGroups);
   res.status(httpStatus.OK).send({ status: true, userGroups });
 });
 

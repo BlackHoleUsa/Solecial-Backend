@@ -244,7 +244,7 @@ const deleteArtWorksOfCollections = async (userId, artworks) => {
   return response;
 };
 const getUserGroups = async (id) => {
-  const result = await User.findOne({ _id: id }).populate('groups');
+  const result = await User.findOne({ _id: id }).populate('groups').lean();
   return result;
 };
 const getUserGroup = async (userId, groupId) => {
