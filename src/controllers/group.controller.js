@@ -30,6 +30,9 @@ const getUserGroups = catchAsync(async (req, res) => {
     for (let j = 0; j < groupArtWorks.length; j++) {
       if (groupArtWorks[j].tokenId) {
         userGroups[i].mint = true;
+        userGroups[i].artwork = groupArtWorks[j];
+      } else {
+        userGroups[i].artwork = null;
       }
     }
   }
