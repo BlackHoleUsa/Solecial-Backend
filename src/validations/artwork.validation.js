@@ -15,8 +15,8 @@ const createArtworkVS = {
     multipleNFT: Joi.boolean().required(),
     amount: Joi.string().optional(),
     groupname: Joi.string().optional(),
-    totalCount: Joi.number().optional(),
     groupId: Joi.string().optional(),
+    edition: Joi.string().optional(),
   }),
 };
 

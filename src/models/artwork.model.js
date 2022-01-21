@@ -92,13 +92,8 @@ const artworkSchema = mongoose.Schema(
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Group',
     },
-    totalEdition: {
-      type: Number,
-      required: false,
-    },
     edition: {
-      type: Number,
-      default: 0,
+      type: String,
       required: false,
     },
     sale: {
