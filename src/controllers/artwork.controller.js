@@ -343,7 +343,8 @@ const helper = (artWorks) => {
         }
       }
     }
-    console.log(multipleStacks.length);
+    console.log("multipleArtwork",multipleStacks.length);
+    console.log("singleArtwork", singleArtWorks.length );
     return [...singleArtWorks, ...multipleStacks];
   }
 
