@@ -316,14 +316,16 @@ const getAllArtworks = catchAsync(async (req, res) => {
   const { user } = req;
   if (!artwork_type) {
     let artWorks = await artworkService.getAllArtworks(page, perPage, user._id, isAuctionOpen, openForSale);
-    artworks = helper(artWorks);
+    let result = helper(artWorks);
     const count = await artworkService.getAllArtworksCount(user._id, isAuctionOpen, openForSale);
-    res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: artWorks, count });
+    console.log("result", result);
+    res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: result, count });
   } else {
     let artWorks = await artworkService.getAllArtworks(page, perPage, user._id, undefined, undefined, artwork_type);
-    artworks = helper(artWorks);
+    let result = helper(artWorks);
     const count = await artworkService.getAllArtworksCount(user._id, undefined, undefined, artwork_type);
-    res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: artWorks, count });
+    console.log("result", result);
+    res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: result, count });
   }
 });
 
@@ -343,8 +345,8 @@ const helper = (artWorks) => {
         }
       }
     }
-    console.log("multipleArtwork",multipleStacks.length);
-    console.log("singleArtwork", singleArtWorks.length );
+    console.log("multipleArtwork", multipleStacks.length);
+    console.log("singleArtwork", singleArtWorks.length);
     return [...singleArtWorks, ...multipleStacks];
   }
 
