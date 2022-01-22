@@ -294,6 +294,7 @@ const addEditionNumber = async (id, edition) => {
 const getGroupArtworks = async (groupId, page, perPage) => {
   const result = await Artwork.find({ group: groupId })
     .populate('group')
+    .populate('sale')
     .limit(parseInt(perPage))
     .skip(page * perPage);
   return result;
@@ -305,7 +306,9 @@ const getGroupArtworksCount = async (groupId) => {
   return result.length;
 };
 const getGroupArtworksWithEditionNumber = async (userId, groupId, editionNumber) => {
-  const result = await Artwork.find({ creater: userId, group: groupId, edition: editionNumber }).populate('group');
+  const result = await Artwork.find({ creater: userId, group: groupId, edition: editionNumber })
+    .populate('group')
+    .populate('sale');
   return result;
 };
 
