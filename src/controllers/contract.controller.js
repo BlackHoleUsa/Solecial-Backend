@@ -1,6 +1,8 @@
 const Web3 = require('web3');
 const { User, Collection, Artwork, Auction, BuySell } = require('../models');
 const { getUserByAddress } = require('../services/user.service');
+const artworkService = require('../services/artwork.service');
+const groupService = require('../services/group.service');
 const { AUCTION_CONTRACT_INSTANCE } = require('../config/contract.config');
 const LISTENERS = require('./listeners.controller');
 const { auctionService, bidService } = require('../services');
@@ -184,6 +186,7 @@ const handleSaleComplete = async (saleFromContract) => {
     const { artwork } = sale;
     console.log('Price in SaleComplete', sale.price);
     const usr = await User.findOneAndUpdate({ _id: sale.owner }, { $pull: { artworks: artwork._id } });
+
     const artworks1 = await User.findOne({ address: newOwner_ }, { artworks: 1 });
     console.log(artworks1);
     let newArtworkOwner;
@@ -259,6 +262,14 @@ const handleSaleComplete = async (saleFromContract) => {
         sale: sale._id,
       },
     });
+    const artwork1 = await artworkService.getArtworkById(artwork._id);
+
+    const result = await artworkService.getGroupArtworks1(artwork1.group);
+
+    if (result.length === 0) {
+      await groupService.setGroupStatusFalse(artwork.group);
+      console.log("artwork group status changed");
+    }
   } catch (err) {
     console.log(err);
   }

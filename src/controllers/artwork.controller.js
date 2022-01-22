@@ -23,7 +23,7 @@ const saveArtwork = catchAsync(async (req, res) => {
   // mutipleNFT, //amount
   const { body } = req;
   const { files } = req;
-  const { name, description, creater, artist_name, artist_description, multipleNFT, groupId } = body;
+  const { name, description, creater, artist_name, artist_description, multipleNFT, groupId, edition } = body;
   let imgData;
   let artistimgData;
   if (files.length > 0) {
@@ -56,9 +56,9 @@ const saveArtwork = catchAsync(async (req, res) => {
       artist_description,
       artist_url: artistimgData,
       artwork_url: imgData,
-      attributes: [{ "trait_type": "Edition Number", "value": `${currentCount[0].currentCount}/${currentCount[0].totalCount}` }]
+      attributes: [{ "trait_type": "Edition Number", "value": edition }]
     });
-    await artworkService.addEditionNumber(artwork._id, currentCount[0].currentCount);
+    // await artworkService.addEditionNumber(artwork._id, currentCount[0].currentCount);
   } else {
     metaUrl = await pinMetaDataToIPFS({
       name: name,
