@@ -87,12 +87,12 @@ const helper = (artWorks) => {
   const multipleArtWorks = artWorks.filter((artwork) => artwork.multipleNFT === true);
   if (multipleArtWorks) {
 
-    const multipleArtworkGroupId = multipleArtWorks.map((artwork) => artwork.group._id);
+    const multipleArtworkGroupId = multipleArtWorks.map((artwork) => artwork?.group?._id);
     const uniq = [...new Set(multipleArtworkGroupId)];
     const multipleStacks = [];
     for (let i = 0; i < uniq.length; i++) {
       for (let k = 0; k < multipleArtWorks.length; k++) {
-        if (multipleArtWorks[k].group._id.toString() === uniq[i].toString()) {
+        if (multipleArtWorks[k].group?._id?.toString() === uniq[i]?.toString()) {
           multipleStacks.push(multipleArtWorks[k]);
           k = multipleArtWorks.length + 1;
         }
