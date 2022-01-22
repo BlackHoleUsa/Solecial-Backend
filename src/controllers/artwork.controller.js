@@ -335,7 +335,7 @@ const helper = (artWorks) => {
     const multipleStacks = [];
     for (let i = 0; i < uniq.length; i++) {
       for (let k = 0; k < multipleArtWorks.length; k++) {
-        if (multipleArtWorks[k]?.group._id?.toString() === uniq[i].toString()) {
+        if (multipleArtWorks[k]?.group?._id?.toString() === uniq[i]?.toString()) {
           multipleStacks.push(multipleArtWorks[k]);
           k = multipleArtWorks.length + 1;
         }
