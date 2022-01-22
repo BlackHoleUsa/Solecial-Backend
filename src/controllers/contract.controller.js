@@ -264,12 +264,15 @@ const handleSaleComplete = async (saleFromContract) => {
     });
     const artwork1 = await artworkService.getArtworkById(artwork._id);
 
+    await artworkService.updateArtworkGroup1(artwork._id);
     const result = await artworkService.getGroupArtworks1(artwork1.group);
 
     if (result.length === 0) {
       await groupService.setGroupStatusFalse(artwork.group);
       console.log("artwork group status changed");
     }
+
+
   } catch (err) {
     console.log(err);
   }
