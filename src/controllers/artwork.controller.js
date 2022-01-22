@@ -328,6 +328,7 @@ const getAllArtworks = catchAsync(async (req, res) => {
 const helper = (artWorks) => {
   const singleArtWorks = artWorks.filter((artwork) => artwork.multipleNFT === false);
   const multipleArtWorks = artWorks.filter((artwork) => artwork.multipleNFT === true);
+  console.log(multipleArtWorks);
   if (multipleArtWorks) {
     const multipleArtworkGroupId = multipleArtWorks.map((artwork) => artwork.group._id);
     const uniq = [...new Set(multipleArtworkGroupId)];
