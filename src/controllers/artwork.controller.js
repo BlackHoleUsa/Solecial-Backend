@@ -316,7 +316,7 @@ const getAllArtworks = catchAsync(async (req, res) => {
   const { user } = req;
   if (!artwork_type) {
     let artWorks = await artworkService.getAllArtworks(page, perPage, user._id, isAuctionOpen, openForSale);
-    artworks = helper(artworks);
+    artworks = helper(artWorks);
     const count = await artworkService.getAllArtworksCount(user._id, isAuctionOpen, openForSale);
     res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: artWorks, count });
   } else {
