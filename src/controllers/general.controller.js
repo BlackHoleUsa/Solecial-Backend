@@ -106,12 +106,12 @@ const helper = (artWorks) => {
 const helper1 = (artWorks) => {
   const singleArtWorks = artWorks.filter((artwork) => artwork.multipleNFT === false);
   const multipleArtWorks = artWorks.filter((artwork) => artwork.multipleNFT === true);
-  const multipleArtworkGroupId = multipleArtWorks.map((artwork) => artwork.group._id);
+  const multipleArtworkGroupId = multipleArtWorks.map((artwork) => artwork?.group?._id);
   const uniq = [...new Set(multipleArtworkGroupId)];
   let multipleStacks = [];
   for (let i = 0; i < uniq.length; i++) {
     for (let k = 0; k < multipleArtWorks.length; k++) {
-      if (multipleArtWorks[k].group._id.toString() === uniq[i].toString()) {
+      if (multipleArtWorks[k]?.group?._id?.toString() === uniq[i]?.toString()) {
         multipleStacks.push(multipleArtWorks[k]);
         k = multipleArtWorks.length + 1;
       }
