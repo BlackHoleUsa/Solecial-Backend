@@ -325,7 +325,7 @@ const convertMultipleToSingleArtwork = async (artworkId) => {
   // }
   const result = await Artwork.findOneAndUpdate(
     { _id: artworkId },
-    { multipleNFT: false, group: null, totalEdition: result1.group.totalCount },
+    { multipleNFT: true, group: null, totalEdition: result1.group.totalCount },
     { new: true }
   );
   return result;
