@@ -328,28 +328,22 @@ const getAllArtworks = catchAsync(async (req, res) => {
 const helper = (artWorks) => {
   const singleArtWorks = artWorks.filter((artwork) => artwork.multipleNFT === false);
   const multipleArtWorks = artWorks.filter((artwork) => artwork.multipleNFT === true);
-  const multipleArtworkGroupId = multipleArtWorks.map((artwork) => artwork.group._id);
-  const uniq = [...new Set(multipleArtworkGroupId)];
-  const multipleStacks = [];
-  for (let i = 0; i < uniq.length; i++) {
-    for (let k = 0; k < multipleArtWorks.length; k++) {
-      if (multipleArtWorks[k].group._id.toString() === uniq[i].toString()) {
-        multipleStacks.push(multipleArtWorks[k]);
-        k = multipleArtWorks.length + 1;
+  if (multipleArtWorks) {
+    const multipleArtworkGroupId = multipleArtWorks.map((artwork) => artwork.group._id);
+    const uniq = [...new Set(multipleArtworkGroupId)];
+    const multipleStacks = [];
+    for (let i = 0; i < uniq.length; i++) {
+      for (let k = 0; k < multipleArtWorks.length; k++) {
+        if (multipleArtWorks[k].group._id.toString() === uniq[i].toString()) {
+          multipleStacks.push(multipleArtWorks[k]);
+          k = multipleArtWorks.length + 1;
+        }
       }
     }
+    console.log(multipleStacks.length);
+    return [...singleArtWorks, ...multipleStacks];
   }
-  // for (let i = 0; i < multipleArtWorks.length; i++) {
-  //   for (let k = 0; k < uniq.length; k++) {
-  //     if (multipleArtWorks[i].group._id.toString() === uniq[k].toString()) {
-  //       multipleStacks.push(multipleArtWorks[i]);
-  //       k = uniq.length + 1;
-  //     }
-  //   }
-  // }
-  // console.log(singleArtWorks.length);
-  console.log(multipleStacks.length);
-  return [...singleArtWorks, ...multipleStacks];
+
 };
 
 const helper1 = (artWorks) => {
