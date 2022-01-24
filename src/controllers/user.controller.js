@@ -6,7 +6,7 @@ const { userService } = require('../services');
 const { uploadToAws } = require('../utils/helpers');
 const EVENT = require('../triggers/custom-events').customEvent;
 const { NOTIFICATION_TYPE } = require('../utils/enums');
-const {adminAuthforBlock}=require('../middlewares/auth')
+const { adminAuthforBlock } = require('../middlewares/auth')
 
 const createUser = catchAsync(async (req, res) => {
   const user = await userService.createUser(req.body);
@@ -64,10 +64,14 @@ const followUser = catchAsync(async (req, res) => {
       message: 'otherUserId is equal to UserId',
     });
   } else {
+    const user1 = await userService.getUser(user._id);
+    const user2 = await userService.getUser(otherUserId);
+
     await userService.followOtherUser(user._id, otherUserId);
 
     EVENT.emit('send-and-save-notification', {
       receiver: user._id,
+      message: `${user1.userName} has followed ${user2.userName}`,
       type: NOTIFICATION_TYPE.NEW_FOLLOWER,
       extraData: {
         follower: otherUserId,

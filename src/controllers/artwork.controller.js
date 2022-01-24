@@ -195,6 +195,7 @@ const placeBid = catchAsync(async (req, res) => {
     if (bidNotification === true) {
       EVENT.emit('send-and-save-notification', {
         receiver: user._id,
+        message: `${bid1.bidder.userName} placed bid on the artwork`,
         type: NOTIFICATION_TYPE.NEW_BID,
         extraData: {
           bid: bid._id,

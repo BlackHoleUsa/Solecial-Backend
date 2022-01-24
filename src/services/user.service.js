@@ -257,6 +257,10 @@ const getUserGroup = async (userId, groupId) => {
 const getAllUsersCount = async () => {
   return await User.find().countDocuments();
 };
+
+const getUser = async (userId) => {
+  return await User.findOne({ _id: userId });
+};
 module.exports = {
   createUser,
   queryUsers,
@@ -286,4 +290,5 @@ module.exports = {
   getUserGroup,
   searchUsersByNameTotal,
   getAllUsersCount,
+  getUser,
 };

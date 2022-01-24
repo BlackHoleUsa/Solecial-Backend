@@ -263,6 +263,7 @@ const handleSaleComplete = async (saleFromContract) => {
     EVENT.emit('send-and-save-notification', {
       receiver: sale.owner,
       type: NOTIFICATION_TYPE.NFT_BUY,
+      message: `${newArtworkOwner.userName} has bought the artwork`,
       extraData: {
         sale: sale._id,
       },
@@ -325,6 +326,7 @@ const handleNewBid = async (par) => {
   EVENT.emit('send-and-save-notification', {
     receiver: dbOwner._id,
     type: NOTIFICATION_TYPE.NEW_BID,
+    message: `${dbBidder.userName} has placed the bid`,
     extraData: {
       bid: dbBid._id,
     },
@@ -394,6 +396,7 @@ const handleNFTClaim = async (values) => {
 
   EVENT.emit('send-and-save-notification', {
     receiver: auction.owner,
+    message: `${newArtworkOwner.userName} has claimed the artwork`,
     type: NOTIFICATION_TYPE.AUCTION_WIN,
     extraData: {
       auction: auction._id,
