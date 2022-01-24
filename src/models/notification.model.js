@@ -30,7 +30,7 @@ const notificationSchema = mongoose.Schema(
       sale: {
         type: mongoose.SchemaTypes.ObjectId,
         ref: 'BuySell',
-      }
+      },
     },
   },
   {

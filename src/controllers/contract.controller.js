@@ -186,7 +186,7 @@ const handleSaleComplete = async (saleFromContract) => {
     const { artwork } = sale;
     console.log('Price in SaleComplete', sale.price);
     const usr = await User.findOneAndUpdate({ _id: sale.owner }, { $pull: { artworks: artwork._id } });
-    EVENT.emit('ownership', {
+    EVENT.emit('update-artwork-history', {
       artwork: artwork._id,
       message: `${usr.userName} was the owner`,
       type: HISTORY_TYPE.OWNERSHIP,
@@ -337,7 +337,7 @@ const handleNFTClaim = async (values) => {
   const auction = await Auction.findOneAndUpdate({ contractAucId: aucId }, { nftClaim: true }).populate('artwork');
   const { artwork } = auction;
   const usr = await User.findOneAndUpdate({ _id: artwork.owner }, { $pull: artwork._id });
-  EVENT.emit('ownership', {
+  EVENT.emit('update-artwork-history', {
     artwork: artwork._id,
     message: `${usr.userName} was the owner`,
     type: HISTORY_TYPE.OWNERSHIP,
