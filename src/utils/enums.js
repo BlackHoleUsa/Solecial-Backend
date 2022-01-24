@@ -57,6 +57,7 @@ const HISTORY_TYPE = {
   AUCTION_STARTED: 'auctionStarted',
   AUCTION_END: 'auctionEnd',
   BID_PLACED: 'bidPlaced',
+  OWNERSHIP: 'ownership',
 };
 
 const TRANSACTION_TYPE = {
