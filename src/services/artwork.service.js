@@ -351,6 +351,12 @@ const getGroupArtworks1 = async (groupId) => {
 const updateArtworkGroup1 = async (artworkId) => {
   return await Artwork.findOneAndUpdate({ _id: artworkId }, { group: null });
 };
+const getSingleArtworks = async () => {
+  return await Artwork.find({ multipleNFT: false });
+};
+const getMultipleArtworks = async () => {
+  return await Artwork.find({ multipleNFT: true });
+};
 module.exports = {
   saveArtwork,
   getUserArtworks,
@@ -391,4 +397,6 @@ module.exports = {
   getAllArtworksCount1,
   getGroupArtworks1,
   updateArtworkGroup1,
+  getSingleArtworks,
+  getMultipleArtworks,
 };

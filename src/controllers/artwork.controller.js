@@ -374,10 +374,10 @@ const helper1 = (artWorks) => {
 };
 
 const getOpenArtWorks = catchAsync(async (req, res) => {
-  let { artwork_type, page, perPage, isAuctionOpen, openForSale } = req.query;
+  let { artwork_type, page, perPage, isAuctionOpen, openForSale, isEditions, isSingle } = req.query;
   page = parseInt(page);
   perPage = parseInt(perPage);
-  if (!artwork_type) {
+  if (!artwork_type && !isSingle && !isEditions) {
     const artWorks = await artworkService.getOpenArtWorks(isAuctionOpen, openForSale, undefined);
     let result = helper(artWorks);
     console.log("result.length before", result.length);
@@ -404,7 +404,66 @@ const getOpenArtWorks = catchAsync(async (req, res) => {
     }
     result1 = result1.filter((el) => { return el != null });
     res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: result1, count: helper(artWorks)?.length, });
-  } else {
+  }
+  else if (isEditions) {
+    let artWorks = await artworkService.getMultipleArtworks();
+    let result = helper(artWorks);
+    console.log("result.length before", result.length);
+    let result1 = [];
+    if (page === 0 && perPage <= result.length) {
+      for (let i = 0; i < perPage; i++) {
+        result1.push(result[i]);
+      }
+    }
+    else if (page === 0 && perPage >= result.length) {
+      for (let i = 0; i < result.length; i++) {
+        result1.push(result[i]);
+      }
+    }
+    else if (page > 0 && perPage <= result.length) {
+      for (let i = page * perPage; i < (page * perPage) + perPage; i++) {
+        result1.push(result[i]);
+      }
+    }
+    else if (page > 0 && perPage >= result.length) {
+      for (let i = page * perPage; i < result.length; i++) {
+        result1.push(result[i]);
+      }
+    }
+    result1 = result1.filter((el) => { return el != null });
+    res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: result1, count: helper(artWorks)?.length, });
+
+  }
+  else if (isSingle) {
+    let artWorks = await artworkService.getSingleArtworks();
+    let result = artWorks;
+    console.log("result.length before", result.length);
+    let result1 = [];
+    if (page === 0 && perPage <= result.length) {
+      for (let i = 0; i < perPage; i++) {
+        result1.push(result[i]);
+      }
+    }
+    else if (page === 0 && perPage >= result.length) {
+      for (let i = 0; i < result.length; i++) {
+        result1.push(result[i]);
+      }
+    }
+    else if (page > 0 && perPage <= result.length) {
+      for (let i = page * perPage; i < (page * perPage) + perPage; i++) {
+        result1.push(result[i]);
+      }
+    }
+    else if (page > 0 && perPage >= result.length) {
+      for (let i = page * perPage; i < result.length; i++) {
+        result1.push(result[i]);
+      }
+    }
+    result1 = result1.filter((el) => { return el != null });
+    res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: result1, count: artWorks?.length, });
+
+  }
+  else {
     const artWorks = await artworkService.getOpenArtWorks(undefined, undefined, artwork_type);
     let result = helper(artWorks);
     console.log("result.length before", result.length);
