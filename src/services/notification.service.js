@@ -10,6 +10,7 @@ const getUserNotifications = async (userId, page, perPage) => {
     .populate('extraData.follower')
     .populate('extraData.Auction')
     .populate('extraData.Bid')
+    .sort({ _id: -1 })
     .limit(parseInt(perPage))
     .skip(page * perPage)
     .lean();
