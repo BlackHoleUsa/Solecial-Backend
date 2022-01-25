@@ -352,10 +352,16 @@ const updateArtworkGroup1 = async (artworkId) => {
   return await Artwork.findOneAndUpdate({ _id: artworkId }, { group: null });
 };
 const getSingleArtworks = async () => {
-  return await Artwork.find({ multipleNFT: false });
+  return await Artwork.find({ multipleNFT: false }).populate('owner')
+    .populate('group')
+    .populate('sale')
+    .populate('auction').sort({ _id: -1 });
 };
 const getMultipleArtworks = async () => {
-  return await Artwork.find({ multipleNFT: true });
+  return await Artwork.find({ multipleNFT: true }).populate('owner')
+    .populate('group')
+    .populate('sale')
+    .populate('auction').sort({ _id: -1 });
 };
 module.exports = {
   saveArtwork,
