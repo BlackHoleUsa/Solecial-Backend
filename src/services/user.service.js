@@ -261,6 +261,9 @@ const getAllUsersCount = async () => {
 const getUser = async (userId) => {
   return await User.findOne({ _id: userId });
 };
+const getAdmins = async () => {
+  return await User.find({ $or: [{ role: 'admin' }, { role: 'superAdmin' }] });
+};
 module.exports = {
   createUser,
   queryUsers,
@@ -291,4 +294,5 @@ module.exports = {
   searchUsersByNameTotal,
   getAllUsersCount,
   getUser,
+  getAdmins,
 };

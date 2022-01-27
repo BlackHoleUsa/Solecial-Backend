@@ -122,6 +122,10 @@ const getAllUsers = catchAsync(async (req, res) => {
   const allUsers = await userService.getAllUsers();
   res.status(httpStatus.OK).send({ allUsers });
 });
+const getAdmins = catchAsync(async (req, res) => {
+  const allUsers = await userService.getAdmins();
+  res.status(httpStatus.OK).send({ allUsers });
+});
 module.exports = {
   createUser,
   getUsers,
@@ -133,4 +137,5 @@ module.exports = {
   getUserFollowing,
   getUserFollowers,
   getAllUsers,
+  getAdmins,
 };
