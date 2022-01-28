@@ -343,7 +343,7 @@ const updateArtworkUrl = async (id, url) => {
   return await Artwork.findOneAndUpdate({ _id: id }, { artwork_url: url }, { new: true }).lean();
 };
 const getAllArtworksCount1 = async () => {
-  return await Artwork.find().countDocuments();
+  return await Artwork.find();
 };
 const getGroupArtworks1 = async (groupId) => {
   return await Artwork.find({ group: groupId }).lean();
