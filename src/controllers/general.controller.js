@@ -11,7 +11,7 @@ const handleSearch = catchAsync(async (req, res) => {
   if (keyword) {
     const users = await userService.searchUsersByName(keyword, page, perPage);
     let usersCount = await userService.searchUsersByNameTotal(keyword);
-    const artworks = await artworkService.searchArtworkByName(keyword, page, perPage);
+    const artworks = await artworkService.searchArtworkByName(keyword);
     let artworksCount = await artworkService.searchArtworkByNameTotal(keyword);
 
     let count = 0;
@@ -25,9 +25,10 @@ const handleSearch = catchAsync(async (req, res) => {
 
       case SEARCH_FILTERS.ARTWORKS:
         data.artworks = artworks;
-        data.artworks = helper(artworks);
+        let result = helper(artworks);
+        data.artworks = myNewHelper(result, parseInt(page), parseInt(perPage));
         artWorksTotal = await artworkService.getAllArtworksCount1();
-        count = helper(artWorksTotal).length;
+        count = helper(artworks)?.length;
         break;
 
       default:
@@ -58,9 +59,10 @@ const handleSearch = catchAsync(async (req, res) => {
         break;
 
       case SEARCH_FILTERS.ARTWORKS:
-        artworks = await artworkService.getAllArtwork(page, perPage);
-        data.artworks = helper(artworks);
-        count = await artworkService.getAllArtworksCount1(); 
+        artworks = await artworkService.getAllArtwork();
+        let result = helper(artworks);
+        data.artworks = myNewHelper(result, parseInt(page), parseInt(perPage));
+        count = helper(artworks)?.length;
         break;
 
       case SEARCH_FILTERS.COLLECTIONS:
@@ -100,7 +102,6 @@ const helper = (artWorks) => {
         }
       }
     }
-    console.log(multipleStacks.length);
     return [...singleArtWorks, ...multipleStacks];
   }
 
@@ -120,11 +121,33 @@ const helper1 = (artWorks) => {
     }
   }
   multipleStacks = [...new Set(multipleStacks)]
-  console.log("singleArtWorks", singleArtWorks.length);
-  console.log("multipleStacks", multipleStacks.length);
   return [...singleArtWorks, ...multipleStacks];
 };
-
+function myNewHelper(result, page, perPage) {
+  let result1 = [];
+  if (page === 0 && perPage <= result.length) {
+    for (let i = 0; i < perPage; i++) {
+      result1.push(result[i]);
+    }
+  }
+  else if (page === 0 && perPage >= result.length) {
+    for (let i = 0; i < result.length; i++) {
+      result1.push(result[i]);
+    }
+  }
+  else if (page > 0 && perPage <= result.length) {
+    for (let i = page * perPage; i < (page * perPage) + perPage; i++) {
+      result1.push(result[i]);
+    }
+  }
+  else if (page > 0 && perPage >= result.length) {
+    for (let i = page * perPage; i < result.length; i++) {
+      result1.push(result[i]);
+    }
+  }
+  let newarray = result1.filter((el) => { return el != null });
+  return newarray;
+};
 const getAppActivity = catchAsync(async (req, res) => {
   let { page, perPage } = req.query;
   page = parseInt(page);
