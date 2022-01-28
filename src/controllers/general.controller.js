@@ -60,7 +60,7 @@ const handleSearch = catchAsync(async (req, res) => {
         artworks = await artworkService.getAllArtwork(page, perPage);
         data.artworks = helper(artworks);
         artWorksTotal = await artworkService.getAllArtworksCount1();
-        count = helper(artWorksTotal);
+        count = helper(artWorksTotal).length;
         break;
 
       case SEARCH_FILTERS.COLLECTIONS:
