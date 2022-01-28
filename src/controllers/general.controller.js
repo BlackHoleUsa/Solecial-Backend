@@ -31,7 +31,7 @@ const handleSearch = catchAsync(async (req, res) => {
       default:
         data = {
           users,
-          artworks,
+          artworks : helper(artworks),
         };
     }
 
@@ -69,7 +69,7 @@ const handleSearch = catchAsync(async (req, res) => {
       default:
         data = {
           users,
-          artworks,
+          artworks: helper(artworks),
           collections,
         };
     }
