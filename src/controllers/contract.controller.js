@@ -192,7 +192,7 @@ const handleSaleComplete = async (saleFromContract) => {
       type: HISTORY_TYPE.OWNERSHIP,
     });
 
-    const artworks1 = await User.findOne({ address: newOwner_ }, { artworks: 1 });
+    const artworks1 = await User.findOne({ address: newOwner_ });
     console.log(artworks1);
     let newArtworkOwner;
     if (!artworks1.artworks.includes(artwork._id)) {
