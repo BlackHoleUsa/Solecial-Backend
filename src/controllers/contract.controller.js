@@ -334,7 +334,7 @@ const handleNewBid = async (par) => {
 };
 
 const handleNFTClaim = async (values) => {
-  const { aucId, newOwner_, collection, amount } = values;
+  const { aucId, newOwner, collection, amount } = values;
 
   console.log("Values in NFT Claim", values);
   const { latestBid } = await AUCTION_CONTRACT_INSTANCE.methods.AuctionList(aucId).call();
@@ -346,7 +346,7 @@ const handleNFTClaim = async (values) => {
     message: `${usr.userName} was the owner`,
     type: HISTORY_TYPE.OWNERSHIP,
   });
-  const newArtworkOwner = await User.findOneAndUpdate({ address: newOwner_ }, { $push: artwork._id });
+  const newArtworkOwner = await User.findOneAndUpdate({ address: newOwner }, { $push: { artworks: artwork._id } });
   if (amount !== undefined) {
     await Artwork.findOneAndUpdate(
       { _id: artwork._id },
