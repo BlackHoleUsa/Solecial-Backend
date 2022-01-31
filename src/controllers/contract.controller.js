@@ -440,7 +440,7 @@ const handleClaimBack = async (values) => {
     { contractAucId: aucId },
     { cancelled: true, status: AUCTION_STATUS.CLOSED }
   );
-  const usr = await User.findOneAndUpdate({ _id: auction.owner }, { $push: auction.artwork });
+  const usr = await User.findOneAndUpdate({ _id: auction.owner }, { $push: { artworks: auction.artwork } });
   if (amount !== undefined) {
     await Artwork.findOneAndUpdate(
       { _id: auction.artwork },
