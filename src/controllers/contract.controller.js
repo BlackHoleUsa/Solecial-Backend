@@ -17,6 +17,15 @@ const {
   STATS_UPDATE_TYPE,
 } = require('../utils/enums');
 
+const isFloat = (n) => {
+  return Number(n) === n && n % 1 !== 0;
+};
+const convertToEther = (amount) => {
+  if (isFloat(amount)) return amount;
+  if (amount) return Web3.utils.fromWei(`${amount}`, 'ether');
+  return '--';
+};
+
 const updateCollectionAddress = async (tokenId, owner, colName) => {
   tokenId = tokenId.toString();
   const user = await User.findOne({ address: owner });
@@ -59,6 +68,7 @@ const transfer = async (transferContract) => {
 };
 const handleNewAuction = async (saleFromContract) => {
   let { tokenId, aucId, amount } = saleFromContract;
+  amount = convertToEther(amount);
   console.log(tokenId);
   tokenId = tokenId.toString();
   try {
@@ -70,7 +80,8 @@ const handleNewAuction = async (saleFromContract) => {
       return;
     }
     const auctionData = await AUCTION_CONTRACT_INSTANCE.methods.AuctionList(aucId).call();
-    const { endTime, startPrice } = auctionData;
+    let { endTime, startPrice } = auctionData;
+    startPrice = convertToEther(startPrice);
     console.log('Price in auction', startPrice);
     const { owner, creater } = artwork;
     const params = {
@@ -107,6 +118,8 @@ const handleNewAuction = async (saleFromContract) => {
 const handleNewSale = async (saleFromContract) => {
   let { colAddress, tokenId, saleId, price, amount } = saleFromContract;
   tokenId = tokenId.toString();
+  price = convertToEther(price);
+  amount = convertToEther(amount);
   try {
     // const collection = await Collection.findOne({ collectionAddress: colAddress });
     console.log('Price in Newsale', price);
@@ -138,7 +151,8 @@ const handleNewSale = async (saleFromContract) => {
 };
 
 const handleCancelSale = async (saleFromContract) => {
-  const { saleId, amount } = saleFromContract;
+  let { saleId, amount } = saleFromContract;
+  amount = convertToEther(amount);
   try {
     const sale = await BuySell.findOneAndUpdate({ contractSaleId: saleId }, { status: SALE_STATUS.CANCELLED }).populate(
       'artwork'
@@ -177,7 +191,8 @@ const handleCancelSale = async (saleFromContract) => {
 };
 
 const handleSaleComplete = async (saleFromContract) => {
-  const { saleId, newOwner_, amount } = saleFromContract;
+  let { saleId, newOwner_, amount } = saleFromContract;
+  amount = convertToEther(amount);
   try {
     console.log('new owner address', newOwner_);
     const sale = await BuySell.findOneAndUpdate({ contractSaleId: saleId }, { status: SALE_STATUS.COMPLETED }).populate(
@@ -285,8 +300,9 @@ const handleSaleComplete = async (saleFromContract) => {
 };
 
 const handleNewBid = async (par) => {
-  const { bid, bidder, aucId } = par;
+  let { bid, bidder, aucId } = par;
 
+  bid = convertToEther(bid);
   const auctionData = await AUCTION_CONTRACT_INSTANCE.methods.AuctionList(aucId).call();
   let { colAddress, owner, tokenId } = auctionData;
   tokenId = tokenId.toString();
@@ -334,10 +350,12 @@ const handleNewBid = async (par) => {
 };
 
 const handleNFTClaim = async (values) => {
-  const { aucId, newOwner, collection, amount } = values;
+  let { aucId, newOwner, collection, amount } = values;
 
+  amount = convertToEther(amount);
   console.log("Values in NFT Claim", values);
-  const { latestBid } = await AUCTION_CONTRACT_INSTANCE.methods.AuctionList(aucId).call();
+  let { latestBid } = await AUCTION_CONTRACT_INSTANCE.methods.AuctionList(aucId).call();
+  latestBid = convertToEther(latestBid);
   const auction = await Auction.findOneAndUpdate({ contractAucId: aucId }, { nftClaim: true }).populate('artwork');
   const { artwork } = auction;
   const usr = await User.findOneAndUpdate({ _id: artwork.owner }, { $pull: artwork._id });
@@ -411,7 +429,8 @@ const handleNFTClaim = async (values) => {
 };
 
 const handleNFTSale = async (values) => {
-  const { aucId, owner, amount } = values;
+  let { aucId, owner, amount } = values;
+  amount = convertToEther(amount);
   const auction = await Auction.findOneAndUpdate({ contractAucId: aucId }, { ownerclaim: true }).populate('artwork');
   const { artwork } = auction;
   const user = await User.findOneAndUpdate({ address: owner }, { $pull: artwork._id });
@@ -435,7 +454,8 @@ const handleNFTSale = async (values) => {
 };
 
 const handleClaimBack = async (values) => {
-  const { aucId, amount } = values;
+  let { aucId, amount } = values;
+  amount = convertToEther(amount);
   const auction = await Auction.findOneAndUpdate(
     { contractAucId: aucId },
     { cancelled: true, status: AUCTION_STATUS.CLOSED }
