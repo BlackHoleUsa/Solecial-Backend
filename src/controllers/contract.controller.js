@@ -439,12 +439,11 @@ const handleClaimBack = async (values) => {
   const auction = await Auction.findOneAndUpdate(
     { contractAucId: aucId },
     { cancelled: true, status: AUCTION_STATUS.CLOSED }
-  ).populate('artwork');
-  const { artwork } = auction;
-  const usr = await User.findOneAndUpdate({ _id: auction.owner }, { $push: artwork._id });
+  );
+  const usr = await User.findOneAndUpdate({ _id: auction.owner }, { $push: auction.artwork });
   if (amount !== undefined) {
     await Artwork.findOneAndUpdate(
-      { _id: artwork._id },
+      { _id: auction.artwork },
       {
         owner: auction.owner,
         isAuctionOpen: false,
@@ -458,7 +457,7 @@ const handleClaimBack = async (values) => {
     );
   } else {
     await Artwork.findOneAndUpdate(
-      { _id: artwork._id },
+      { _id: auction.artwork },
       {
         owner: auction.owner,
         isAuctionOpen: false,
