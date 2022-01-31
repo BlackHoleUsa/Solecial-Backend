@@ -121,7 +121,7 @@ const handleNewSale = async (saleFromContract) => {
       };
 
       const sale = await BuySell.create(params);
-      // await User.findOneAndUpdate({ _id: owner }, { $pull: { artworks: artwork._id } });
+      await User.findOneAndUpdate({ _id: owner }, { $pull: { artworks: artwork._id } });
       if (amount !== undefined) {
         await Artwork.findOneAndUpdate({ _id: artwork._id }, { owner, sale: sale._id, openForSale: true, amount });
       } else {
