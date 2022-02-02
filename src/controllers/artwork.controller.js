@@ -25,19 +25,20 @@ const saveArtwork = catchAsync(async (req, res) => {
   const { files } = req;
   const { name, description, creater, artist_name, artist_description, multipleNFT, groupId, edition } = body;
   let imgData;
+  let imgData1;
   let artistimgData;
   if (files.length > 0) {
-    imgData = await addFilesToIPFS(files[0].buffer, 'image');
+    imgData1 = await addFilesToIPFS(files[0].buffer, 'image');
     artistimgData = await addFilesToIPFS(files[1].buffer, 'artist_image');
-    body.artwork_url = imgData;
+    body.artwork_url = imgData1;
     body.artist_url = artistimgData;
   }
   body.owner = body.creater;
   body.basePrice = body.price;
   const artwork = await artworkService.saveArtwork(body);
   if (files.length > 0) {
-    imgData = await uploadToAws(files[0].buffer, `/artworks/${artwork._id}`)
-    await artworkService.updateArtworkUrl(artwork._id, imgData.Location)
+    // imgData = await uploadToAws(files[0].buffer, `/artworks/${artwork._id}`)
+    await artworkService.updateArtworkUrl(artwork._id, imgData1.Location)
   }
   const user = await userService.getUserById(creater);
   let metaUrl;
@@ -51,11 +52,11 @@ const saveArtwork = catchAsync(async (req, res) => {
     metaUrl = await pinMetaDataToIPFS({
       name: name,
       description: description,
-      image: imgData,
+      image: imgData1,
       artist_name,
       artist_description,
       artist_url: artistimgData,
-      artwork_url: imgData,
+      artwork_url: imgData1,
       attributes: [{ "trait_type": "Edition Number", "value": edition }]
     });
     // await artworkService.addEditionNumber(artwork._id, currentCount[0].currentCount);
@@ -63,11 +64,11 @@ const saveArtwork = catchAsync(async (req, res) => {
     metaUrl = await pinMetaDataToIPFS({
       name: name,
       description: description,
-      image: imgData,
+      image: imgData1,
       artist_name,
       artist_description,
       artist_url: artistimgData,
-      artwork_url: imgData,
+      artwork_url: imgData1,
     });
   }
 
