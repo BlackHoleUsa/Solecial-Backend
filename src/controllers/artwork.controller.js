@@ -29,6 +29,7 @@ const saveArtwork = catchAsync(async (req, res) => {
   let artistimgData;
   if (files.length > 0) {
     imgData1 = await addFilesToIPFS(files[0].buffer, 'image');
+    console.log(imgData1);
     artistimgData = await addFilesToIPFS(files[1].buffer, 'artist_image');
     body.artwork_url = imgData1;
     body.artist_url = artistimgData;
@@ -38,7 +39,7 @@ const saveArtwork = catchAsync(async (req, res) => {
   const artwork = await artworkService.saveArtwork(body);
   if (files.length > 0) {
     // imgData = await uploadToAws(files[0].buffer, `/artworks/${artwork._id}`)
-    await artworkService.updateArtworkUrl(artwork._id, imgData1.Location)
+    await artworkService.updateArtworkUrl(artwork._id, imgData1)
   }
   const user = await userService.getUserById(creater);
   let metaUrl;
