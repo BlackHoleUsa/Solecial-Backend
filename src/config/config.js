@@ -82,8 +82,8 @@ module.exports = {
     bucket: envVars.AWS_BUCKET,
   },
   ETH_CONTRACTS: {
-    SINGLE_NFT_CONTRACT_ADDRESS: '0xe0d20730dD30C3295cC84f67f98a1899ca8525db',
-    AUCTION_CONTRACT_ADDRESS: '0x53FcCF69E17a7B3F306801411C487dB88E71b447',
+    SINGLE_NFT_CONTRACT_ADDRESS: '0x549462E4737D56E1D544De36905DeA49184dC5B8',
+    AUCTION_CONTRACT_ADDRESS: '0x26E86102bA1c01F787Ca65eFfE283b36647637c1',
     AUC_ABI: [
       {
         "inputs": [
@@ -218,37 +218,6 @@ module.exports = {
         "inputs": [
           {
             "indexed": false,
-            "internalType": "address",
-            "name": "colAddress",
-            "type": "address"
-          },
-          {
-            "indexed": false,
-            "internalType": "uint256",
-            "name": "tokenId",
-            "type": "uint256"
-          },
-          {
-            "indexed": false,
-            "internalType": "uint256",
-            "name": "amount",
-            "type": "uint256"
-          },
-          {
-            "indexed": false,
-            "internalType": "uint256",
-            "name": "aucId",
-            "type": "uint256"
-          }
-        ],
-        "name": "newAuction1155",
-        "type": "event"
-      },
-      {
-        "anonymous": false,
-        "inputs": [
-          {
-            "indexed": false,
             "internalType": "uint256",
             "name": "aucId",
             "type": "uint256"
@@ -298,43 +267,6 @@ module.exports = {
           }
         ],
         "name": "newSale",
-        "type": "event"
-      },
-      {
-        "anonymous": false,
-        "inputs": [
-          {
-            "indexed": false,
-            "internalType": "address",
-            "name": "colAddress",
-            "type": "address"
-          },
-          {
-            "indexed": false,
-            "internalType": "uint256",
-            "name": "tokenId",
-            "type": "uint256"
-          },
-          {
-            "indexed": false,
-            "internalType": "uint256",
-            "name": "saleId",
-            "type": "uint256"
-          },
-          {
-            "indexed": false,
-            "internalType": "uint256",
-            "name": "price",
-            "type": "uint256"
-          },
-          {
-            "indexed": false,
-            "internalType": "uint256",
-            "name": "amount",
-            "type": "uint256"
-          }
-        ],
-        "name": "newSale1155",
         "type": "event"
       },
       {
@@ -497,44 +429,6 @@ module.exports = {
       {
         "inputs": [
           {
-            "internalType": "address",
-            "name": "collectionAddress_",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "tokenId_",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "startTime",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "endTime",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "startPrice",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amount_",
-            "type": "uint256"
-          }
-        ],
-        "name": "NewAuction1155",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
             "internalType": "uint256",
             "name": "",
             "type": "uint256"
@@ -607,34 +501,6 @@ module.exports = {
       {
         "inputs": [
           {
-            "internalType": "address",
-            "name": "collectionAddress_",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "tokenId_",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "price_",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amount_",
-            "type": "uint256"
-          }
-        ],
-        "name": "SaleNFT1155",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
             "internalType": "uint256",
             "name": "saleId",
             "type": "uint256"
@@ -649,37 +515,11 @@ module.exports = {
         "inputs": [
           {
             "internalType": "uint256",
-            "name": "saleId",
-            "type": "uint256"
-          }
-        ],
-        "name": "buyNFTsale1155",
-        "outputs": [],
-        "stateMutability": "payable",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "internalType": "uint256",
             "name": "aucId",
             "type": "uint256"
           }
         ],
         "name": "cancelAuction",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "internalType": "uint256",
-            "name": "aucId",
-            "type": "uint256"
-          }
-        ],
-        "name": "cancelAuction1155",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -705,7 +545,7 @@ module.exports = {
             "type": "uint256"
           }
         ],
-        "name": "claimNFT",
+        "name": "claimAuction",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -718,7 +558,7 @@ module.exports = {
             "type": "uint256"
           }
         ],
-        "name": "claimNFT1155",
+        "name": "claimNFT",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -760,84 +600,6 @@ module.exports = {
           }
         ],
         "stateMutability": "view",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "internalType": "address",
-            "name": "_operator",
-            "type": "address"
-          },
-          {
-            "internalType": "address",
-            "name": "_from",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256[]",
-            "name": "_ids",
-            "type": "uint256[]"
-          },
-          {
-            "internalType": "uint256[]",
-            "name": "_values",
-            "type": "uint256[]"
-          },
-          {
-            "internalType": "bytes",
-            "name": "_data",
-            "type": "bytes"
-          }
-        ],
-        "name": "onERC1155BatchReceived",
-        "outputs": [
-          {
-            "internalType": "bytes4",
-            "name": "",
-            "type": "bytes4"
-          }
-        ],
-        "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "internalType": "address",
-            "name": "_operator",
-            "type": "address"
-          },
-          {
-            "internalType": "address",
-            "name": "_from",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "_id",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "_value",
-            "type": "uint256"
-          },
-          {
-            "internalType": "bytes",
-            "name": "_data",
-            "type": "bytes"
-          }
-        ],
-        "name": "onERC1155Received",
-        "outputs": [
-          {
-            "internalType": "bytes4",
-            "name": "",
-            "type": "bytes4"
-          }
-        ],
-        "stateMutability": "nonpayable",
         "type": "function"
       },
       {
@@ -923,25 +685,6 @@ module.exports = {
         "name": "setRoyalty",
         "outputs": [],
         "stateMutability": "nonpayable",
-        "type": "function"
-      },
-      {
-        "inputs": [
-          {
-            "internalType": "bytes4",
-            "name": "interfaceID",
-            "type": "bytes4"
-          }
-        ],
-        "name": "supportsInterface",
-        "outputs": [
-          {
-            "internalType": "bool",
-            "name": "",
-            "type": "bool"
-          }
-        ],
-        "stateMutability": "view",
         "type": "function"
       },
       {
