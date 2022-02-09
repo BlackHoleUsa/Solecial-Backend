@@ -41,8 +41,8 @@ const transfer = async (transferContract) => {
     if (
       from.toString() !== '0x0000000000000000000000000000000000000000' &&
       result.length === 0 &&
-      to.toString() !== '0x53FcCF69E17a7B3F306801411C487dB88E71b447' &&
-      from.toString() !== '0xe0d20730dD30C3295cC84f67f98a1899ca8525db'
+      to.toString() !== '0x549462E4737D56E1D544De36905DeA49184dC5B8' &&
+      from.toString() !== '0x26E86102bA1c01F787Ca65eFfE283b36647637c1'
     ) {
       const artwork = await Artwork.findOne({ tokenId });
       await User.findOneAndUpdate({ address: from }, { $pull: { artworks: artwork._id } });

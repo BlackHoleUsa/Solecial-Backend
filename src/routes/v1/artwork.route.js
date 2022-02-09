@@ -286,7 +286,7 @@ router.post(
  */
 router.get(
   '/getFavouriteArtworks',
-  [auth('manageUsers'), validate(artworkValidation.getFavouriteVS)],
+  validate(artworkValidation.getFavouriteVS),
   artworkController.getFavouriteArtworks
 );
 /**

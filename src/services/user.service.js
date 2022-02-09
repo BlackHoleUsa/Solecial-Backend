@@ -150,6 +150,8 @@ const getFavouriteArtworks = async (userId, page, perPage) => {
   const user = await User.findOne({ _id: userId })
     .select(['favouriteArtworks'])
     .populate('favouriteArtworks')
+    .populate('sale')
+    .populate('auction')
     .limit(parseInt(perPage))
     .skip(page * perPage)
     .lean();
