@@ -321,13 +321,11 @@ const getAllArtworks = catchAsync(async (req, res) => {
     let artWorks = await artworkService.getAllArtworks(page, perPage, user._id, isAuctionOpen, openForSale);
     let result = helper(artWorks);
     const count = await artworkService.getAllArtworksCount(user._id, isAuctionOpen, openForSale);
-    console.log("result", result);
     res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: result, count });
   } else {
     let artWorks = await artworkService.getAllArtworks(page, perPage, user._id, undefined, undefined, artwork_type);
     let result = helper(artWorks);
     const count = await artworkService.getAllArtworksCount(user._id, undefined, undefined, artwork_type);
-    console.log("result", result);
     res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: result, count });
   }
 });
@@ -335,7 +333,6 @@ const getAllArtworks = catchAsync(async (req, res) => {
 const helper = (artWorks) => {
   const singleArtWorks = artWorks.filter((artwork) => artwork.multipleNFT === false);
   const multipleArtWorks = artWorks.filter((artwork) => artwork.multipleNFT === true);
-  console.log(multipleArtWorks);
   if (multipleArtWorks) {
     const multipleArtworkGroupId = multipleArtWorks.map((artwork) => artwork?.group?._id);
     const uniq = [...new Set(multipleArtworkGroupId)];
@@ -348,8 +345,6 @@ const helper = (artWorks) => {
         }
       }
     }
-    console.log("multipleArtwork", multipleStacks.length);
-    console.log("singleArtwork", singleArtWorks.length);
     return [...singleArtWorks, ...multipleStacks];
   }
 
@@ -370,8 +365,6 @@ const helper1 = (artWorks) => {
     }
   }
   multipleStacks = [...new Set(multipleStacks)]
-  console.log("singleArtWorks", singleArtWorks.length);
-  console.log("multipleStacks", multipleStacks.length);
   return [...singleArtWorks, ...multipleStacks];
 };
 
@@ -410,7 +403,6 @@ const getOpenArtWorks = catchAsync(async (req, res) => {
   else if (isEditions) {
     let artWorks = await artworkService.getMultipleArtworks();
     let result = helper(artWorks);
-    console.log("result.length before", result.length);
     let result1 = [];
     if (page === 0 && perPage <= result.length) {
       for (let i = 0; i < perPage; i++) {
@@ -439,7 +431,6 @@ const getOpenArtWorks = catchAsync(async (req, res) => {
   else if (isSingle) {
     let artWorks = await artworkService.getSingleArtworks();
     let result = artWorks;
-    console.log("result.length before", result.length);
     let result1 = [];
     if (page === 0 && perPage <= result.length) {
       for (let i = 0; i < perPage; i++) {
@@ -468,7 +459,6 @@ const getOpenArtWorks = catchAsync(async (req, res) => {
   else {
     const artWorks = await artworkService.getOpenArtWorks(undefined, undefined, artwork_type);
     let result = helper(artWorks);
-    console.log("result.length before", result.length);
     let result1 = [];
     if (page === 0 && perPage <= result.length) {
       for (let i = 0; i < perPage; i++) {
@@ -491,7 +481,6 @@ const getOpenArtWorks = catchAsync(async (req, res) => {
       }
     }
     result1 = result1.filter((el) => { return el != null });
-    console.log("result1.length()", result1.length)
     res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: result1, count: helper(artWorks)?.length, });
   }
 });
@@ -500,7 +489,6 @@ const getGroupArtworks = catchAsync(async (req, res) => {
   const { groupId, page, perPage } = req.query;
   const result = await artworkService.getGroupArtworks(groupId, page, perPage);
   const count = await artworkService.getGroupArtworksCount(groupId);
-  console.log("sdas");
   res.status(httpStatus.OK).send({ data: result, count });
 });
 
