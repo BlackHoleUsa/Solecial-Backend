@@ -87,11 +87,12 @@ const handleSearch = catchAsync(async (req, res) => {
 });
 
 const helper = (artWorks) => {
-  const singleArtWorks = artWorks.filter((artwork) => artwork.multipleNFT === false);
-  const multipleArtWorks = artWorks.filter((artwork) => artwork.multipleNFT === true);
+  const singleArtWorks = artWorks.filter((artwork) => !artwork.group);
+  const multipleArtWorks = artWorks.filter((artwork) => !!artwork.group);
   if (multipleArtWorks) {
 
     const multipleArtworkGroupId = multipleArtWorks.map((artwork) => artwork?.group?._id);
+    console.log(multipleArtworkGroupId);
     const uniq = [...new Set(multipleArtworkGroupId)];
     const multipleStacks = [];
     for (let i = 0; i < uniq.length; i++) {
@@ -154,7 +155,7 @@ const getAppActivity = catchAsync(async (req, res) => {
   perPage = parseInt(perPage);
   const artWorks = await artworkService.getAllArtworksPaginated();
   const newArtWorks = await artworkService.getAllArtworksWithOutPaginated();
-  const result = artWorks;
+  const result = helper(artWorks);
   console.log("result", result.length);
   let result1 = [];
   if (page === 0 && perPage <= result.length) {

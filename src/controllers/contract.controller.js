@@ -177,6 +177,7 @@ const handleCancelSale = async (saleFromContract) => {
 };
 
 const handleSaleComplete = async (saleFromContract) => {
+  console.log('saleFormContract', saleFromContract);
   const { saleId, newOwner_, amount } = saleFromContract;
   try {
     console.log('new owner address', newOwner_);
