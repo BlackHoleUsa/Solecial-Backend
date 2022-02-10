@@ -154,7 +154,8 @@ const getAppActivity = catchAsync(async (req, res) => {
   perPage = parseInt(perPage);
   const artWorks = await artworkService.getAllArtworksPaginated();
   const newArtWorks = await artworkService.getAllArtworksWithOutPaginated();
-  const result = helper(artWorks);
+  const result = artWorks;
+  console.log("result", result.length);
   let result1 = [];
   if (page === 0 && perPage <= result.length) {
     for (let i = 0; i < perPage; i++) {
@@ -177,11 +178,12 @@ const getAppActivity = catchAsync(async (req, res) => {
     }
   }
   let newarray = result1.filter((el) => { return el != null });
+  console.log("newarray", newarray.length);
   res.status(httpStatus.OK).send({
     status: true,
     message: 'Successfull',
     data: newarray,
-    count: helper1(newArtWorks)?.length,
+    count: result.length,
   });
 });
 
