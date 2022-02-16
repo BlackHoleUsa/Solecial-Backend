@@ -64,7 +64,6 @@ const transfer = async (transferContract) => {
 };
 const handleNewAuction = async (saleFromContract) => {
   let { tokenId, aucId, amount } = saleFromContract;
-  amount = convertFromWei(amount);
   console.log(tokenId);
   tokenId = tokenId.toString();
   try {
@@ -113,7 +112,6 @@ const handleNewAuction = async (saleFromContract) => {
 const handleNewSale = async (saleFromContract) => {
   let { colAddress, tokenId, saleId, price, amount } = saleFromContract;
   price = convertFromWei(price);
-  amount = convertFromWei(amount);
   tokenId = tokenId.toString();
   try {
     // const collection = await Collection.findOne({ collectionAddress: colAddress });
@@ -147,7 +145,6 @@ const handleNewSale = async (saleFromContract) => {
 
 const handleCancelSale = async (saleFromContract) => {
   let { saleId, amount } = saleFromContract;
-  amount = convertFromWei(amount);
   try {
     const sale = await BuySell.findOneAndUpdate({ contractSaleId: saleId }, { status: SALE_STATUS.CANCELLED }).populate(
       'artwork'
@@ -188,7 +185,6 @@ const handleCancelSale = async (saleFromContract) => {
 const handleSaleComplete = async (saleFromContract) => {
   console.log('saleFormContract', saleFromContract);
   let { saleId, newOwner_, amount } = saleFromContract;
-  amount = convertFromWei(amount);
   try {
     console.log('new owner address', newOwner_);
     const sale = await BuySell.findOneAndUpdate({ contractSaleId: saleId }, { status: SALE_STATUS.COMPLETED }).populate(
@@ -346,7 +342,6 @@ const handleNewBid = async (par) => {
 
 const handleNFTClaim = async (values) => {
   let { aucId, newOwner, collection, amount } = values;
-  amount = convertFromWei(amount);
   console.log("Values in NFT Claim", values);
   const { latestBid } = await AUCTION_CONTRACT_INSTANCE.methods.AuctionList(aucId).call();
   const auction = await Auction.findOneAndUpdate({ contractAucId: aucId }, { nftClaim: true }).populate('artwork');
@@ -423,7 +418,6 @@ const handleNFTClaim = async (values) => {
 
 const handleNFTSale = async (values) => {
   let { aucId, owner, amount } = values;
-  amount = convertFromWei(amount);
   const auction = await Auction.findOneAndUpdate({ contractAucId: aucId }, { ownerclaim: true }).populate('artwork');
   const { artwork } = auction;
   const user = await User.findOneAndUpdate({ address: owner }, { $pull: artwork._id });
@@ -448,7 +442,6 @@ const handleNFTSale = async (values) => {
 
 const handleClaimBack = async (values) => {
   let { aucId, amount } = values;
-  amount = convertFromWei(amount);
   const auction = await Auction.findOneAndUpdate(
     { contractAucId: aucId },
     { cancelled: true, status: AUCTION_STATUS.CLOSED }
