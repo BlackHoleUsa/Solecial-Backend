@@ -342,7 +342,7 @@ const handleNewBid = async (par) => {
 
 const handleNFTClaim = async (values) => {
   let { aucId, newOwner, collection, amount } = values;
-  amount = convertFromWei(amount);
+  // amount = convertFromWei(amount);
   console.log('Values in NFT Claim', values);
   let { latestBid } = await AUCTION_CONTRACT_INSTANCE.methods.AuctionList(aucId).call();
   latestBid = convertFromWei(latestBid);
@@ -444,7 +444,7 @@ const handleNFTSale = async (values) => {
 
 const handleClaimBack = async (values) => {
   let { aucId, amount } = values;
-  amount = convertFromWei(amount);
+  // amount = convertFromWei(amount);
   const auction = await Auction.findOneAndUpdate(
     { contractAucId: aucId },
     { cancelled: true, status: AUCTION_STATUS.CLOSED }
