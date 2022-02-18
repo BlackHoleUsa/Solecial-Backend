@@ -55,7 +55,7 @@ const transfer = async (transferContract) => {
       await Auction.findOneAndDelete({ artwork: artwork._id });
       await BuySell.findOneAndDelete({ artwork: artwork._id });
       await Artwork.findOneAndDelete({ _id: artwork._id });
-      console.log('transfer event called');
+      console.log('transfer event called unregistered');
     } else if (
       from.toString() !== '0x0000000000000000000000000000000000000000' &&
       to.toString() !== '0x8b22fd13958D4D34B072b6DD8db798eDc5240b76' && // auction contract
@@ -66,7 +66,7 @@ const transfer = async (transferContract) => {
       await Auction.findOneAndDelete({ artwork: artwork._id });
       await BuySell.findOneAndDelete({ artwork: artwork._id });
       await Artwork.findOneAndDelete({ _id: artwork._id });
-      console.log('transfer event called');
+      console.log('transfer event called registered');
     } else {
       console.log('mint');
     }
