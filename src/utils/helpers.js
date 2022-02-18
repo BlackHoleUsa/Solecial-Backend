@@ -24,7 +24,7 @@ const addFilesToIPFS = async (photo, type) => {
     };
 
     const imgData = await pinata.pinFileToIPFS(stream, options);
-    return `https://gateway.pinata.cloud/ipfs/${imgData.IpfsHash}`.toString();
+    return `https://solecialpinata.mypinata.cloud/ipfs/${imgData.IpfsHash}`.toString();
   } catch (err) {
     console.log('---error ipfs---', err);
   }
