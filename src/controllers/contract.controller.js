@@ -56,6 +56,17 @@ const transfer = async (transferContract) => {
       await BuySell.findOneAndDelete({ artwork: artwork._id });
       await Artwork.findOneAndDelete({ _id: artwork._id });
       console.log('transfer event called');
+    } else if (
+      from.toString() !== '0x0000000000000000000000000000000000000000' &&
+      to.toString() !== '0x8b22fd13958D4D34B072b6DD8db798eDc5240b76' && // auction contract
+      from.toString() !== '0x865cf1FB2157130E776B0a6DDb72003be8244681' // mint contract
+    ) {
+      const artwork = await Artwork.findOne({ tokenId });
+      await User.findOneAndUpdate({ address: from }, { $pull: { artworks: artwork._id } });
+      await Auction.findOneAndDelete({ artwork: artwork._id });
+      await BuySell.findOneAndDelete({ artwork: artwork._id });
+      await Artwork.findOneAndDelete({ _id: artwork._id });
+      console.log('transfer event called');
     } else {
       console.log('mint');
     }
