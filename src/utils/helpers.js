@@ -48,7 +48,7 @@ const pinMetaDataToIPFS = async (metaData) => {
     //   },
     // };
     const meta = await pinata.pinJSONToIPFS(metaData, {});
-    return `https://gateway.pinata.cloud/ipfs/${meta.IpfsHash}`.toString();
+    return `https://solecialpinata.mypinata.cloud/ipfs/${meta.IpfsHash}`.toString();
   } catch (err) {
     throw new ApiError(httpStatus[400], 'Error pinning meta data to ipfs');
   }

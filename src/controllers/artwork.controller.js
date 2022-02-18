@@ -39,7 +39,7 @@ const saveArtwork = catchAsync(async (req, res) => {
   const artwork = await artworkService.saveArtwork(body);
   if (files.length > 0) {
     // imgData = await uploadToAws(files[0].buffer, `/artworks/${artwork._id}`)
-    await artworkService.updateArtworkUrl(artwork._id, imgData1)
+    // await artworkService.updateArtworkUrl(artwork._id, imgData1)
   }
   const user = await userService.getUserById(creater);
   let metaUrl;
