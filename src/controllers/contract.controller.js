@@ -40,6 +40,7 @@ const updateCollectionAddress = async (tokenId, owner, colName) => {
 };
 const transfer = async (transferContract) => {
   const { from, to, tokenId } = transferContract;
+  console.log("transferContract", transferContract);
   const result = await User.find({ address: to });
   console.log(result);
   try {
