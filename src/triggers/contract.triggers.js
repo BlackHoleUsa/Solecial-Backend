@@ -15,7 +15,7 @@ MINT_SINGLE_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
     return;
   }
 
-  console.log('Event', ev);
+  console.log('Mint Events', ev);
 
   switch (ev.event) {
     case MINT_CONTRACT_EVENTS.NEW_COLLECTION:
@@ -29,7 +29,7 @@ MINT_SINGLE_CONTRACT_INSTANCE.events.allEvents(async (err, ev) => {
       break;
 
     default:
-      console.log('happy');
+      console.log('In mint events happy');
   }
 });
 
