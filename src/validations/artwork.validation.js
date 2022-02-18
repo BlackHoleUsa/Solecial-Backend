@@ -153,14 +153,14 @@ const getOpenArtWorks = {
 const getGroupArtworks = {
   query: Joi.object().keys({
     groupId: Joi.string().required(),
-    page: Joi.number().required(),
-    perPage: Joi.number().required(),
+    page: Joi.number().optional(),
+    perPage: Joi.number().optional(),
   }),
 };
 const getGroupArtworksWithEdition = {
   query: Joi.object().keys({
-    groupId: Joi.string().required(),
-    editionNumber: Joi.string().required(),
+    groupId: Joi.string().optional(),
+    editionNumber: Joi.string().optional(),
   }),
 };
 const convertMultipleToSingleArtwork = {

@@ -320,7 +320,7 @@ const getAllArtworks = catchAsync(async (req, res) => {
   if (!artwork_type) {
     let artWorks = await artworkService.getAllArtworks(page, perPage, user._id, isAuctionOpen, openForSale);
     let result = helper(artWorks);
-    let result1 = await artworkService.getAllArtworks(undefined, undefined, user._id, isAuctionOpen, openForSale);
+    let result1 = await artworkService.getAllArtworks(page, perPage, user._id, isAuctionOpen, openForSale);
 
     res.status(httpStatus.OK).send({ status: true, message: 'Successfull', data: result, count: result1.length });
   } else {
