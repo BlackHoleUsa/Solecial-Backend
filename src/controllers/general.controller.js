@@ -25,10 +25,7 @@ const handleSearch = catchAsync(async (req, res) => {
 
       case SEARCH_FILTERS.ARTWORKS:
         data.artworks = artworks;
-        let result = helper(artworks);
-        data.artworks = myNewHelper(result, parseInt(page), parseInt(perPage));
-        artWorksTotal = await artworkService.getAllArtworksCount1();
-        count = helper(artworks)?.length;
+        count = artworksCount;
         break;
 
       default:
@@ -60,9 +57,8 @@ const handleSearch = catchAsync(async (req, res) => {
 
       case SEARCH_FILTERS.ARTWORKS:
         artworks = await artworkService.getAllArtwork();
-        let result = helper(artworks);
-        data.artworks = myNewHelper(result, parseInt(page), parseInt(perPage));
-        count = helper(artworks)?.length;
+        data.artworks = artworks;
+        count = await artworkService.getAllArtworksCount1();
         break;
 
       case SEARCH_FILTERS.COLLECTIONS:
