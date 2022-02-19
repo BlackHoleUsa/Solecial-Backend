@@ -56,26 +56,6 @@ const transfer = async (transferContract) => {
       await BuySell.findOneAndDelete({ artwork: artwork._id });
       await Artwork.findOneAndDelete({ _id: artwork._id });
       console.log('transfer event called unregistered');
-    } else if ((await User.find({ address: to }).length) > 0 || (await User.find({ address: from }).length) > 0) {
-      const prevUser = await User.find({ address: from });
-      console.log('prevUser', preUser);
-      const artwork = await Artwork.findOne({ tokenId });
-      await User.findOneAndUpdate({ _id: prevUser._id }, { $pull: { artworks: artwork._id } });
-      const newUser = await User.find({ address: to });
-      console.log('newUser', newUser);
-      await User.findOneAndUpdate({ _id: newUser._id }, { $push: { artworks: artwork._id } });
-      await Artwork.findOneAndUpdate(
-        { _id: artwork._id },
-        {
-          owner: newUser._id,
-          isAuctionOpen: false,
-          openForSale: false,
-          auction: null,
-          sale: null,
-          auctionMintStatus: null,
-        }
-      );
-      console.log('registered');
     } else {
       console.log('mint');
     }
