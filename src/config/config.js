@@ -1405,6 +1405,6 @@ module.exports = {
         "type": "function"
       }
     ],
-    WEB_SOCKET_INFURA_URL: 'wss://rinkeby.infura.io/ws/v3/c944b72ce9b74c77aac906c6a59f4e99',
+    WEB_SOCKET_INFURA_URL: 'wss://mainnet.infura.io/ws/v3/db1024cf08de462b9eaccb0acbccc1b1',
   },
 };
